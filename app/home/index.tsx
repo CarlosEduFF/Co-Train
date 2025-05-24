@@ -1,17 +1,15 @@
-import { StyleSheet, Platform } from 'react-native';
 import {colors} from '../../constants/colors'
+import styles from "./style"
+import { View ,Image} from 'react-native';
 
-export default StyleSheet.create({
-    container:{
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor:colors.background,
-    },
-    logo:{
-        width: 200,
-        height: 100,
-        marginBottom: 20,
-    },
+export default function home() {
+ return (
+   <View style={styles.container}>
+         <Image 
+          source={require('../../img/logo.png')}
+          style={styles.logo}
+          resizeMode="cover"/>
 
-});
+    </View>   
+  );
+}
