@@ -2,11 +2,20 @@ import { StyleSheet, Platform } from 'react-native';
 import {colors} from '../../constants/colors'
 
 export default StyleSheet.create({
+    
+    scrollContainer: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingBottom: 50
+      
+    },
     container:{
     flex: 1,
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor:colors.background,
+    backgroundColor:colors.white,
     },
     logo:{
         width: 200,
@@ -14,4 +23,47 @@ export default StyleSheet.create({
         marginBottom: 20,
     },
 
+    buttonLeft:{
+    marginTop:'10%',
+    height:40,
+    width:40,
+    backgroundColor:colors.vermEscuro,
+    borderRadius:20,
+    justifyContent:'center',
+    alignItems:'center',
+    },
+    paineis:{
+       
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        borderWidth: 1,
+        borderColor: colors.Vermelho,
+        borderRadius: 10,
+        width: '70%',
+        height: '30%',
+        textAlign: 'center',
+        padding:5,
+    },
+    titulos:{
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: colors.Vermelho,
+        marginBottom: 10,
+        paddingBottom: 10,
+        flexWrap: 'wrap',
+        textAlign: 'center',
+    },
+    textos:{
+        color:colors.black,
+        flexWrap: 'wrap',
+        alignItems: 'center',
+        textAlign: 'center',
+    },
+Image:{
+    height:120,
+    width:120,
+},
 });
