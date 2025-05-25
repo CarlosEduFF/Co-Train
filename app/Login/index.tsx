@@ -1,15 +1,21 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, TouchableOpacity, Image, Alert,Pressable} from 'react-native';
+import { View, Text, TouchableOpacity, Image, Alert,Pressable,TextInput} from 'react-native';
 import { router } from 'expo-router';
 import styles from './style'; 
 import {Feather,Entypo,Ionicons} from '@expo/vector-icons';
-import { TextInput } from 'react-native-paper';
+import * as Animatable from 'react-native-animatable';
+
 
 
 
 export default function Login() {
 
-    const [hidePass, setHidePass] = useState(true)
+    const [hidePass, setHidePass] = useState(true);
+    const [email, setEmail] = useState('');
+    const [senha, setSenha] = useState('');
+    const [emailFocused, setEmailFocused] = useState(false);
+    const [senhaFocused, setsenhaFocused] = useState(false);
+
 
     return (  
     <View style={styles.container}>
@@ -32,14 +38,27 @@ export default function Login() {
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
             <Feather name="mail" size={20} color="#3D0000" />
+              <View style={{flex:1}}>
+                {(emailFocused || email) && (
+                <Animatable.Text
+                  animation="fadeInUp"
+                  duration={300}
+                  style={{ fontSize: 16, color: '#3D0000', marginLeft: 5, }}
+                >
+                  E-mail
+                </Animatable.Text>
+              )}
                 <TextInput 
-                  placeholder="E-mail"
+                  placeholder={!emailFocused ? "E-mail" : ""}
                   placeholderTextColor="#3D0000"
                   style={styles.input}
-                  mode="outlined"
-                  theme={{ colors: { primary: '#800000' } }}
+                  value={email}
+                  onChangeText={setEmail}
+                  onFocus={() => setEmailFocused(true)}
+                  onBlur={() => setEmailFocused(false)}
                   >   
                 </TextInput>
+         </View>
          </View>
 
         <View style={styles.inputContainer}>

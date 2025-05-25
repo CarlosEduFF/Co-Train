@@ -43,7 +43,6 @@ export default StyleSheet.create({
   
    formContainer:{
      width:'100%',
-     
    },
 
    inputContainer:{
@@ -54,7 +53,10 @@ export default StyleSheet.create({
     alignItems:'center',
     flexDirection:'row',
     marginTop:30,
-    
+   },
+
+    input: {
+      paddingVertical: 15,
    },
    
     button:{
@@ -69,8 +71,8 @@ export default StyleSheet.create({
       borderColor: colors.vermEscuro,
     },
     icon:{
-    top: Platform.OS === 'ios'?-70 : 0,
-    marginLeft:'60%'
+    position: 'absolute',
+    right: 20,
     },
     
     buttonText:{
