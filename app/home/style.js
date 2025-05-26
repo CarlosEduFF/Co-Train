@@ -7,7 +7,7 @@ export default StyleSheet.create({
       flexGrow: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      paddingBottom: 50
+      paddingBottom: 120
       
     },
     container:{
@@ -16,11 +16,17 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor:colors.white,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingBottom: 50,
+    top: 10
     },
+
     logo:{
         width: 200,
         height: 100,
         marginBottom: 20,
+        marginTop:'50%'
     },
 
     buttonLeft:{

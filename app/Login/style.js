@@ -18,7 +18,7 @@ export default StyleSheet.create({
     alignItems:'center',
     },
     containerLogo:{
-        justifyContent:'certer',
+        justifyContent:'center',
         alignItems:'center',
     },
     
@@ -36,7 +36,6 @@ export default StyleSheet.create({
 
    headingText:{
     fontSize:35,
-    alignItems:'flex-start',
     fontWeight:'bold',
     marginTop:5
    },
@@ -50,14 +49,26 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     borderRadius:15,
     paddingHorizontal:20,
+    paddingVertical:5,
     alignItems:'center',
     flexDirection:'row',
-    marginTop:30,
+    marginTop:35,
    },
 
-    input: {
-      paddingVertical: 15,
-   },
+    animation:{
+     height:30,
+     width:65,
+     borderRadius:15,
+     backgroundColor: colors.white,
+     position: 'absolute',
+     top: -20, 
+     fontSize: 16, 
+     color: '#3D0000',
+    },
+    labelText:{ 
+     color: '#3D0000',
+     textAlign: 'center',
+    },
    
     button:{
       backgroundColor: colors.vermEscuro,
@@ -73,6 +84,7 @@ export default StyleSheet.create({
     icon:{
     position: 'absolute',
     right: 20,
+    marginTop:5
     },
     
     buttonText:{

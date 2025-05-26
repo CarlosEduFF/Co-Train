@@ -14,7 +14,7 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
-    const [senhaFocused, setsenhaFocused] = useState(false);
+    const [senhaFocused, setSenhaFocused] = useState(false);
 
 
     return (  
@@ -38,20 +38,19 @@ export default function Login() {
         <View style={styles.formContainer}>
           <View style={styles.inputContainer}>
             <Feather name="mail" size={20} color="#3D0000" />
-              <View style={{flex:1}}>
+              <View style={{flex:1, position: 'relative'}}>
                 {(emailFocused || email) && (
                 <Animatable.Text
-                  animation="fadeInUp"
+                  animation="slideInUp"
                   duration={300}
-                  style={{ fontSize: 16, color: '#3D0000', marginLeft: 5, }}
+                  style={styles.animation}
                 >
-                  E-mail
+                 <Text style={styles.labelText}>E-mail</Text>
                 </Animatable.Text>
               )}
                 <TextInput 
                   placeholder={!emailFocused ? "E-mail" : ""}
                   placeholderTextColor="#3D0000"
-                  style={styles.input}
                   value={email}
                   onChangeText={setEmail}
                   onFocus={() => setEmailFocused(true)}
@@ -63,10 +62,24 @@ export default function Login() {
 
         <View style={styles.inputContainer}>
          <Entypo name="lock" size={20} color="#3D0000"  />
+          <View style={{flex:1, position: 'relative'}}>
+                {(senhaFocused || senha) && (
+                <Animatable.Text
+                  animation="slideInUp"
+                  duration={300}
+                  style={styles.animation}
+                >
+                 <Text style={styles.labelText}>Senha</Text>
+                </Animatable.Text>
+              )}
           <TextInput
-            placeholder="Senha"
+            placeholder={!senhaFocused ? "Senha" : ""}
             placeholderTextColor="#3D0000"
-            secureTextEntry={hidePass}>
+            secureTextEntry={hidePass}
+            value={senha}
+            onChangeText={setSenha}
+            onFocus={() => setSenhaFocused(true)}
+            onBlur={() => setSenhaFocused(false)}>
           </TextInput> 
           <TouchableOpacity style={styles.icon} onPress={()=>setHidePass(!hidePass)}>
             {hidePass?
@@ -75,6 +88,7 @@ export default function Login() {
           <Ionicons name="eye-off" size={28} color="#3D0000" />
         }
           </TouchableOpacity>
+          </View>
           </View>
 
           </View>
