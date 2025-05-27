@@ -13,5 +13,8 @@ export default StyleSheet.create({
         height: 100,
         marginBottom: 20,
     },
+    formContainer:{
+     width:'100%',
+   },
 
 });

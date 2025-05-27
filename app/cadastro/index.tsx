@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, TouchableOpacity, Image, Alert,Pressable,TextInput} from 'react-native';
 import { router } from 'expo-router';
+import {Input} from '../../components/input/input'
 import styles from './style'; 
 import {Feather,Entypo,Ionicons} from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';

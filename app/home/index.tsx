@@ -13,7 +13,7 @@ export default function home() {
           style={styles.logo}
           resizeMode="cover"/>
           
-            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/')}>
+            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/planejamentos')}>
               <Image source={require("../../img/Planejamento.png")} style={styles.Image}></Image>
               <Text style={styles.titulos}>
                 Planejamento Semanal
@@ -23,7 +23,7 @@ export default function home() {
               </Text>
             </TouchableOpacity>
   
-            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/')}>
+            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/gruposMusc')}>
                <Image source={require("../../img/Muscle.png")} style={styles.Image}></Image>
               <Text style={styles.titulos}>
                 Divisão por Grupos Musculares

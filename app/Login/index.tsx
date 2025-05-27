@@ -5,9 +5,6 @@ import styles from './style';
 import {Feather,Entypo,Ionicons} from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 
-
-
-
 export default function Login() {
 
     const [hidePass, setHidePass] = useState(true);
@@ -15,7 +12,6 @@ export default function Login() {
     const [senha, setSenha] = useState('');
     const [emailFocused, setEmailFocused] = useState(false);
     const [senhaFocused, setSenhaFocused] = useState(false);
-
 
     return (  
     <View style={styles.container}>
