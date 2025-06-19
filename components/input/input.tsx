@@ -34,6 +34,7 @@ export  function Input({name, control,placeholder,rules,error,keyboardType,label
                             duration={300}
                             style={styles.animation}
                           >
+                            
                           <Text style={styles.labelText}>{labelText}</Text>
                           </Animatable.Text>
                           )}

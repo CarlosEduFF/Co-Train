@@ -19,7 +19,7 @@ export default StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 10,
     paddingBottom: 50,
-    top: 10
+    top: 15
     },
 
     logo:{

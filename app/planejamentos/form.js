@@ -59,50 +59,49 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderColor: colors.Vermelho,
     },
-    centerContent: {
-        height: '40%',
-        width: '90%',  
-        borderRadius:20,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
-        borderWidth: 1,
-        borderColor: colors.Vermelho,
-    },
-    rigthcontent: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-    },
-    leftcontent: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-    },
-    bottomContent: {
-        width: '100%',
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingBottom: Platform.OS === 'ios' ? 20 : 0,
-        position:'absolute',
-        marginTop:'40%'
-        
-    },
-    buttonBottom: {
+    card: {
         backgroundColor: colors.white,
         borderRadius: 5,
-        width: '95%',
+        padding: 20,
+        marginBottom: 10,
+        width: '90%',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    label: {
+        fontSize: 16,
+        color: colors.black,
+        marginBottom: 5,
+    },
+    checkboxContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        width: '90%',
+    },
+    checkboxLabel: {
+        fontSize: 16,
+        color: colors.black,
+        marginLeft: 10,
+    },
+    addButton: {
+        backgroundColor: colors.Vermelho,
+        borderRadius: 5,
+        padding: 10,
+        width: '90%',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 10,
-        borderWidth: 1,
-        borderColor: colors.Vermelho,
     },
-    dayText: {
+    addButtonText: {
+        color: colors.white,
         fontSize: 16,
-        color: colors.Vermelho,
-        textAlign: 'center',
+        fontWeight: 'bold',
     },
-});
+})

@@ -33,7 +33,7 @@ export default function home() {
               </Text>
             </TouchableOpacity>
   
-            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/')}>
+            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/perfil')}>
               <Image source={require("../../img/Nutricion.png")} style={styles.Image}></Image>
               <Text style={styles.titulos}>
                 Plano Alimentar
@@ -42,6 +42,7 @@ export default function home() {
                 Acompannhe sua alimentação diária de forma prática e organizada
               </Text>
             </TouchableOpacity>
+
          </View>  
     </ScrollView>
   );

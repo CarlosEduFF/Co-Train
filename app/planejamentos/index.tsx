@@ -3,6 +3,7 @@ import styles from "./style"
 import { View ,Image,Text,TouchableOpacity} from 'react-native';
 import { router } from 'expo-router';
 
+
 export default function planejamentos() {
  return (
   <View style={styles.container}>
@@ -15,7 +16,7 @@ export default function planejamentos() {
 
     <View style={styles.centerContent}>
       <View style={styles.rigthcontent}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/planejamentos/adicionar')}>
           <Text style={styles.dayText}>SEGUNDA</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
