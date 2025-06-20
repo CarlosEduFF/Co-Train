@@ -10,11 +10,11 @@ export default function RootLayout() {
     <Stack.Screen name="cadastro/index" options={{ headerShown: false}}/>
     <Stack.Screen name="perfil/index" options={{ headerShown: false}}/>
     <Stack.Screen name="planejamentos/index" options={{ headerShown: false}}/>
-    <Stack.Screen name="planejamentos/adicionar" options={{ headerShown: false}}/>
+    <Stack.Screen name="planejamentos/Adicionar/adicionar" options={{ headerShown: false}}/>
+    <Stack.Screen name="planejamentos/FormAdicionar/formAdicionar" options={{ headerShown: false}}/>
+    <Stack.Screen name="planejamentos/FormEditar/formEditar" options={{ headerShown: false}}/>
     <Stack.Screen name="nutricional/index" options={{ headerShown: false}}/>
      <Stack.Screen name="EditarPerfil/index" options={{ headerShown: false}}/>
-     
-    <Stack.Screen name="(main)" options={{ headerShown: false }} />
 
 
   </Stack>

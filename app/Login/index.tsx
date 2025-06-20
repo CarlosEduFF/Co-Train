@@ -68,6 +68,7 @@ export default function Login() {
                  <Text style={styles.labelText}>Senha</Text>
                 </Animatable.Text>
               )}
+              
           <TextInput
             placeholder={!senhaFocused ? "Senha" : ""}
             placeholderTextColor="#3D0000"

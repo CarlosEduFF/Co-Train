@@ -20,7 +20,7 @@ export default StyleSheet.create({
         marginBottom: -75,
       },
       buttonLeft:{
-        marginTop:'10%',
+        
         marginLeft:20,
         marginTop:50,
         height:40,

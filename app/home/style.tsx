@@ -43,7 +43,6 @@ export default StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
-        justifyContent: 'center',
         marginTop: 20,
         borderWidth: 1,
         borderColor: colors.Vermelho,

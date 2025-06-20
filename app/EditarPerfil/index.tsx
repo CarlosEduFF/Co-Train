@@ -1,13 +1,14 @@
+import {View, Text, TouchableOpacity, Image, Alert,Pressable,TextInput,ScrollView} from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import {colors} from '../../constants/colors'
 import styles from "./style"
 import {z} from 'zod'
 import {zodResolver} from'@hookform/resolvers/zod'
 import {Input } from '../../components/input/inputNormal'
-import {View, Text, TouchableOpacity, Image, Alert,Pressable,TextInput,ScrollView} from 'react-native';
-import * as Animatable from "react-native-animatable";
 import {useForm} from 'react-hook-form'
 import { router } from 'expo-router';
+import { useState } from 'react';
+import * as ImagePicker from 'expo-image-picker';
+import * as Animatable from "react-native-animatable";
 
 const schema = z.object({
 name:z.string().min(1,{message:"O nome é obrigatório"}),
@@ -26,7 +27,25 @@ export default function editarPerfil() {
 const onSubmit = (data:FormData)=>{
 
 }
+  const [imageUri, setImageUri]= useState('https://via.placeholder.com/150');
 
+  const pickImage = async () =>{
+   const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      alert('Permissão para acessar a galeria foi negada');
+      return;
+}
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1], 
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setImageUri(result.assets[0].uri);
+    }
+   };
 
  return ( 
   <View style={styles.container}>
@@ -43,14 +62,17 @@ const onSubmit = (data:FormData)=>{
      </View>
 
    <View style={styles.logoContainer}>
+    <TouchableOpacity onPress={pickImage}>
        <Animatable.Image 
              animation="zoomIn"
              duration={1500}
-             source={{ uri:  'https://via.placeholder.com/150' }} 
+             source={{ uri:  imageUri }} 
              style={styles.perfilImage}
              resizeMode="contain"
-       />
+        />
+       </TouchableOpacity>
        </View>
+       
 <View style={styles.formContainer}>
     <Text style={styles.label}>Nome:</Text>
     <Input

@@ -34,12 +34,12 @@ export default function home() {
             </TouchableOpacity>
   
             <TouchableOpacity style={styles.paineis} onPress={() => router.push('/perfil')}>
-              <Image source={require("../../img/Nutricion.png")} style={styles.Image}></Image>
+              <Image source={require("../../img/Perfil.png")} style={styles.Image}></Image>
               <Text style={styles.titulos}>
-                Plano Alimentar
+                Meu Perfil
               </Text>
               <Text style={styles.textos}>
-                Acompannhe sua alimentação diária de forma prática e organizada
+                Acompanhe seu perfil de usuário aqui! e faça edição.
               </Text>
             </TouchableOpacity>
 

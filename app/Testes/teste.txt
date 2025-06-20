@@ -100,3 +100,36 @@ export default function AdicionarPlanejamento() {
     </ScrollView>
   );
 }
+
+
+
+const [exercises, setExercises] = useState<Exercise[]>([
+    { exercicio: '', series: '', weight: '', isChecked: false }
+  ]);
+
+  const [open, setOpen] = useState(false);
+  const [value, setValue] = useState<string | null>(exercises[0]?.exercicio || null);
+  const [items, setItems] = useState([
+    { label: 'Peito', value: 'chest' },
+    { label: 'Costas', value: 'back' },
+    { label: 'Pernas', value: 'legs' },
+    { label: 'Ombros', value: 'shoulders' },
+    { label: 'Bíceps', value: 'biceps' },
+    { label: 'Tríceps', value: 'triceps' },
+    { label: 'Abdômen', value: 'abs' },
+  ]);
+
+  const handleUpdateExercise = <K extends keyof Exercise>(
+    index: number,
+    key: K,
+    value: Exercise[K]
+  ) => {
+    const updated = [...exercises];
+    updated[index] = { ...updated[index], [key]: value };
+    setExercises(updated);
+  };
+
+  const onSubmit = (data: FormData) => {
+    // lógica de envio
+    console.log("Formulário enviado:", data);
+  };
