@@ -1,14 +1,14 @@
-import {colors} from '../../constants/colors'
 import styles from "./style"
 import { View ,Image,Text,TouchableOpacity} from 'react-native';
 import { router } from 'expo-router';
+import { images } from "~/constants/images";
 
 
 export default function planejamentos() {
  return (
   <View style={styles.container}>
            <Image 
-              source={require('../../img/logo.png')}
+              source={images.logo}
               style={styles.logo}
               resizeMode="cover"/>
             <Text style={styles.title}>Planejamento Semanal</Text>

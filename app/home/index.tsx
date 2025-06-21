@@ -1,20 +1,20 @@
-import {colors} from '../../constants/colors'
 import styles from "./style"
 import { View ,Image,TouchableOpacity,Text,ScrollView} from 'react-native';
-import {Feather,Entypo} from '@expo/vector-icons';
 import { router } from 'expo-router';
+import { images } from '~/constants/images';
+import { routes } from "~/constants/routes";
 
 export default function home() {
  return (
   <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>
       <Image 
-          source={require('../../img/logo.png')}
+          source={images.logo}
           style={styles.logo}
           resizeMode="cover"/>
           
             <TouchableOpacity style={styles.paineis} onPress={() => router.push('/planejamentos')}>
-              <Image source={require("../../img/Planejamento.png")} style={styles.Image}></Image>
+              <Image source={images.plan} style={styles.Image}></Image>
               <Text style={styles.titulos}>
                 Planejamento Semanal
               </Text>
@@ -24,7 +24,7 @@ export default function home() {
             </TouchableOpacity>
   
             <TouchableOpacity style={styles.paineis} onPress={() => router.push('/gruposMusc')}>
-               <Image source={require("../../img/Muscle.png")} style={styles.Image}></Image>
+               <Image source={images.muscle} style={styles.Image}></Image>
               <Text style={styles.titulos}>
                 Divisão por Grupos Musculares
               </Text>
@@ -33,8 +33,8 @@ export default function home() {
               </Text>
             </TouchableOpacity>
   
-            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/perfil')}>
-              <Image source={require("../../img/Nutricion.png")} style={styles.Image}></Image>
+            <TouchableOpacity style={styles.paineis} onPress={() => router.push(routes.profile as any)}>
+              <Image source={images.nutri} style={styles.Image}></Image>
               <Text style={styles.titulos}>
                 Plano Alimentar
               </Text>

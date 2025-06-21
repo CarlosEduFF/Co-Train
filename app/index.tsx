@@ -1,18 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, Platform, ImageSourcePropType } from 'react-native';
+import { useState, useEffect } from "react";
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
 import { colors } from '../constants/colors';
 import * as Animatable from "react-native-animatable";
-import { Link } from 'expo-router';
+import { router } from 'expo-router';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-
+import { images } from "~/constants/images";
+import { routes } from "~/constants/routes";
 export default function Index() {
- const backgroundImages: ImageSourcePropType[] = [
-    require('../img/background2.jpeg'),
-    require('../img/background2.jpeg'),
-    require('../img/background3.jpeg'),
+  const backgroundImages: ImageSourcePropType[] = [
+    images.backg1,
+    images.backg2,
+    images.backg3,
   ];
-  
+
   const [backgroundImage, setBackgroundImage] = useState<ImageSourcePropType | null>(null);
 
   useEffect(() => {
@@ -32,10 +33,10 @@ export default function Index() {
       />
 
       <BlurView intensity={50} style={styles.blurContainer}>
-        <Animatable.Image 
+        <Animatable.Image
           animation="zoomIn"
           duration={1500}
-          source={require('../img/logo.png')}
+          source={images.logo}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -44,11 +45,9 @@ export default function Index() {
           Sua plataforma de gerenciamento de treinos e dietas!
         </Animatable.Text>
 
-        <Link href="/Login" asChild>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>Acessar Co-Train</Text>
-          </TouchableOpacity>
-        </Link>
+        <TouchableOpacity style={styles.button} onPress={() => router.replace(routes.login as any)}>
+          <Text style={styles.buttonText}>Acessar Co-Train</Text>
+        </TouchableOpacity>
       </BlurView>
     </View>
   );
@@ -71,7 +70,7 @@ const styles = StyleSheet.create({
 
   blurContainer: {
     flex: 1,
-    width:'100%',
+    width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
@@ -88,7 +87,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    marginTop:'50%',
+    marginTop: '50%',
     fontSize: 22,
     color: '#fff',
     fontWeight: 'bold',

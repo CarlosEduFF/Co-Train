@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import {colors} from '../../constants/colors'
+import {colors} from '~/constants/colors'
 
 export default StyleSheet.create({
     scrollContainer:{
@@ -22,7 +22,6 @@ export default StyleSheet.create({
       buttonLeft:{
         marginTop:'10%',
         marginLeft:20,
-        marginTop:50,
         height:40,
         width:40,
         backgroundColor:colors.vermEscuro,

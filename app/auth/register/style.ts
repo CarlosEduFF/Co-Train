@@ -1,5 +1,5 @@
 import { StyleSheet, Platform } from 'react-native';
-import {colors} from '../../constants/colors'
+import {colors} from '~/constants/colors'
 
 export default StyleSheet.create({
   container:{
@@ -130,5 +130,25 @@ export default StyleSheet.create({
        color:colors.vermEscuro,
        fontSize:16,
        fontWeight:'bold'
-    }
+    },
+     googleButtonContaine:{
+      flexDirection:'row',
+      borderWidth:2,
+      borderRadius:15,
+      borderColor:colors.vermEscuro,
+      alignItems:'center',
+      justifyContent:'center',
+       width:'100%',
+       marginTop:30,
+       padding:5
+    },
+
+    googleImage:{
+      height:35,
+      width:35,
+    },
+
+    TextGoogle:{
+     fontSize:16,
+    },
 });
