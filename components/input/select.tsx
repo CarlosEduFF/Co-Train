@@ -7,7 +7,9 @@ import { useState } from 'react'
 
 interface OptionsProps{
     label:string;
-    value:string|number
+    value:string|number;
+    image?: string;
+
 }
 
 interface selectProps{
@@ -15,10 +17,11 @@ name:string;
 control:any;
 placeholder?:string;
 error?:string;
-options:OptionsProps[]
+options:OptionsProps[];
+onSelectExtraData?: (item: OptionsProps) => void;
 }
 
-export function Select({name, control, placeholder, error,options}:selectProps) {
+export function Select({name, control, placeholder, error,options, onSelectExtraData}:selectProps) {
     const [visible, setVisible]=useState(false);
 
  return (
@@ -51,7 +54,8 @@ export function Select({name, control, placeholder, error,options}:selectProps) 
                            renderItem={({item})=>(
                             <TouchableOpacity style={styles.option}
                                onPress={()=>{
-                               onChange(item.value)
+                               onChange(item.value);
+                                onSelectExtraData?.(item);
                                setVisible(false)
                               }}>
                                  <Text>{item.label}</Text>
