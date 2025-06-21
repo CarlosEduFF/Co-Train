@@ -1,44 +1,45 @@
 import { StyleSheet, Platform } from 'react-native';
-import { colors } from '~/constants/colors'
+import {colors} from '../../constants/colors'
 
 export default StyleSheet.create({
-
+    
     scrollContainer: {
-        flexGrow: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        paddingBottom: 120
-
+      flexGrow: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      paddingBottom: 120
+      
     },
-    container: {
-        flex: 1,
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: colors.white,
-        paddingVertical: 8,
-        paddingHorizontal: 10,
-        paddingBottom: 50,
-        top: 15
+    container:{
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor:colors.white,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    paddingBottom: 50,
+    top: 15
     },
 
-    logo: {
+    logo:{
         width: 200,
         height: 100,
         marginBottom: 20,
-        marginTop: '50%'
+        marginTop:'50%'
     },
 
-    buttonLeft: {
-        marginTop: '10%',
-        height: 40,
-        width: 40,
-        backgroundColor: colors.vermEscuro,
-        borderRadius: 20,
-        justifyContent: 'center',
-        alignItems: 'center',
+    buttonLeft:{
+    marginTop:'10%',
+    height:40,
+    width:40,
+    backgroundColor:colors.vermEscuro,
+    borderRadius:20,
+    justifyContent:'center',
+    alignItems:'center',
     },
-    paineis: {
+    paineis:{
+       
         flexDirection: 'column',
         justifyContent: 'space-between',
         alignItems: 'center',
@@ -49,9 +50,9 @@ export default StyleSheet.create({
         width: '70%',
         height: '30%',
         textAlign: 'center',
-        padding: 5,
+        padding:5,
     },
-    titulos: {
+    titulos:{
         fontSize: 20,
         fontWeight: 'bold',
         color: colors.Vermelho,
@@ -60,14 +61,14 @@ export default StyleSheet.create({
         flexWrap: 'wrap',
         textAlign: 'center',
     },
-    textos: {
-        color: colors.black,
+    textos:{
+        color:colors.black,
         flexWrap: 'wrap',
         alignItems: 'center',
         textAlign: 'center',
     },
-    Image: {
-        height: 120,
-        width: 120,
-    },
+Image:{
+    height:120,
+    width:120,
+},
 });

@@ -33,13 +33,13 @@ export default function home() {
               </Text>
             </TouchableOpacity>
   
-            <TouchableOpacity style={styles.paineis} onPress={() => router.push(routes.profile as any)}>
-              <Image source={images.nutri} style={styles.Image}></Image>
+            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/profile/perfil')}>
+              <Image source={require("../../assets/Icons/Perfil.png")} style={styles.Image}></Image>
               <Text style={styles.titulos}>
-                Plano Alimentar
+                Meu Perfil
               </Text>
               <Text style={styles.textos}>
-                Acompannhe sua alimentação diária de forma prática e organizada
+                Acompanhe seu perfil de usuário aqui! e faça edição.
               </Text>
             </TouchableOpacity>
 

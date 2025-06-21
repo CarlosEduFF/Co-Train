@@ -1,22 +1,20 @@
+import {colors} from '../../constants/colors'
 import styles from "./style"
 import { View ,Image,Text,TouchableOpacity} from 'react-native';
 import { router } from 'expo-router';
-import { images } from "~/constants/images";
+import { Header } from '../../components/header/header';
 
 
 export default function planejamentos() {
  return (
   <View style={styles.container}>
-           <Image 
-              source={images.logo}
-              style={styles.logo}
-              resizeMode="cover"/>
-            <Text style={styles.title}>Planejamento Semanal</Text>
-            <Text style={styles.subtitle}>Gerencie de segunda a domingo: seus treinos organizados</Text>
-
+           <Header
+                 title='Planejamento Semanal'
+                  text='Gerencie de segunda a domingo: seus treinos organizados'
+          />  
     <View style={styles.centerContent}>
       <View style={styles.rigthcontent}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/planejamentos/adicionar')}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push('/planejamentos/Adicionar/adicionar')}>
           <Text style={styles.dayText}>SEGUNDA</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.button} onPress={() => router.push('/')}>
