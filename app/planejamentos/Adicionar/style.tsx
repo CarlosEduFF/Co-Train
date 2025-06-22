@@ -12,7 +12,26 @@ export default StyleSheet.create({
        backgroundColor:colors.background,
        marginTop:30
     },
+    card: {
+      backgroundColor: '#FFF',
 
+
+      marginBottom: 15,
+      flexDirection: 'row',    
+      justifyContent: 'space-between', 
+      alignItems: 'center',  
+
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.1,
+      shadowRadius: 4,
+      marginTop:10,
+    borderRadius: 12,
+    padding: 13,
+    elevation: 4,
+    borderLeftWidth: 3,
+    borderLeftColor: colors.Vermelho,
+    },
   
     button:{
         marginTop:15,
@@ -36,19 +55,14 @@ export default StyleSheet.create({
     listContainer: {
     gap: 16,
   },
-
-  card: {
-    marginTop:10,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 13,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 4,
-    borderLeftWidth: 3,
-    borderLeftColor: colors.Vermelho,
+  cardContent: {
+    flex: 1, // Faz com que o conteúdo do card ocupe o espaço disponível
+  },
+  deleteButton: {
+    padding: 10,       // Aumenta a área de toque
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 10,     // Espaçamento entre o texto e o ícone
   },
 
   cardTitulo: {

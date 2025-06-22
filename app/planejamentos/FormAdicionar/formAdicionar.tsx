@@ -1,118 +1,180 @@
-import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity,Switch } from 'react-native'; 
-import { Feather } from '@expo/vector-icons'; 
+import React, { useState, useEffect  } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Switch, Alert } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+// Importamos o useFieldArray
+import { useForm, useFieldArray } from 'react-hook-form';
 import { colors } from '../../../constants/colors';
 import { Input } from '../../../components/input/inputNormal';
-import {Select} from '../../../components/input/select';
-import {Header} from '../../../components/header/header'
+import { Select } from '../../../components/input/select';
+import { Header } from '../../../components/header/header';
+import { router, useLocalSearchParams  } from 'expo-router';
+import { auth, firestore } from '../../../config/firebase';
 
+// 1. ATUALIZAMOS O SCHEMA
 const schema = z.object({
-   parte: z.string().min(1, { message: "Informe a parte muscular de treino" }),
-   exercicio: z.string().min(1, { message: "Informe um exercício" }),
-   series: z.string().min(1, { message: "Informe as séries" }),
-   horaTreino: z.string().optional(),
+  parte: z.string().min(1, { message: "Informe o grupo muscular" }),
+  horaTreino: z.string().optional(),
+  // O campo 'exercicios' agora é um array de objetos
+  exercicios: z.array(
+    z.object({
+      nome: z.string().min(1, { message: "Informe o exercício" }),
+      series: z.string().min(1, { message: "Informe as séries" }),
+    })
+  ).min(1, { message: "Adicione pelo menos um exercício." }) // Garante que o array não esteja vazio
 });
 
 type FormData = z.infer<typeof schema>;
 
-type Exercise = {
-  parte: string;
-  exercicio: string;
-  series: string;
-  weight: string;
-  isChecked: boolean;
-};
-
 export default function FormAdicionar() {
-  const { control, handleSubmit, formState: { errors, isValid } } = useForm<FormData>({
-    resolver: zodResolver(schema)
+  const { dia } = useLocalSearchParams<{ dia: string }>();
+    useEffect(() => {
+    console.log("DIA RECEBIDO NO FORMULÁRIO DE ADIÇÃO:", dia);
+    if (!dia) {
+      Alert.alert(
+        "Erro Crítico",
+        "Nenhum dia da semana foi especificado. Por favor, volte e tente novamente.",
+        [{ text: "OK", onPress: () => router.back() }]
+      );
+    }
+  }, [dia]);
+
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    // Valor inicial do formulário, já com um exercício
+    defaultValues: {
+      parte: '',
+      horaTreino: '',
+      exercicios: [{ nome: '', series: '' }]
+    }
+  });
+  
+  // 2. CONFIGURAMOS O useFieldArray
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "exercicios"
   });
 
-const [notify, setNotify] = useState(false);
-const ExercicieOptions =[
-    { label: 'Peito', value: 'chest' },
-    { label: 'Costas', value: 'back' },
-    { label: 'Pernas', value: 'legs' },
-    { label: 'Ombros', value: 'shoulders' },
-    { label: 'Bíceps', value: 'biceps' },
-    { label: 'Tríceps', value: 'triceps' },
-    { label: 'Abdômen', value: 'abs' },
-]
+  const [notify, setNotify] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+ const ExercicieOptions = [
+    { label: 'Peito', value: 'Peito' },
+    { label: 'Costas', value: 'Costas' },
+    { label: 'Pernas', value: 'Pernas' },
+    { label: 'Ombros', value: 'Ombros' },
+    { label: 'Bíceps', value: 'Bíceps' },
+    { label: 'Tríceps', value: 'Tríceps' },
+    { label: 'Abdômen', value: 'Abdômen' },
+  ];
+  
+  // 2. A função de salvar com uma verificação robusta
+  const handleSavePlano = async (data: FormData) => {
+    const user = auth.currentUser;
+
+    // ESTA VERIFICAÇÃO É A MAIS IMPORTANTE
+    if (!user || !dia) {
+      Alert.alert("Erro", "Dia da semana não especificado ou usuário não logado. Não é possível salvar.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      await firestore.collection('planejamentos').add({
+        userId: user.uid,
+        diaDaSemana: dia, // <-- Agora 'dia' garantidamente tem um valor
+        ...data,
+        notify: notify,
+        createdAt: new Date(),
+      });
+
+      Alert.alert("Sucesso!", "Seu plano foi salvo.");
+      router.back();
+
+    } catch (error) {
+      console.error("Erro ao salvar: ", error);
+      Alert.alert("Erro ao Salvar", (error as Error).message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
       <View style={styles.container}>
-             <Header
-                 title='Planejamento Semanal'
-                text="Gerencie seus treinos de >dia<"
-        />
+        <Header title='Planejamento Semanal' text="Gerencie seus treinos" />
 
         <View style={styles.formContainer}>
           <Text style={styles.label}>Músculo:</Text>
-          <Select
-            control={control}
-            name="parte"
-            placeholder="Selecione o grupo muscular"
-            error={errors.parte?.message}
-            options={ExercicieOptions}
-          />
+          <Select control={control} name="parte" error={errors.parte?.message} options={ExercicieOptions} />
           
-          <View style={styles.row}>
-            <View style={styles.inputHalf}>
-              <Text style={styles.label}>Exercício:</Text>
-              <Input
-                name="exercicio"
-                control={control}
-                placeholder="--"
-                error={errors.exercicio?.message}
-                keyboardType="default"
-              />
+          {/* 3. RENDERIZAMOS OS CAMPOS DINAMICAMENTE */}
+          {fields.map((field, index) => (
+            <View key={field.id} style={styles.exerciseRow}>
+              <View style={styles.row}>
+                <View style={styles.inputHalf}>
+                  <Text style={styles.label}>Exercício:</Text>
+                  <Input
+                    name={`exercicios.${index}.nome`} // Nome dinâmico
+                    control={control}
+                    placeholder="--"
+                    error={errors.exercicios?.[index]?.nome?.message}
+                    keyboardType="default"
+                  />
+                </View>
+                <View style={styles.inputHalf}>
+                  <Text style={styles.label}>Séries:</Text>
+                  <Input
+                    name={`exercicios.${index}.series`} // Nome dinâmico
+                    control={control}
+                    placeholder="--"
+                    error={errors.exercicios?.[index]?.series?.message}
+                    keyboardType="default"
+                  />
+                </View>
+              </View>
+              {/* Mostra o botão de remover apenas para itens adicionais */}
+              {index > 0 && (
+                 <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
+                    <Feather name="x-circle" size={20} color={colors.vermEscuro} />
+                 </TouchableOpacity>
+              )}
             </View>
+          ))}
           
-            <View style={styles.inputHalf}>
-              <Text style={styles.label}>Séries:</Text>
-              <Input
-                name="series"
-                control={control}
-                placeholder="--"
-                error={errors.series?.message}
-                keyboardType="default"
-              />
-            </View>
-          </View>
-
+          {/* 4. BOTÕES DE CONTROLE DO ARRAY */}
           <Text style={styles.label}>Hora do treino (opcional):</Text>
-          <Input
-            name="horaTreino"
-            control={control}
-            placeholder="Hora do treino"
-            keyboardType="default"
-          />
+          <Input name="horaTreino" control={control} placeholder="Hora do treino" keyboardType="default"/>
 
           <View style={styles.checkboxContainer}>
-            <Switch
-              value={notify}
-              onValueChange={setNotify}
-              trackColor={{ false: '#ccc', true: colors.vermEscuro }}
-              thumbColor={notify ? '#fff' : '#fff'}
-            />
-            <Text style={styles.optionalLabel}>Me notificar quando chegar a hora do treino (opcional)</Text>
+            <Switch value={notify} onValueChange={setNotify} trackColor={{ false: '#ccc', true: colors.vermEscuro }} thumbColor={'#fff'} />
+            <Text style={styles.optionalLabel}>Me notificar</Text>
           </View>
 
-          <TouchableOpacity style={styles.buttonAdicionar}>
-            <Text style={styles.adicionarButton}>Adicionar</Text>
+          <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
+            <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
             <Feather name="plus-circle" size={20} color="#3D0000" />
           </TouchableOpacity>
-
-          <TouchableOpacity style={styles.buttonSave} >
-            <Text style={styles.buttonText}>SALVAR</Text>
+          
+          <TouchableOpacity 
+            style={[styles.buttonAdicionar, fields.length <= 1 && styles.buttonDisabled]} 
+            onPress={() => remove(fields.length - 1)}
+            disabled={fields.length <= 1}
+          >
+            <Text>REMOVER ÚLTIMO EXERCÍCIO</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(handleSavePlano)} disabled={isLoading}>
+            <Text style={styles.buttonText}>{isLoading ? 'SALVANDO...' : 'SALVAR'}</Text>
+          </TouchableOpacity>
+          
+          
         </View>
       </View>
     </ScrollView>
   );
 }
+

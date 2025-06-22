@@ -26,6 +26,32 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#555',
     marginBottom: 10,
+    flexWrap: 'wrap',
+    height: 50,
+    padding: 4
+  },
+
+   exerciseRow: {
+    marginBottom: 10,
+    position: 'relative',
+    padding: 10,
+    borderRadius: 8,
+  },
+  removeIcon: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+  },
+  buttonRemover: {
+    // seu estilo para o botão de remover...
+  },
+  buttonDisabled: {
+    backgroundColor: '#ccc', // Cor para botão desabilitado
+    opacity: 0.6,
+     borderWidth: 2,
+    borderColor: '#ccc',
   },
 
   button: {
@@ -69,7 +95,7 @@ export default StyleSheet.create({
   buttonAdicionar: {
     backgroundColor: colors.white,
     borderRadius: 30,
-    width: '45%',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -90,6 +116,7 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 80
   },
 
   buttonText: {

@@ -1,61 +1,138 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, Button, TouchableOpacity, ScrollView,FlatList } from 'react-native';
-import { Feather } from '@expo/vector-icons'; 
+import React, { useState, useCallback } from 'react';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import styles from "./style";
-import { router } from 'expo-router';
-import {Header} from '../../../components/header/header'
+import { router, useFocusEffect, useLocalSearchParams  } from 'expo-router';
+import { Header } from '../../../components/header/header';
+import { auth, firestore } from '../../../config/firebase';
+import { colors } from '../../../constants/colors';
 
-const planoTreino =[
-  {
-    id:"1",
-    titulo: 'Ombro',
-    descricao: 'Elevação Lateral',
-    repeticoes: '3x12',
-  },
-  {
-    id: '2',
-    titulo: 'Peito',
-    descricao: 'Supino Reto',
-    repeticoes: '4x10',
-  },
-]
- 
-
+// Interface para o tipo de dado que esperamos do Firestore
+interface Plano {
+  id: string;
+  parte: string;
+  exercicios: Array<{ nome: string; series: string }>;
+}
 
 export default function Adicionar() {
+  const { dia } = useLocalSearchParams<{ dia?: string }>();
 
-const renderItem = ({ item }: any) => (
-  <TouchableOpacity style={styles.card} onPress={() => handleCardPress(item.id)}>
-    <Text style={styles.cardTitulo}>{item.titulo}</Text>
-    <Text style={styles.cardDescricao}>{item.descricao}</Text>
-    <Text style={styles.cardRepeticoes}>{item.repeticoes}</Text>
-  </TouchableOpacity>
-);
+  const [planos, setPlanos] = useState<Plano[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Função para capitalizar o nome do dia para o título
+  const getDayName = (diaParam: string | undefined) => {
+    if (!diaParam) return 'Seu Treino';
+    return diaParam.charAt(0).toUpperCase() + diaParam.slice(1);
+  }
+
+  useFocusEffect(
+    useCallback(() => {
+      if (!dia) {
+        setLoading(false);
+        return;
+      }
+      const user = auth.currentUser;
+      if (!user) {
+        setLoading(false);
+        setPlanos([]);
+        return;
+      }
+      
+      setLoading(true);
+
+      const subscriber = firestore
+        .collection('planejamentos')
+        .where('userId', '==', user.uid)
+        .where('diaDaSemana', '==', dia)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(querySnapshot => {
+          const planosData: Plano[] = [];
+          querySnapshot.forEach(documentSnapshot => {
+            planosData.push({ id: documentSnapshot.id, ...documentSnapshot.data() } as Plano);
+          });
+          setPlanos(planosData);
+          setLoading(false);
+        }, error => {
+            console.error(error);
+            Alert.alert("Erro", "Não foi possível carregar os planos.");
+            setLoading(false);
+        });
+
+      return () => subscriber();
+    }, [dia])
+  );
+
+  const handleDelete = (planoId: string) => {
+    // Sua função de delete continua aqui, sem alterações.
+    Alert.alert( "Excluir Plano", "Você tem certeza?", [ { text: "Cancelar" }, { text: "Excluir", onPress: async () => { /* ... sua lógica de delete ... */ } } ]);
+  };
+
+  const renderItem = ({ item }: { item: Plano }) => {
+    const primeiroExercicio = item.exercicios?.[0] || { nome: 'Plano sem exercícios', series: '' };
+    return (
+      <View style={styles.card}>
+        <TouchableOpacity style={styles.cardContent} onPress={() => handleCardPress(item.id)}>
+          <Text style={styles.cardTitulo}>{item.parte}</Text>
+          <Text style={styles.cardDescricao}>{primeiroExercicio.nome}</Text>
+          <Text style={styles.cardRepeticoes}>{primeiroExercicio.series} Séries</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
+          <Feather name="trash-2" size={24} color={colors.vermEscuro} />
+        </TouchableOpacity>
+      </View>
+    );
+  };
   
-const handleCardPress = (id: string) => {
-  router.push('/planejamentos/FormEditar/formEditar');
-};
+  // CORREÇÃO 1: NAVEGAÇÃO PARA A TELA DE EDIÇÃO
+  // A tela de edição espera um parâmetro 'id'.
+  const handleCardPress = (id: string) => {
+     router.push({
+        pathname: "/planejamentos/FormEditar/[id]", 
+        params: { id: id }, // O parâmetro deve ser 'id', não 'dia'.
+     });
+  };
 
-return(
-    
-     <View style={styles.container}>
-        <Header
-            title='Planejamento Semanal'
-            text='Gerencie seus treinos'
-        />  
+  // CORREÇÃO 2: NOVA FUNÇÃO PARA NAVEGAR PARA O FORMULÁRIO DE ADIÇÃO
+  // Esta função garante que o parâmetro 'dia' seja passado adiante.
+  const handleAddPress = () => {
+    if (!dia) {
+      Alert.alert("Erro", "Dia não identificado. Por favor, volte e tente novamente.");
+      return;
+    }
+    router.push({
+      pathname: '/planejamentos/FormAdicionar/formAdicionar',
+      params: { dia: dia } // Passando o dia adiante!
+    });
+  };
 
-    <TouchableOpacity style={styles.button} onPress={() => router.push('/planejamentos/FormAdicionar/formAdicionar')}>
+  return (
+    <View style={styles.container}>
+      <Header
+        title='Planejamento Semanal'
+        // CORREÇÃO 3: HEADER COM TEMPLATE LITERAL (USANDO CRASES ``)
+        text={`Gerencie seus treinos de ${getDayName(dia)}`}
+      />  
+
+      {/* Botão de adicionar agora chama a nova função handleAddPress */}
+      <TouchableOpacity style={styles.button} onPress={handleAddPress}>
         <Text style={styles.adicionarButton}>Adicionar</Text>
         <Feather name='plus-circle' size={30} color='#fff' />
-    </TouchableOpacity>
+      </TouchableOpacity>
 
-      <FlatList
-        data={planoTreino}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContainer}
-      />
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.vermEscuro} style={{ marginTop: 20 }} />
+      ) : (
+        <FlatList
+          data={planos}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
+          ListEmptyComponent={
+             <Text >Nenhum plano adicionado para este dia. Clique em "Adicionar" para começar!</Text>
+          }
+        />
+      )}
     </View>
-   
   );
 }
