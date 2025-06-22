@@ -117,7 +117,7 @@ export default function Adicionar() {
       {/* Botão de adicionar agora chama a nova função handleAddPress */}
       <TouchableOpacity style={styles.button} onPress={handleAddPress}>
         <Text style={styles.adicionarButton}>Adicionar</Text>
-        <Feather name='plus-circle' size={30} color='#fff' />
+        <Feather name='plus-circle' size={30} color='#3D0000' />
       </TouchableOpacity>
 
       {loading ? (
@@ -129,8 +129,12 @@ export default function Adicionar() {
           renderItem={renderItem}
           contentContainerStyle={styles.listContainer}
           ListEmptyComponent={
-             <Text >Nenhum plano adicionado para este dia. Clique em "Adicionar" para começar!</Text>
-          }
+                      <View style={{alignItems: 'center', marginTop: 50}}>
+                        <Text>Nenhum plano adicionado para este dia..</Text>
+                        <Text>Clique em "Adicionar" para começar!</Text>
+                      </View>
+                    }
+      
         />
       )}
     </View>

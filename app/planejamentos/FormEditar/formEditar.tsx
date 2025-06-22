@@ -34,13 +34,17 @@ export default function FormEditar() {
 
 const [notify, setNotify] = useState(false);
 const ExercicieOptions =[
-    { label: 'Peito', value: 'chest' },
-    { label: 'Costas', value: 'back' },
-    { label: 'Pernas', value: 'legs' },
-    { label: 'Ombros', value: 'shoulders' },
-    { label: 'Bíceps', value: 'biceps' },
-    { label: 'Tríceps', value: 'triceps' },
-    { label: 'Abdômen', value: 'abs' },
+    { label: 'Peito', value: 'Peito' },
+    { label: 'Costas', value: 'Costas' },
+    { label: 'Ombros', value: 'Ombros' },
+    { label: 'Bíceps', value: 'Bíceps' },
+    { label: 'Tríceps', value: 'Tríceps' },
+    { label: 'Abdômen', value: 'Abdômen' },
+    { label: 'Posterior de Coxa', value: 'Posterior de Coxa'},
+    { label: 'Quadríceps', value: 'Quadríceps'},
+    { label: 'Glúteo', value: 'Glúteo'},
+    { label: 'Panturrilha', value: 'Panturrilha'},
+    { label: 'Antebraço', value: 'Antebraço'},
 ]
 
   return (

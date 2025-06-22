@@ -1,117 +1,199 @@
-import React, { useState } from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity,Switch } from 'react-native'; 
-import { Feather } from '@expo/vector-icons'; 
-import styles from "./style";
+// gruposMusc/FormEditar/formEditar.tsx
+
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { Feather } from '@expo/vector-icons';
+import styles from "../FormAdicionar/style"; // Pode reutilizar o estilo
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
+import { useForm, useFieldArray } from 'react-hook-form';
 import { colors } from '../../../constants/colors';
 import { Input } from '../../../components/input/inputNormal';
-import {Select} from '../../../components/input/select';
-import {Header} from '../../../components/header/header'
+import { Select } from '../../../components/input/select';
+import { Header } from '../../../components/header/header';
+import { router, useLocalSearchParams } from 'expo-router';
+import { firestore } from '../../../config/firebase'; // Verifique o caminho
 
+// Schema idêntico ao de adicionar
 const schema = z.object({
-   parte: z.string().min(1, { message: "Informe a parte muscular de treino" }),
-   exercicio: z.string().min(1, { message: "Informe um exercício" }),
-   series: z.string().min(1, { message: "Informe as séries" }),
-   horaTreino: z.string().optional(),
+  parte: z.string().min(1, { message: "Informe o grupo muscular" }),
+  horaTreino: z.string().optional(),
+  exercicios: z.array(z.object({
+    nome: z.string().min(1, { message: "Informe o exercício" }),
+    series: z.string().min(1, { message: "Informe as séries" }),
+  })).min(1, { message: "Adicione pelo menos um exercício." })
 });
 
 type FormData = z.infer<typeof schema>;
 
-type Exercise = {
-  parte: string;
-  exercicio: string;
-  series: string;
-  
-};
+const ExercicieOptions = [
+    { label: 'Peito', value: 'Peito' },
+    { label: 'Costas', value: 'Costas' },
+    { label: 'Ombros', value: 'Ombros' },
+    { label: 'Bíceps', value: 'Bíceps' },
+    { label: 'Tríceps', value: 'Tríceps' },
+    { label: 'Abdômen', value: 'Abdômen' },
+    { label: 'Posterior de Coxa', value: 'Posterior de Coxa'},
+    { label: 'Quadríceps', value: 'Quadríceps'},
+    { label: 'Glúteo', value: 'Glúteo'},
+    { label: 'Panturrilha', value: 'Panturrilha'},
+    { label: 'Antebraço', value: 'Antebraço'},
+];
 
 export default function FormEditar() {
-const { control, handleSubmit, formState: { errors, isValid } } = useForm<FormData>({
-    resolver: zodResolver(schema)
+  const { id } = useLocalSearchParams<{ id: string }>();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(true);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
+  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+    resolver: zodResolver(schema),
   });
 
-const [selectedImage, setSelectedImage] = useState<string | null>(null);
-const ExercicieOptions =[
-   { label: 'Peito', value: 'chest', image: 'https://link-para-imagem.com/peito.png' },
-     { label: 'Costas', value: 'back', image: 'https://link-para-imagem.com/costas.png' },
-     { label: 'Pernas', value: 'legs', image: 'https://link-para-imagem.com/pernas.png' },
-     { label: 'Ombros', value: 'shoulders', image: 'https://link-para-imagem.com/ombros.png' },
-     { label: 'Bíceps', value: 'biceps', image: 'https://link-para-imagem.com/biceps.png' },
-     { label: 'Tríceps', value: 'triceps', image: 'https://link-para-imagem.com/triceps.png' },
-     { label: 'Abdômen', value: 'abs', image: 'https://link-para-imagem.com/abs.png' },
-]
+
+  const { fields, append, remove } = useFieldArray({ control, name: "exercicios" });
+
+  useEffect(() => {
+    if (!id) {
+      Alert.alert("Erro", "ID do treino não fornecido.");
+      router.back();
+      return;
+    }
+
+    const docRef = firestore.collection('treinos_grupados').doc(id);
+    docRef.get().then(doc => {
+      if (doc.exists) {
+        const data = doc.data() as FormData & { imagemUrl: string };
+        reset(data); // Preenche o formulário com os dados do Firestore
+        setSelectedImage(data.imagemUrl);
+      } else {
+        Alert.alert("Erro", "Treino não encontrado.");
+        router.back();
+      }
+    }).catch(error => {
+      console.error(error);
+      Alert.alert("Erro", "Não foi possível carregar os dados do treino.");
+    }).finally(() => {
+      setIsFetching(false);
+    });
+  }, [id, reset]);
+
+  const handleUpdateTreino = async (data: FormData) => {
+    if (!id) return;
+    setIsLoading(true);
+    try {
+      await firestore.collection('treinos_grupados').doc(id).update({
+        ...data,
+        imagemUrl: selectedImage,
+      });
+      Alert.alert("Sucesso", "Treino atualizado!");
+      router.back();
+    } catch (error) {
+      console.error(error);
+      Alert.alert("Erro", "Não foi possível atualizar o treino.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDeleteTreino = () => {
+    if (!id) return;
+    Alert.alert(
+      "Excluir Treino",
+      "Você tem certeza que deseja excluir este treino?",
+      [
+        { text: "Cancelar", style: 'cancel' },
+        {
+          text: "Excluir", style: 'destructive', onPress: async () => {
+            setIsLoading(true);
+            try {
+              await firestore.collection('treinos_grupados').doc(id).delete();
+              Alert.alert("Sucesso", "Treino excluído.");
+              router.back();
+            } catch (error) {
+              console.error(error);
+              Alert.alert("Erro", "Não foi possível excluir o treino.");
+              setIsLoading(false);
+            }
+          }
+        }
+      ]
+    );
+  };
+  
+  if (isFetching) {
+    return <ActivityIndicator size="large" color={colors.vermEscuro} style={{flex: 1}}/>
+  }
 
   return (
     <ScrollView style={styles.container}>
-      <View style={styles.container}>
-             <Header
-                  title='Divisão por Grupos Musculares'
-                  text='Gerencie por grupos muscular seus treinos organizados'
+      <Header title='Editar Treino' text='Ajuste ou remova seu treino' />
+      <View style={styles.formContainer}>
+        {/* O JSX do formulário é praticamente idêntico ao de Adicionar */}
+        <Text style={styles.label}>Músculo:</Text>
+        <Select
+          control={control}
+          name="parte"
+          error={errors.parte?.message}
+          options={ExercicieOptions}
+          onSelectExtraData={(selectedItem) => {
+    setSelectedImage(selectedItem.image ?? null);
+  }}
         />
 
-        <View style={styles.formContainer}>
-          <Text style={styles.label}>Músculo:</Text>
-          <Select
-            control={control}
-            name="parte"
-            placeholder="Selecione o grupo muscular"
-            error={errors.parte?.message}
-            options={ExercicieOptions}
-            onSelectExtraData={(item) => setSelectedImage(item.image ?? null)}
-          />
-          
-          <View style={styles.row}>
-            <View style={styles.inputHalf}>
-              <Text style={styles.label}>Exercício:</Text>
-              <Input
-                name="exercicio"
-                control={control}
-                placeholder="--"
-                error={errors.exercicio?.message}
-                keyboardType="default"
-              />
-            </View>
-          
-            <View style={styles.inputHalf}>
-              <Text style={styles.label}>Séries:</Text>
-              <Input
-                name="series"
-                control={control}
-                placeholder="--"
-                error={errors.series?.message}
-                keyboardType="default"
-              />
-            </View>
-          </View>
+      
+           {fields.map((field, index) => (
+                     <View key={field.id} >
+                       <View style={styles.row}>
+                         <View style={styles.inputHalf}>
+                           <Text style={styles.label}>Exercício {index + 1}:</Text>
+                           <Input
+                             name={`exercicios.${index}.nome`}
+                             control={control}
+                             placeholder="Ex: Supino Reto"
+                             error={errors.exercicios?.[index]?.nome?.message}
+                             keyboardType="default"
+                           />
+                         </View>
+                         <View style={styles.inputHalf}>
+                           <Text style={styles.label}>Séries:</Text>
+                           <Input
+                             name={`exercicios.${index}.series`}
+                             control={control}
+                             placeholder="Ex: 4x10"
+                             error={errors.exercicios?.[index]?.series?.message}
+                             keyboardType="default"
+                           />
+                         </View>
+                       </View>
+                     </View>
+                   ))}
+        
+        <Text style={styles.label}>Hora do treino (opcional):</Text>
+        <Input name="horaTreino" control={control} placeholder="Ex: 18:00" keyboardType="default" />
+        
+        <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
+          <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
+          <Feather name="plus-circle" size={20} color="#3D0000" />
+        </TouchableOpacity>
+        <TouchableOpacity 
+                                style={[styles.buttonAdicionar, fields.length <= 1 && styles.buttonDisabled]} 
+                                onPress={() => remove(fields.length - 1)}
+                                disabled={fields.length <= 1}
+                              >
+                                <Text>REMOVER ÚLTIMO EXERCÍCIO</Text>
+                              </TouchableOpacity>
 
-          <Text style={styles.label}>Hora do treino (opcional):</Text>
-          <Input
-            name="horaTreino"
-            control={control}
-            placeholder="Hora do treino"
-            keyboardType="default"
-          />
+        <TouchableOpacity style={styles.buttonAdicionar} onPress={handleDeleteTreino} disabled={isLoading}>
+          <Text >DELETAR TREINO</Text>
+        </TouchableOpacity>
 
+        {/* Botões de Ação */}
+        <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(handleUpdateTreino)} disabled={isLoading}>
+          {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>}
+        </TouchableOpacity>
 
-          <TouchableOpacity style={styles.buttonAdicionar}>
-            <Text style={styles.adicionarButton}>Adicionar</Text>
-            <Feather name="plus-circle" size={20} color="#3D0000" />
-          </TouchableOpacity>
-
-          
-          <TouchableOpacity style={styles.buttonSave} >
-            <Text style={styles.buttonText}>REMOVER ÚLTIMO EXERCÍCIO</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.buttonSave} >
-            <Text style={styles.buttonText}>SALVAR</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.buttonSave} >
-            <Text style={styles.buttonText}>DELETAR</Text>
-          </TouchableOpacity>
-        </View>
+       
       </View>
     </ScrollView>
   );

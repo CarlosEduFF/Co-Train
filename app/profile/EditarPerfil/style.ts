@@ -60,7 +60,8 @@ export default StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 4,
-    marginTop: 10
+    marginTop: 10,
+    marginBottom: 60
   },
   buttonText: {
     color: colors.white,

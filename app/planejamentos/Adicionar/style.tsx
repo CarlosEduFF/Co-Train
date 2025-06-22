@@ -35,21 +35,29 @@ export default StyleSheet.create({
   
     button:{
         marginTop:15,
-        backgroundColor: colors.vermEscuro,
-        borderRadius: 15,
-        width: '43%',
+
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 10,
-        borderWidth: 3,
-        borderColor: colors.Vermelho,
+          backgroundColor: colors.white,
+    borderRadius: 30,
+    width: '45%',
+
+    borderWidth: 2,
+    borderColor: colors.Vermelho,
+    paddingVertical: 2,
+    gap: 6,
     },
      adicionarButton: {
+
       margin:10,
         fontSize: 16,
-        color: colors.white,
         textAlign: 'center',
+    color: colors.vermEscuro,
+    paddingHorizontal: 10,
+        
+
     },
   
     listContainer: {

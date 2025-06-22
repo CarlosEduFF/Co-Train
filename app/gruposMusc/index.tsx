@@ -1,94 +1,113 @@
-import React, { useState } from 'react';
-import { View, Text, Image, TextInput, Button, TouchableOpacity, ScrollView,FlatList } from 'react-native';
+// gruposMusc/index.tsx
+
+import React, { useState, useCallback } from 'react';
+import { View, Text, Image, TouchableOpacity, FlatList, ActivityIndicator, Alert } from 'react-native';
 import { Feather } from '@expo/vector-icons'; 
 import styles from "./style";
-import { router } from 'expo-router';
-import {Header} from '../../components/header/header'
+import { router, useFocusEffect } from 'expo-router';
+import { Header } from '../../components/header/header';
+import { auth, firestore } from '../../config/firebase'; // Verifique o caminho
+import { colors } from '../../constants/colors';
 
-const planoTreino =[
-  {
-    id:"1",
-    titulo: 'Ombro',
-    descricao: 'Elevação Lateral',
-    repeticoes: '3x12',
-  },
-  {
-    id: '2',
-    titulo: 'Peito',
-    descricao: 'Supino Reto',
-    repeticoes: '4x10',
-  },
-  {
-    id: '3',
-    titulo: 'Peito',
-    descricao: 'Supino Reto',
-    repeticoes: '4x10',
-  },
-  {
-    id:"4",
-    titulo: 'Ombro',
-    descricao: 'Elevação Lateral',
-    repeticoes: '3x12',
-  },
-  {
-    id: '5',
-    titulo: 'Peito',
-    descricao: 'Supino Reto',
-    repeticoes: '4x10',
-  },
-  {
-    id: '6',
-    titulo: 'Peito',
-    descricao: 'Supino Reto',
-    repeticoes: '4x10',
-  },
-]
+// Interface para os dados do treino vindos do Firestore
+interface Treino {
+  id: string;
+  parte: string; // Grupo muscular
+  imagemUrl: string; // URL da imagem do grupo
+  exercicios: Array<{ nome: string; series: string }>;
+}
 
-const userData = {
-    imageUrl: 'https://images.unsplash.com/photo-1607746882042-944635dfe10e?auto=format&fit=crop&w=150&q=80',
-  };
- 
+export default function GruposMusc() {
+  const [treinos, setTreinos] = useState<Treino[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default function gruposMusc() {
+  useFocusEffect(
+    useCallback(() => {
+      const user = auth.currentUser;
+      if (!user) {
+        Alert.alert("Erro", "Você precisa estar logado para ver seus treinos.");
+        setLoading(false);
+        return;
+      }
 
- const renderItem = ({ item }: any) => (
-  <TouchableOpacity style={styles.card} onPress={() => handleCardPress(item.id)}>
-    <View style={styles.containerCard}>
-    <Text style={styles.cardTitulo}>{item.titulo}</Text>
-            <Image
-              source={{ uri: userData.imageUrl }}
-              style={styles.MuscImage}
-              resizeMode="contain"
-            />
-    </View>
-  </TouchableOpacity>
-);
-  
-const handleCardPress = (id: string) => {
-  router.push('/gruposMusc/FormEditar/formEditar');
-};
+      setLoading(true);
+      const collectionRef = firestore.collection('treinos_grupados');
 
-return(
-    
-     <View style={styles.container}>
-        <Header
-            title='Divisão por Grupos Musculares'
-            text='Gerencie por grupos muscular seus treinos organizados'
-        />  
+      const subscriber = collectionRef
+        .where('userId', '==', user.uid)
+        .orderBy('createdAt', 'desc')
+        .onSnapshot(querySnapshot => {
+          const treinosData: Treino[] = [];
+          querySnapshot.forEach(doc => {
+            treinosData.push({
+              id: doc.id,
+              ...doc.data()
+            } as Treino);
+          });
+          setTreinos(treinosData);
+          setLoading(false);
+        }, error => {
+          console.error("Erro ao buscar treinos: ", error);
+          Alert.alert("Erro", "Não foi possível carregar os treinos.");
+          setLoading(false);
+        });
 
-    <TouchableOpacity style={styles.button} onPress={() => router.push('/gruposMusc/FormAdicionar/formAdicionar')}>
-        <Text style={styles.adicionarButton}>Adicionar</Text>
-        <Feather name='plus-circle' size={30} color='#fff' />
+      // Se desinscreve do listener ao sair da tela
+      return () => subscriber();
+    }, [])
+  );
+
+  const renderItem = ({ item }: { item: Treino }) => (
+    <TouchableOpacity style={styles.card} onPress={() => handleCardPress(item.id)}>
+      <View style={styles.containerCard}>
+       
+        <Image
+          source={{ uri: item.imagemUrl || 'https://via.placeholder.com/150' }} // Usa a imagem salva ou um placeholder
+          style={styles.MuscImage} // Verifique se seu estilo define width/height
+          resizeMode="cover"
+        />
+         <Text style={styles.cardTitulo}>{item.parte}</Text>
+      </View>
     </TouchableOpacity>
+  );
 
-      <FlatList
-        data={planoTreino}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
-        contentContainerStyle={styles.listContainer}
-        numColumns={3}
+  const handleCardPress = (id: string) => {
+    // Passa o ID do treino para a tela de edição
+    router.push({
+      pathname: '/gruposMusc/FormEditar/formEditar',
+      params: { id: id }
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <Header
+        title='Divisão por Grupos Musculares'
+        text='Gerencie por grupos musculares seus treinos organizados'
       />
+      <TouchableOpacity style={styles.button} onPress={() => router.push('/gruposMusc/FormAdicionar/formAdicionar')}>
+        <Text style={styles.adicionarButton}>Adicionar</Text>
+        <Feather name='plus-circle' size={30} color='#3D0000' />
+      </TouchableOpacity>
+      
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.vermEscuro} style={{ flex: 1 }} />
+      ) : (
+        <FlatList
+          data={treinos}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          contentContainerStyle={styles.listContainer}
+          numColumns={2}
+          
+          ListEmptyComponent={
+            <View style={{alignItems: 'center', marginTop: 50}}>
+              <Text>Nenhum treino adicionado.</Text>
+              <Text>Clique em "Adicionar" para começar!</Text>
+            </View>
+          }
+        />
+      )}
     </View>
-   
   );
 }

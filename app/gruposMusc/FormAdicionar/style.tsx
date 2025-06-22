@@ -70,7 +70,7 @@ export default StyleSheet.create({
   buttonAdicionar: {
     backgroundColor: colors.white,
     borderRadius: 30,
-    width: '45%',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -80,6 +80,12 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     paddingVertical: 8,
     gap: 6,
+  },
+    buttonDisabled: {
+    backgroundColor: '#ccc', // Cor para botão desabilitado
+    opacity: 0.6,
+     borderWidth: 2,
+    borderColor: '#ccc',
   },
 
   buttonSave: {
@@ -91,6 +97,7 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 80
   },
 
   buttonText: {

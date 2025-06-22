@@ -13,25 +13,32 @@ export default StyleSheet.create({
         marginTop:30
     },
     button:{
-        marginTop:15,
-        backgroundColor: colors.vermEscuro,
-        borderRadius: 15,
-        width: '43%',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 10,
-        borderWidth: 3,
-        borderColor: colors.Vermelho,
+          backgroundColor: colors.white,
+    borderRadius: 30,
+    width: '45%',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    borderWidth: 2,
+    borderColor: colors.Vermelho,
+    paddingVertical: 2,
+    gap: 6,
     },
      adicionarButton: {
         margin:10,
-        fontSize: 16,
-        color: colors.white,
         textAlign: 'center',
+         fontSize: 16,
+    color: colors.vermEscuro,
+    paddingHorizontal: 10,
+        
+        
     },
   
      listContainer: {
+      alignItems: 'center', // Tenta centralizar a lista como um todo
+    paddingHorizontal: 10,
         gap: 16,
     },
 
@@ -40,26 +47,35 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        margin:'5%'
+        margin:'5%',
+        height: '100%',
     },
 
      containerCard:{
-        alignItems:'center'
+        alignItems:'center',
+        alignContent:'center',
+        maxWidth: '100%',
+        height: '100%',
+
+
+  
      },
      MuscImage:{
-        width: 85,
-        height: 85,
+        width: 100,
+        height: 100,
         borderRadius: 75,
-        borderWidth: 5,
+        borderWidth: 1,
         borderColor: colors.vermEscuro,
 
      },
      cardTitulo: {
        color: colors.Vermelho,
        fontWeight: 'bold',
-       fontSize: 23,
+       fontSize: 15,
        marginBottom: 4,
-       marginLeft:10
+       maxWidth: 90, 
+       textAlign: "center",
+  
      },
 
      cardDescricao: {

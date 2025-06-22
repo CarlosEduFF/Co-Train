@@ -27,11 +27,15 @@ const schema = z.object({
  const ExercicieOptions = [
     { label: 'Peito', value: 'Peito' },
     { label: 'Costas', value: 'Costas' },
-    { label: 'Pernas', value: 'Pernas' },
     { label: 'Ombros', value: 'Ombros' },
     { label: 'Bíceps', value: 'Bíceps' },
     { label: 'Tríceps', value: 'Tríceps' },
     { label: 'Abdômen', value: 'Abdômen' },
+    { label: 'Posterior de Coxa', value: 'Posterior de Coxa'},
+    { label: 'Quadríceps', value: 'Quadríceps'},
+    { label: 'Glúteo', value: 'Glúteo'},
+    { label: 'Panturrilha', value: 'Panturrilha'},
+    { label: 'Antebraço', value: 'Antebraço'},
   ];
 
 type FormData = z.infer<typeof schema>;

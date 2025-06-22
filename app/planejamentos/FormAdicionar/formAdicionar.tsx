@@ -63,11 +63,16 @@ export default function FormAdicionar() {
  const ExercicieOptions = [
     { label: 'Peito', value: 'Peito' },
     { label: 'Costas', value: 'Costas' },
-    { label: 'Pernas', value: 'Pernas' },
     { label: 'Ombros', value: 'Ombros' },
     { label: 'Bíceps', value: 'Bíceps' },
     { label: 'Tríceps', value: 'Tríceps' },
     { label: 'Abdômen', value: 'Abdômen' },
+    { label: 'Posterior de Coxa', value: 'Posterior de Coxa'},
+    { label: 'Quadríceps', value: 'Quadríceps'},
+    { label: 'Glúteo', value: 'Glúteo'},
+    { label: 'Panturrilha', value: 'Panturrilha'},
+    { label: 'Antebraço', value: 'Antebraço'},
+
   ];
   
   // 2. A função de salvar com uma verificação robusta
