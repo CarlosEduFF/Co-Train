@@ -97,21 +97,10 @@ const ExercicieOptions =[
             keyboardType="default"
           />
 
-          <View style={styles.checkboxContainer}>
-            <Switch
-              value={notify}
-              onValueChange={setNotify}
-              trackColor={{ false: '#ccc', true: colors.vermEscuro }}
-              thumbColor={notify ? '#fff' : '#fff'}
-            />
-            <Text style={styles.optionalLabel}>Me notificar quando chegar a hora do treino (opcional)</Text>
-          </View>
-
           <TouchableOpacity style={styles.buttonAdicionar}>
             <Text style={styles.adicionarButton}>Adicionar</Text>
             <Feather name="plus-circle" size={20} color="#3D0000" />
           </TouchableOpacity>
-
           
           <TouchableOpacity style={styles.buttonSave} >
             <Text style={styles.buttonText}>REMOVER ÚLTIMO EXERCÍCIO</Text>

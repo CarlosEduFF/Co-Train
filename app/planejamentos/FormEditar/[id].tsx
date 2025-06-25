@@ -141,12 +141,7 @@ export default function FormEditar() {
               {}
               <Text style={styles.label}>Hora do treino (opcional):</Text>
               <Input name="horaTreino" control={control} placeholder="Hora do treino" keyboardType="default"/>
-    
-              <View style={styles.checkboxContainer}>
-                <Switch value={notify} onValueChange={setNotify} trackColor={{ false: '#ccc', true: colors.vermEscuro }} thumbColor={'#fff'} />
-                <Text style={styles.optionalLabel}>Me notificar</Text>
-              </View>
-    
+        
               <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
                 <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
                 <Feather name="plus-circle" size={20} color="#3D0000" />
