@@ -133,6 +133,11 @@ export default function FormAdicionar() {
                 />
               </View>
             </View>
+            {index > 0 && (
+                <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
+                  <Feather name="x-circle" size={20} color={colors.vermEscuro} />
+                </TouchableOpacity>
+            )}
           </View>
         ))}
         

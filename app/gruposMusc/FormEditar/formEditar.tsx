@@ -142,31 +142,36 @@ export default function FormEditar() {
 
       
            {fields.map((field, index) => (
-                     <View key={field.id} >
-                       <View style={styles.row}>
-                         <View style={styles.inputHalf}>
-                           <Text style={styles.label}>Exercício {index + 1}:</Text>
-                           <Input
-                             name={`exercicios.${index}.nome`}
-                             control={control}
-                             placeholder="Ex: Supino Reto"
-                             error={errors.exercicios?.[index]?.nome?.message}
-                             keyboardType="default"
-                           />
-                         </View>
-                         <View style={styles.inputHalf}>
-                           <Text style={styles.label}>Séries:</Text>
-                           <Input
-                             name={`exercicios.${index}.series`}
-                             control={control}
-                             placeholder="Ex: 4x10"
-                             error={errors.exercicios?.[index]?.series?.message}
-                             keyboardType="default"
-                           />
-                         </View>
-                       </View>
-                     </View>
-                   ))}
+              <View key={field.id} >
+                <View style={styles.row}>
+                  <View style={styles.inputHalf}>
+                    <Text style={styles.label}>Exercício {index + 1}:</Text>
+                    <Input
+                      name={`exercicios.${index}.nome`}
+                      control={control}
+                      placeholder="Ex: Supino Reto"
+                      error={errors.exercicios?.[index]?.nome?.message}
+                      keyboardType="default"
+                    />
+                  </View>
+                  <View style={styles.inputHalf}>
+                    <Text style={styles.label}>Séries:</Text>
+                    <Input
+                      name={`exercicios.${index}.series`}
+                      control={control}
+                      placeholder="Ex: 4x10"
+                      error={errors.exercicios?.[index]?.series?.message}
+                      keyboardType="default"
+                    />
+                  </View>
+                </View>
+                {index > 0 && (
+                    <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
+                      <Feather name="x-circle" size={20} color={colors.vermEscuro} />
+                    </TouchableOpacity>
+                )}
+              </View>
+            ))}
         
         <Text style={styles.label}>Hora do treino (opcional):</Text>
         <Input name="horaTreino" control={control} placeholder="Ex: 18:00" keyboardType="default" />

@@ -98,4 +98,13 @@ export default StyleSheet.create({
     color: colors.vermEscuro,
     fontWeight: 'bold',
   },
+
+  removeIcon: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: '#fff',
+    borderRadius: 12,
+  },
+  
 });
