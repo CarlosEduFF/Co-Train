@@ -4,7 +4,6 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Header } from '../../components/header/header';
 
-// Vamos criar um array para não repetir o código
 const DIAS_SEMANA = [
   { nome: 'SEGUNDA', valor: 'segunda' },
   { nome: 'TERÇA-FEIRA', valor: 'terca' },
@@ -17,10 +16,9 @@ const DIAS_SEMANA = [
 export default function Planejamentos() {
 
   const handleDayPress = (dia: string) => {
-    // Usamos o objeto de rota para passar o dia como parâmetro
     router.push({
       pathname: '/planejamentos/Adicionar/adicionar',
-      params: { dia: dia } // <-- Enviando o dia da semana
+      params: { dia: dia } // envia o dia da semana
     });
   };
 

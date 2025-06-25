@@ -7,7 +7,6 @@ import { Header } from '../../../components/header/header';
 import { auth, firestore } from '../../../config/firebase';
 import { colors } from '../../../constants/colors';
 
-// Interface para o tipo de dado que esperamos do Firestore
 interface Plano {
   id: string;
   parte: string;
@@ -20,7 +19,6 @@ export default function Adicionar() {
   const [planos, setPlanos] = useState<Plano[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Função para capitalizar o nome do dia para o título
   const getDayName = (diaParam: string | undefined) => {
     if (!diaParam) return 'Seu Treino';
     return diaParam.charAt(0).toUpperCase() + diaParam.slice(1);
@@ -64,8 +62,7 @@ export default function Adicionar() {
   );
 
   const handleDelete = (planoId: string) => {
-    // Sua função de delete continua aqui, sem alterações.
-    Alert.alert( "Excluir Plano", "Você tem certeza?", [ { text: "Cancelar" }, { text: "Excluir", onPress: async () => { /* ... sua lógica de delete ... */ } } ]);
+    Alert.alert( "Excluir Plano", "Você tem certeza?", [ { text: "Cancelar" }, { text: "Excluir", onPress: async () => {} } ]);
   };
 
   const renderItem = ({ item }: { item: Plano }) => {
@@ -84,8 +81,6 @@ export default function Adicionar() {
     );
   };
   
-  // CORREÇÃO 1: NAVEGAÇÃO PARA A TELA DE EDIÇÃO
-  // A tela de edição espera um parâmetro 'id'.
   const handleCardPress = (id: string) => {
      router.push({
         pathname: "/planejamentos/FormEditar/[id]", 
@@ -93,8 +88,7 @@ export default function Adicionar() {
      });
   };
 
-  // CORREÇÃO 2: NOVA FUNÇÃO PARA NAVEGAR PARA O FORMULÁRIO DE ADIÇÃO
-  // Esta função garante que o parâmetro 'dia' seja passado adiante.
+  //func para passar o parametro dia
   const handleAddPress = () => {
     if (!dia) {
       Alert.alert("Erro", "Dia não identificado. Por favor, volte e tente novamente.");
@@ -102,7 +96,7 @@ export default function Adicionar() {
     }
     router.push({
       pathname: '/planejamentos/FormAdicionar/formAdicionar',
-      params: { dia: dia } // Passando o dia adiante!
+      params: { dia: dia } 
     });
   };
 
@@ -110,11 +104,10 @@ export default function Adicionar() {
     <View style={styles.container}>
       <Header
         title='Planejamento Semanal'
-        // CORREÇÃO 3: HEADER COM TEMPLATE LITERAL (USANDO CRASES ``)
         text={`Gerencie seus treinos de ${getDayName(dia)}`}
       />  
 
-      {/* Botão de adicionar agora chama a nova função handleAddPress */}
+      {}
       <TouchableOpacity style={styles.button} onPress={handleAddPress}>
         <Text style={styles.adicionarButton}>Adicionar</Text>
         <Feather name='plus-circle' size={30} color='#3D0000' />

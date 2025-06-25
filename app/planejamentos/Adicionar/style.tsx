@@ -64,13 +64,13 @@ export default StyleSheet.create({
     gap: 16,
   },
   cardContent: {
-    flex: 1, // Faz com que o conteúdo do card ocupe o espaço disponível
+    flex: 1,
   },
   deleteButton: {
-    padding: 10,       // Aumenta a área de toque
+    padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    marginLeft: 10,     // Espaçamento entre o texto e o ícone
+    marginLeft: 10,
   },
 
   cardTitulo: {

@@ -1,11 +1,10 @@
-// Import the functions you need from the SDKs you need
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth'; // Importa o módulo de Auth
 import 'firebase/compat/firestore';
 import 'firebase/compat/storage'; // Importa o módulo de Storage
 
 
-// Your web app's Firebase configuration
+// config firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDjGBX2IKO9bTBP4NgvXhkLXp_coQzDCp4",
   authDomain: "co-train-84be9.firebaseapp.com",
@@ -23,7 +22,7 @@ if (!firebase.apps.length) {
 
 // Exporta Firestore, Auth e Storage
 export const firestore = firebase.firestore();
-export const auth = firebase.auth();       // Exporta o Auth
-export const storage = firebase.storage(); // Exporta o Storage
+export const auth = firebase.auth();       
+export const storage = firebase.storage(); 
 
 export default firebase;

@@ -6,10 +6,9 @@ import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { router, useFocusEffect } from 'expo-router';
 import { Header } from '../../components/header/header';
-import { auth, firestore } from '../../config/firebase'; // Verifique o caminho
+import { auth, firestore } from '../../config/firebase';
 import { colors } from '../../constants/colors';
 
-// Interface para os dados do treino vindos do Firestore
 interface Treino {
   id: string;
   parte: string; // Grupo muscular
@@ -52,7 +51,6 @@ export default function GruposMusc() {
           setLoading(false);
         });
 
-      // Se desinscreve do listener ao sair da tela
       return () => subscriber();
     }, [])
   );
@@ -63,7 +61,7 @@ export default function GruposMusc() {
        
         <Image
           source={{ uri: item.imagemUrl || 'https://via.placeholder.com/150' }} // Usa a imagem salva ou um placeholder
-          style={styles.MuscImage} // Verifique se seu estilo define width/height
+          style={styles.MuscImage}
           resizeMode="cover"
         />
          <Text style={styles.cardTitulo}>{item.parte}</Text>

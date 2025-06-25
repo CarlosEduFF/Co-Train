@@ -82,7 +82,7 @@ export default StyleSheet.create({
     gap: 6,
   },
     buttonDisabled: {
-    backgroundColor: '#ccc', // Cor para botão desabilitado
+    backgroundColor: '#ccc', // Cor para botao desabilitado
     opacity: 0.6,
      borderWidth: 2,
     borderColor: '#ccc',

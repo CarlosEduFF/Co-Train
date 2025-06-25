@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import styles from "../FormAdicionar/style"; // Pode reutilizar o estilo
+import styles from "../FormAdicionar/style";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useForm, useFieldArray } from 'react-hook-form';
@@ -12,9 +12,8 @@ import { Input } from '../../../components/input/inputNormal';
 import { Select } from '../../../components/input/select';
 import { Header } from '../../../components/header/header';
 import { router, useLocalSearchParams } from 'expo-router';
-import { firestore } from '../../../config/firebase'; // Verifique o caminho
+import { firestore } from '../../../config/firebase';
 
-// Schema idêntico ao de adicionar
 const schema = z.object({
   parte: z.string().min(1, { message: "Informe o grupo muscular" }),
   horaTreino: z.string().optional(),
@@ -64,7 +63,7 @@ export default function FormEditar() {
     docRef.get().then(doc => {
       if (doc.exists) {
         const data = doc.data() as FormData & { imagemUrl: string };
-        reset(data); // Preenche o formulário com os dados do Firestore
+        reset(data);
         setSelectedImage(data.imagemUrl);
       } else {
         Alert.alert("Erro", "Treino não encontrado.");
@@ -129,7 +128,7 @@ export default function FormEditar() {
     <ScrollView style={styles.container}>
       <Header title='Editar Treino' text='Ajuste ou remova seu treino' />
       <View style={styles.formContainer}>
-        {/* O JSX do formulário é praticamente idêntico ao de Adicionar */}
+        {}
         <Text style={styles.label}>Músculo:</Text>
         <Select
           control={control}
@@ -188,7 +187,7 @@ export default function FormEditar() {
           <Text >DELETAR TREINO</Text>
         </TouchableOpacity>
 
-        {/* Botões de Ação */}
+        {}
         <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(handleUpdateTreino)} disabled={isLoading}>
           {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>}
         </TouchableOpacity>

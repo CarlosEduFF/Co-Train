@@ -19,9 +19,6 @@ export function Input({name,control,placeholder,rules,error,keyboardType}:InputP
     control={control}
     name={name}
     rules={rules}
-    // onChange é eu trocar o valor que está dentro do campo
-      //onBlur
-      //value valor que tem dentro dele
       render={({field:{onChange,onBlur,value}})=>(
         <TextInput
         style={styles.inputContainer}

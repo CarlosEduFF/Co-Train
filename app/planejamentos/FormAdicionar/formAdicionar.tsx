@@ -4,7 +4,6 @@ import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-// Importamos o useFieldArray
 import { useForm, useFieldArray } from 'react-hook-form';
 import { colors } from '../../../constants/colors';
 import { Input } from '../../../components/input/inputNormal';
@@ -13,17 +12,15 @@ import { Header } from '../../../components/header/header';
 import { router, useLocalSearchParams  } from 'expo-router';
 import { auth, firestore } from '../../../config/firebase';
 
-// 1. ATUALIZAMOS O SCHEMA
 const schema = z.object({
   parte: z.string().min(1, { message: "Informe o grupo muscular" }),
   horaTreino: z.string().optional(),
-  // O campo 'exercicios' agora é um array de objetos
   exercicios: z.array(
     z.object({
       nome: z.string().min(1, { message: "Informe o exercício" }),
       series: z.string().min(1, { message: "Informe as séries" }),
     })
-  ).min(1, { message: "Adicione pelo menos um exercício." }) // Garante que o array não esteja vazio
+  ).min(1, { message: "Adicione pelo menos um exercício." }) // Garante que nao esteja vazio
 });
 
 type FormData = z.infer<typeof schema>;
@@ -43,7 +40,6 @@ export default function FormAdicionar() {
 
   const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
     resolver: zodResolver(schema),
-    // Valor inicial do formulário, já com um exercício
     defaultValues: {
       parte: '',
       horaTreino: '',
@@ -51,7 +47,6 @@ export default function FormAdicionar() {
     }
   });
   
-  // 2. CONFIGURAMOS O useFieldArray
   const { fields, append, remove } = useFieldArray({
     control,
     name: "exercicios"
@@ -75,11 +70,11 @@ export default function FormAdicionar() {
 
   ];
   
-  // 2. A função de salvar com uma verificação robusta
+  //salvar
   const handleSavePlano = async (data: FormData) => {
     const user = auth.currentUser;
 
-    // ESTA VERIFICAÇÃO É A MAIS IMPORTANTE
+    //verificacao
     if (!user || !dia) {
       Alert.alert("Erro", "Dia da semana não especificado ou usuário não logado. Não é possível salvar.");
       return;
@@ -90,7 +85,7 @@ export default function FormAdicionar() {
     try {
       await firestore.collection('planejamentos').add({
         userId: user.uid,
-        diaDaSemana: dia, // <-- Agora 'dia' garantidamente tem um valor
+        diaDaSemana: dia,
         ...data,
         notify: notify,
         createdAt: new Date(),
@@ -116,14 +111,14 @@ export default function FormAdicionar() {
           <Text style={styles.label}>Músculo:</Text>
           <Select control={control} name="parte" error={errors.parte?.message} options={ExercicieOptions} />
           
-          {/* 3. RENDERIZAMOS OS CAMPOS DINAMICAMENTE */}
+          {}
           {fields.map((field, index) => (
             <View key={field.id} style={styles.exerciseRow}>
               <View style={styles.row}>
                 <View style={styles.inputHalf}>
                   <Text style={styles.label}>Exercício:</Text>
                   <Input
-                    name={`exercicios.${index}.nome`} // Nome dinâmico
+                    name={`exercicios.${index}.nome`}
                     control={control}
                     placeholder="--"
                     error={errors.exercicios?.[index]?.nome?.message}
@@ -133,7 +128,7 @@ export default function FormAdicionar() {
                 <View style={styles.inputHalf}>
                   <Text style={styles.label}>Séries:</Text>
                   <Input
-                    name={`exercicios.${index}.series`} // Nome dinâmico
+                    name={`exercicios.${index}.series`}
                     control={control}
                     placeholder="--"
                     error={errors.exercicios?.[index]?.series?.message}
@@ -141,7 +136,7 @@ export default function FormAdicionar() {
                   />
                 </View>
               </View>
-              {/* Mostra o botão de remover apenas para itens adicionais */}
+              {}
               {index > 0 && (
                  <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
                     <Feather name="x-circle" size={20} color={colors.vermEscuro} />
@@ -150,7 +145,7 @@ export default function FormAdicionar() {
             </View>
           ))}
           
-          {/* 4. BOTÕES DE CONTROLE DO ARRAY */}
+          {}
           <Text style={styles.label}>Hora do treino (opcional):</Text>
           <Input name="horaTreino" control={control} placeholder="Hora do treino" keyboardType="default"/>
 

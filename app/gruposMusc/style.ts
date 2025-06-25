@@ -37,7 +37,7 @@ export default StyleSheet.create({
     },
   
      listContainer: {
-      alignItems: 'center', // Tenta centralizar a lista como um todo
+      alignItems: 'center',
     paddingHorizontal: 10,
         gap: 16,
     },

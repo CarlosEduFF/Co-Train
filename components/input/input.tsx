@@ -23,9 +23,6 @@ export  function Input({name, control,placeholder,rules,error,keyboardType,label
                 control={control}
                 name={name}
                 rules={rules}
-                    // onChange é eu trocar o valor que está dentro do campo
-                    //onBlur
-                    //value valor que tem dentro dele
                render={({field:{onChange, onBlur, value}})=>(
                       <View style={{flex:1, position: 'relative'}}>
                           {(isFocused ||value)&&(

@@ -1,5 +1,5 @@
 // services/authService.ts
-import { auth, firestore } from '../config/firebase'; // ajuste conforme seu caminho
+import { auth, firestore } from '../config/firebase';
 import firebase from 'firebase/compat/app';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
@@ -52,7 +52,7 @@ export const loginUser = async (email: string, senha: string) => {
   }
 
   try {
-    // Autentica o usuário
+    // Autentica o user
     const userCredential = await auth.signInWithEmailAndPassword(email, senha);
     const user = userCredential.user;
 
@@ -60,11 +60,11 @@ export const loginUser = async (email: string, senha: string) => {
       throw new Error('Usuário não encontrado.');
     }
 
-    // Busca dados adicionais do usuário no Firestore
+    // Busca dados adicionais do user no Firestore
     const doc = await firestore.collection('Usuarios').doc(user.uid).get();
     const userData = doc.data();
 
-    // Salva dados no AsyncStorage (opcional)
+    // Salva dados no AsyncStorage
     await AsyncStorage.setItem('@userId', user.uid);
     await AsyncStorage.setItem('@userEmail', user.email || '');
     if (userData?.nome) {

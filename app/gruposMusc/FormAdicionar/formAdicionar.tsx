@@ -12,9 +12,8 @@ import { Input } from '../../../components/input/inputNormal';
 import { Select } from '../../../components/input/select';
 import { Header } from '../../../components/header/header';
 import { router } from 'expo-router';
-import { auth, firestore } from '../../../config/firebase'; // Verifique o caminho
+import { auth, firestore } from '../../../config/firebase';
 
-// 1. Schema atualizado para um array de exercícios
 const schema = z.object({
   parte: z.string().min(1, { message: "Informe o grupo muscular" }),
   horaTreino: z.string().optional(),
@@ -28,7 +27,7 @@ const schema = z.object({
 
 type FormData = z.infer<typeof schema>;
 
-// Opções de treino
+//opcoes de treino
 const ExercicieOptions = [
   { label: 'Peito', value: 'Peito', image: 'https://res.cloudinary.com/dpwlhesro/image/upload/v1750568950/peito_r9l5l0.png' },
   { label: 'Costas', value: 'Costas', image: 'https://res.cloudinary.com/dpwlhesro/image/upload/v1750570186/costas_enbi72.png' },
@@ -52,11 +51,10 @@ export default function FormAdicionar() {
     defaultValues: {
       parte: '',
       horaTreino: '',
-      exercicios: [{ nome: '', series: '' }] // Começa com um campo de exercício
+      exercicios: [{ nome: '', series: '' }]
     }
   });
 
-  // 2. Hook para gerenciar campos dinâmicos
   const { fields, append, remove } = useFieldArray({
     control,
     name: "exercicios"
@@ -110,7 +108,7 @@ export default function FormAdicionar() {
   }}
         />
 
-        {/* 3. Mapeia os campos de exercício */}
+        {}
         {fields.map((field, index) => (
           <View key={field.id} >
             <View style={styles.row}>
@@ -141,7 +139,7 @@ export default function FormAdicionar() {
         <Text style={styles.label}>Hora do treino (opcional):</Text>
         <Input name="horaTreino" control={control} placeholder="Ex: 18:00" keyboardType="default"/>
         
-        {/* 4. Botões funcionais */}
+        {}
         <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
           <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
           <Feather name="plus-circle" size={20} color="#3D0000" />

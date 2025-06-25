@@ -12,7 +12,6 @@ import { Header } from '../../../components/header/header';
 import { router, useLocalSearchParams } from 'expo-router';
 import { auth, firestore } from '../../../config/firebase';
 
-// Schema e Tipo idênticos ao do FormAdicionar
 const schema = z.object({
   parte: z.string().min(1, { message: "Informe o grupo muscular" }),
   horaTreino: z.string().optional(),
@@ -63,7 +62,6 @@ export default function FormEditar() {
         const docSnap = await firestore.collection('planejamentos').doc(id as string).get();
         if (docSnap.exists) {
           const planoData = docSnap.data();
-          // O 'reset' do react-hook-form irá preencher todos os campos, incluindo o field array!
           reset(planoData); 
           setNotify(planoData?.notify || false);
         } else {
@@ -78,7 +76,7 @@ export default function FormEditar() {
     fetchPlano();
   }, [id, reset]);
 
-  // Função para ATUALIZAR os dados (semelhante à de salvar)
+  //atualizar os dados
   const handleUpdatePlano = async (data: FormData) => {
     setIsLoading(true);
     try {
@@ -97,7 +95,6 @@ export default function FormEditar() {
     return <ActivityIndicator size="large" color={colors.vermEscuro} style={{ flex: 1 }} />;
   }
 
-  // O JSX do formulário de edição agora é quase idêntico ao de adição
   return (
     <ScrollView style={styles.container}>
           <View style={styles.container}>
@@ -107,14 +104,14 @@ export default function FormEditar() {
               <Text style={styles.label}>Músculo:</Text>
               <Select control={control} name="parte" error={errors.parte?.message} options={ExercicieOptions} />
               
-              {/* 3. RENDERIZAMOS OS CAMPOS DINAMICAMENTE */}
+              {}
               {fields.map((field, index) => (
                 <View key={field.id} style={styles.exerciseRow}>
                   <View style={styles.row}>
                     <View style={styles.inputHalf}>
                       <Text style={styles.label}>Exercício:</Text>
                       <Input
-                        name={`exercicios.${index}.nome`} // Nome dinâmico
+                        name={`exercicios.${index}.nome`}
                         control={control}
                         placeholder="--"
                         error={errors.exercicios?.[index]?.nome?.message}
@@ -124,7 +121,7 @@ export default function FormEditar() {
                     <View style={styles.inputHalf}>
                       <Text style={styles.label}>Séries:</Text>
                       <Input
-                        name={`exercicios.${index}.series`} // Nome dinâmico
+                        name={`exercicios.${index}.series`}
                         control={control}
                         placeholder="--"
                         error={errors.exercicios?.[index]?.series?.message}
@@ -132,7 +129,7 @@ export default function FormEditar() {
                       />
                     </View>
                   </View>
-                  {/* Mostra o botão de remover apenas para itens adicionais */}
+                  {}
                   {index > 0 && (
                      <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
                         <Feather name="x-circle" size={20} color={colors.vermEscuro} />
@@ -141,7 +138,7 @@ export default function FormEditar() {
                 </View>
               ))}
               
-              {/* 4. BOTÕES DE CONTROLE DO ARRAY */}
+              {}
               <Text style={styles.label}>Hora do treino (opcional):</Text>
               <Input name="horaTreino" control={control} placeholder="Hora do treino" keyboardType="default"/>
     
