@@ -62,7 +62,22 @@ export default function Adicionar() {
   );
 
   const handleDelete = (planoId: string) => {
-    Alert.alert( "Excluir Plano", "Você tem certeza?", [ { text: "Cancelar" }, { text: "Excluir", onPress: async () => {} } ]);
+    Alert.alert( 
+      "Excluir Plano", 
+      "Você tem certeza?", 
+      [ 
+        { text: "Cancelar" }, 
+        { text: "Excluir", onPress: async () => {
+            try {
+              await firestore.collection('planejamentos').doc(planoId).delete();
+            } catch (error) {
+              console.error("Erro ao deletar o plano: ", error);
+              Alert.alert("Erro", "Não foi possível excluir o plano. Tente novamente.");
+            }
+          } 
+        } 
+      ]
+    );
   };
 
   const renderItem = ({ item }: { item: Plano }) => {
@@ -84,7 +99,7 @@ export default function Adicionar() {
   const handleCardPress = (id: string) => {
      router.push({
         pathname: "/planejamentos/FormEditar/[id]", 
-        params: { id: id }, // O parâmetro deve ser 'id', não 'dia'.
+        params: { id: id },
      });
   };
 
@@ -122,11 +137,11 @@ export default function Adicionar() {
           renderItem={renderItem}
           contentContainerStyle={styles.listContainer}
           ListEmptyComponent={
-                      <View style={{alignItems: 'center', marginTop: 50}}>
-                        <Text>Nenhum plano adicionado para este dia..</Text>
-                        <Text>Clique em "Adicionar" para começar!</Text>
-                      </View>
-                    }
+            <View style={{alignItems: 'center', marginTop: 50}}>
+              <Text>Nenhum plano adicionado para este dia..</Text>
+              <Text>Clique em "Adicionar" para começar!</Text>
+            </View>
+          }
       
         />
       )}
