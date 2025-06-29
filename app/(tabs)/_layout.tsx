@@ -32,6 +32,13 @@ export default function MainLayout() {
         }}
       />
       <Tabs.Screen
+        name="dieta"
+        options={{
+          title: 'Plano Alimentar',
+          tabBarIcon: ({ color }) => <TabBarIcon name="heartbeat" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="perfil"
         options={{
           title: 'Perfil',

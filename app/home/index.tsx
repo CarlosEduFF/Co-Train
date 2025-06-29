@@ -32,6 +32,16 @@ export default function home() {
                 Acompanhe o seu treino de cada grupo muscular
               </Text>
             </TouchableOpacity>
+
+            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/dieta')}>
+               <Image source={images.dieta} style={styles.Image}></Image>
+              <Text style={styles.titulos}>
+                Plano Alimentar
+              </Text>
+              <Text style={styles.textos}>
+                Acompanhe a sua alimentação diária de forma organizada.
+              </Text>
+            </TouchableOpacity>
   
             <TouchableOpacity style={styles.paineis} onPress={() => router.push('/profile/perfil')}>
               <Image source={require("../../assets/Icons/Perfil.png")} style={styles.Image}></Image>
