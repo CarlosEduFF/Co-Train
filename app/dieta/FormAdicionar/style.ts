@@ -8,7 +8,7 @@ const TEXT_COLOR = '#333';
 export default StyleSheet.create({
     container: {
     flex: 1,
-    backgroundColor: '#FFFFFF',
+    backgroundColor:colors.background,
   },
   contentContainer: {
     padding: 24,
@@ -32,9 +32,10 @@ export default StyleSheet.create({
     fontFamily: FONT_FAMILY,
     marginBottom: 6,
     fontWeight: '600',
+    marginTop: 10
   },
   input: {
-    backgroundColor: '#FFF',
+    backgroundColor:colors.background,
     borderWidth: 1.5,
     borderColor: PRIMARY_COLOR,
     borderRadius: 16,
@@ -54,6 +55,8 @@ export default StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     marginBottom: 8,
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
   addedFoodText: {
     color: PRIMARY_COLOR,
@@ -70,6 +73,7 @@ export default StyleSheet.create({
     paddingHorizontal: 15,
     marginBottom: 24,
     alignSelf: 'center',
+    width: '100%'
   },
   addButtonText: {
     color: PRIMARY_COLOR,
@@ -117,7 +121,7 @@ export default StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: TEXT_COLOR,
+    color: PRIMARY_COLOR,
     marginBottom: 16,
     fontFamily: FONT_FAMILY,
   },
@@ -139,6 +143,7 @@ export default StyleSheet.create({
     paddingVertical: 14,
     alignItems: 'center',
     marginTop: 32,
+       marginBottom: 60
   },
   saveButtonText: {
     color: PRIMARY_COLOR,
@@ -146,5 +151,6 @@ export default StyleSheet.create({
     fontWeight: 'bold',
     fontFamily: FONT_FAMILY,
     letterSpacing: 1,
+ 
   },
 });

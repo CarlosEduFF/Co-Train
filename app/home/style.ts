@@ -26,7 +26,7 @@ export default StyleSheet.create({
         width: 200,
         height: 100,
         marginBottom: 20,
-        marginTop:'20%'
+        marginTop:'15%'
     },
 
     buttonLeft:{
@@ -38,6 +38,7 @@ export default StyleSheet.create({
     justifyContent:'center',
     alignItems:'center',
     },
+
     paineis:{
        
         flexDirection: 'column',
@@ -48,12 +49,12 @@ export default StyleSheet.create({
         borderColor: colors.Vermelho,
         borderRadius: 10,
         width: '70%',
-        height: '25%',
+        height: '18%',
         textAlign: 'center',
         padding:5,
     },
     titulos:{
-        fontSize: 20,
+        fontSize: 15,
         fontWeight: 'bold',
         color: colors.Vermelho,
         marginBottom: 0,
@@ -68,7 +69,7 @@ export default StyleSheet.create({
         textAlign: 'center',
     },
 Image:{
-    height:80,
-    width:80,
+    height:60,
+    width:60,
 },
 });

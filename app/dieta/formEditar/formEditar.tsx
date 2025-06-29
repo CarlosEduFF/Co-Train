@@ -1,204 +1,150 @@
-// gruposMusc/FormEditar/formEditar.tsx
-
-import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import styles from "../FormAdicionar/style";
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { colors } from '../../../constants/colors';
-import { Input } from '../../../components/input/inputNormal';
-import { Select } from '../../../components/input/select';
-import { Header } from '../../../components/header/header';
-import { router, useLocalSearchParams } from 'expo-router';
-import { firestore } from '../../../config/firebase';
+import { useLocalSearchParams, router } from 'expo-router';
+import styles from './style';
+import { firestore, auth, FirebaseFirestore } from '../../../config/firebase';
 
-const schema = z.object({
-  parte: z.string().min(1, { message: "Informe o grupo muscular" }),
-  horaTreino: z.string().optional(),
-  exercicios: z.array(z.object({
-    nome: z.string().min(1, { message: "Informe o exercício" }),
-    series: z.string().min(1, { message: "Informe as séries" }),
-  })).min(1, { message: "Adicione pelo menos um exercício." })
-});
+type DayKey = 'segunda' | 'terca' | 'quarta' | 'quinta' | 'sexta' | 'sabado' | 'domingo';
 
-type FormData = z.infer<typeof schema>;
+interface FoodItem {
+  name: string;
+  quantity: number;
+}
 
-const ExercicieOptions = [
-    { label: 'Peito', value: 'Peito' },
-    { label: 'Costas', value: 'Costas' },
-    { label: 'Ombros', value: 'Ombros' },
-    { label: 'Bíceps', value: 'Bíceps' },
-    { label: 'Tríceps', value: 'Tríceps' },
-    { label: 'Abdômen', value: 'Abdômen' },
-    { label: 'Posterior de Coxa', value: 'Posterior de Coxa'},
-    { label: 'Quadríceps', value: 'Quadríceps'},
-    { label: 'Glúteo', value: 'Glúteo'},
-    { label: 'Panturrilha', value: 'Panturrilha'},
-    { label: 'Antebraço', value: 'Antebraço'},
-];
+interface MealPlan {
+  id: string;
+  mealName: string;
+  mealTime: string;
+  foods: FoodItem[];
+  days: DayKey[];
+  notify: boolean;
+}
 
 export default function FormEditar() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetching, setIsFetching] = useState(true);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-
-  const { control, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
-    resolver: zodResolver(schema),
-  });
-
-
-  const { fields, append, remove } = useFieldArray({ control, name: "exercicios" });
+  const { dia } = useLocalSearchParams();
+  const [meals, setMeals] = useState<MealPlan[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) {
-      Alert.alert("Erro", "ID do treino não fornecido.");
-      router.back();
-      return;
-    }
+    const fetchMeals = async () => {
+      try {
+        const user = auth.currentUser;
+        if (!user || typeof dia !== 'string') return;
 
-    const docRef = firestore.collection('treinos_grupados').doc(id);
-    docRef.get().then(doc => {
-      if (doc.exists) {
-        const data = doc.data() as FormData & { imagemUrl: string };
-        reset(data);
-        setSelectedImage(data.imagemUrl);
-      } else {
-        Alert.alert("Erro", "Treino não encontrado.");
-        router.back();
+        const snapshot = await firestore
+          .collection('plano_alimentar')
+          .where('userId', '==', user.uid)
+          .get();
+
+        const filtered = snapshot.docs
+          .map(doc => ({ id: doc.id, ...doc.data() } as MealPlan))
+          .filter(meal => meal.days.includes(dia as DayKey));
+
+        setMeals(filtered);
+      } catch (error) {
+        Alert.alert('Erro', 'Não foi possível carregar as refeições.');
+        console.error(error);
+      } finally {
+        setLoading(false);
       }
-    }).catch(error => {
-      console.error(error);
-      Alert.alert("Erro", "Não foi possível carregar os dados do treino.");
-    }).finally(() => {
-      setIsFetching(false);
-    });
-  }, [id, reset]);
+    };
 
-  const handleUpdateTreino = async (data: FormData) => {
-    if (!id) return;
-    setIsLoading(true);
+    fetchMeals();
+  }, [dia]);
+
+  const handleRemoveFood = (mealIndex: number, foodIndex: number) => {
+    const updated = [...meals];
+    updated[mealIndex].foods.splice(foodIndex, 1);
+    setMeals(updated);
+  };
+
+  const handleUpdateMeal = async (meal: MealPlan) => {
     try {
-      await firestore.collection('treinos_grupados').doc(id).update({
-        ...data,
-        imagemUrl: selectedImage,
+      await firestore.collection('plano_alimentar').doc(meal.id).update({
+        mealName: meal.mealName,
+        mealTime: meal.mealTime,
+        foods: meal.foods,
+        days: meal.days,
+        notify: meal.notify,
+        updatedAt: FirebaseFirestore.FieldValue.serverTimestamp(),
       });
-      Alert.alert("Sucesso", "Treino atualizado!");
-      router.back();
+      Alert.alert('Sucesso', 'Refeição atualizada com sucesso!');
     } catch (error) {
+      Alert.alert('Erro', 'Não foi possível salvar.');
       console.error(error);
-      Alert.alert("Erro", "Não foi possível atualizar o treino.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  const handleDeleteTreino = () => {
-    if (!id) return;
-    Alert.alert(
-      "Excluir Treino",
-      "Você tem certeza que deseja excluir este treino?",
-      [
-        { text: "Cancelar", style: 'cancel' },
-        {
-          text: "Excluir", style: 'destructive', onPress: async () => {
-            setIsLoading(true);
-            try {
-              await firestore.collection('treinos_grupados').doc(id).delete();
-              Alert.alert("Sucesso", "Treino excluído.");
-              router.back();
-            } catch (error) {
-              console.error(error);
-              Alert.alert("Erro", "Não foi possível excluir o treino.");
-              setIsLoading(false);
-            }
+  const handleDeleteMeal = async (id: string) => {
+    Alert.alert('Tem certeza?', 'Deseja realmente deletar essa refeição?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Deletar',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await firestore.collection('plano_alimentar').doc(id).delete();
+            setMeals(prev => prev.filter(meal => meal.id !== id));
+            Alert.alert('Deletado', 'Refeição excluída com sucesso!');
+          } catch (error) {
+            Alert.alert('Erro', 'Falha ao deletar.');
+            console.error(error);
           }
         }
-      ]
-    );
+      }
+    ]);
   };
-  
-  if (isFetching) {
-    return <ActivityIndicator size="large" color={colors.vermEscuro} style={{flex: 1}}/>
-  }
+
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" color="#A14545" />;
 
   return (
-    <ScrollView style={styles.container}>
-      <Header title='Editar Treino' text='Ajuste ou remova seu treino' />
-      <View style={styles.formContainer}>
-        {}
-        <Text style={styles.label}>Músculo:</Text>
-        <Select
-          control={control}
-          name="parte"
-          error={errors.parte?.message}
-          options={ExercicieOptions}
-          onSelectExtraData={(selectedItem) => {
-    setSelectedImage(selectedItem.image ?? null);
-  }}
-        />
+    <ScrollView style={styles.container} >
+      <Text >Refeições de {String(dia).toUpperCase()}</Text>
 
-      
-           {fields.map((field, index) => (
-              <View key={field.id} >
-                <View style={styles.row}>
-                  <View style={styles.inputHalf}>
-                    <Text style={styles.label}>Exercício {index + 1}:</Text>
-                    <Input
-                      name={`exercicios.${index}.nome`}
-                      control={control}
-                      placeholder="Ex: Supino Reto"
-                      error={errors.exercicios?.[index]?.nome?.message}
-                      keyboardType="default"
-                    />
-                  </View>
-                  <View style={styles.inputHalf}>
-                    <Text style={styles.label}>Séries:</Text>
-                    <Input
-                      name={`exercicios.${index}.series`}
-                      control={control}
-                      placeholder="Ex: 4x10"
-                      error={errors.exercicios?.[index]?.series?.message}
-                      keyboardType="default"
-                    />
-                  </View>
-                </View>
-                {index > 0 && (
-                    <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
-                      <Feather name="x-circle" size={20} color={colors.vermEscuro} />
-                    </TouchableOpacity>
-                )}
-              </View>
-            ))}
-        
-        <Text style={styles.label}>Hora do treino (opcional):</Text>
-        <Input name="horaTreino" control={control} placeholder="Ex: 18:00" keyboardType="default" />
-        
-        <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
-          <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
-          <Feather name="plus-circle" size={20} color="#3D0000" />
-        </TouchableOpacity>
-        <TouchableOpacity 
-                                style={[styles.buttonAdicionar, fields.length <= 1 && styles.buttonDisabled]} 
-                                onPress={() => remove(fields.length - 1)}
-                                disabled={fields.length <= 1}
-                              >
-                                <Text>REMOVER ÚLTIMO EXERCÍCIO</Text>
-                              </TouchableOpacity>
+      {meals.map((meal, mealIndex) => (
+        <View key={meal.id} style={styles.mealCard}>
+          <TextInput
+           
+            placeholder="Nome da Refeição"
+            value={meal.mealName}
+            onChangeText={text => {
+              const updated = [...meals];
+              updated[mealIndex].mealName = text;
+              setMeals(updated);
+            }}
+          />
 
-        <TouchableOpacity style={styles.buttonAdicionar} onPress={handleDeleteTreino} disabled={isLoading}>
-          <Text >DELETAR TREINO</Text>
-        </TouchableOpacity>
+          <TextInput
+           
+            placeholder="Hora da Refeição (opcional)"
+            value={meal.mealTime}
+            onChangeText={text => {
+              const updated = [...meals];
+              updated[mealIndex].mealTime = text;
+              setMeals(updated);
+            }}
+          />
 
-        {}
-        <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(handleUpdateTreino)} disabled={isLoading}>
-          {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>}
-        </TouchableOpacity>
+          <Text style={styles.label}>Alimentos:</Text>
+          {meal.foods.map((food, foodIndex) => (
+            <View key={foodIndex} style={styles.foodItemRow}>
+              <Text>{food.name} - {food.quantity}g</Text>
+              <TouchableOpacity onPress={() => handleRemoveFood(mealIndex, foodIndex)}>
+                <Feather name="trash-2" size={18} color="red" />
+              </TouchableOpacity>
+            </View>
+          ))}
 
-       
-      </View>
+          <TouchableOpacity style={styles.saveButton} onPress={() => handleUpdateMeal(meal)}>
+            <Text style={styles.saveButtonText}>SALVAR</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteMeal(meal.id)}>
+            <Text style={styles.deleteButtonText}>DELETAR</Text>
+          </TouchableOpacity>
+        </View>
+      ))}
     </ScrollView>
   );
 }

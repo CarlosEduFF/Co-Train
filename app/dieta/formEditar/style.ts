@@ -106,5 +106,54 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
   },
+  mealCard: {
+  backgroundColor: '#FFF',
+  padding: 16,
+  marginVertical: 10,
+  borderRadius: 10,
+  elevation: 2,
+  shadowColor: '#000',
+  shadowOpacity: 0.1,
+  shadowOffset: { width: 0, height: 2 },
+},
+
+foodItemRow: {
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  backgroundColor: '#F5F5F5',
+  padding: 8,
+  marginVertical: 4,
+  borderRadius: 5,
+},
+
+deleteButton: {
+  borderWidth: 1,
+  borderColor: 'red',
+  borderRadius: 10,
+  padding: 10,
+  marginTop: 8,
+  alignItems: 'center',
+},
+
+deleteButtonText: {
+  color: 'red',
+  fontWeight: 'bold',
+},
+
+saveButton: {
+  borderWidth: 1,
+  borderColor: '#A14545',
+  borderRadius: 10,
+  padding: 10,
+  marginTop: 12,
+  alignItems: 'center',
+},
+
+saveButtonText: {
+  color: '#A14545',
+  fontWeight: 'bold',
+},
+
   
 });

@@ -19,7 +19,7 @@ export default function home() {
                 Planejamento Semanal
               </Text>
               <Text style={styles.textos}>
-                Acompanhe o seu treino em cada dia da semana
+                Acompanhe o seu treino em cada dia da semana.
               </Text>
             </TouchableOpacity>
   
@@ -29,7 +29,7 @@ export default function home() {
                 Divisão por Grupos Musculares
               </Text>
               <Text style={styles.textos}>
-                Acompanhe o seu treino de cada grupo muscular
+                Acompanhe o seu treino de cada grupo muscular.
               </Text>
             </TouchableOpacity>
 
@@ -43,13 +43,13 @@ export default function home() {
               </Text>
             </TouchableOpacity>
   
-            <TouchableOpacity style={styles.paineis} onPress={() => router.push('/profile/perfil')}>
+            <TouchableOpacity style={[styles.paineis]} onPress={() => router.push('/profile/perfil')}>
               <Image source={require("../../assets/Icons/Perfil.png")} style={styles.Image}></Image>
               <Text style={styles.titulos}>
                 Meu Perfil
               </Text>
               <Text style={styles.textos}>
-                Acompanhe seu perfil de usuário aqui! e faça edição.
+                Acompanhe e gerencie seu perfil de usuário.
               </Text>
             </TouchableOpacity>
 

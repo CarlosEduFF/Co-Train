@@ -64,6 +64,11 @@ export default function MealPlanForm() {
     setCurrentQuantity('');
   };
 
+  const handleRemoveFood = (indexToRemove: number) => {
+  setFoods(prevFoods => prevFoods.filter((_, index) => index !== indexToRemove));
+};
+
+
   //func alternar a selecao dos dias da semana
   const toggleDay = (day: DayKey) => {
     setSelectedDays(prev => ({ ...prev, [day]: !prev[day] }));
@@ -95,6 +100,7 @@ export default function MealPlanForm() {
         mealTime: mealTime.trim(),
         notify: notify,
         days: activeDays,
+         userId: auth.currentUser?.uid,
                createdAt: FirebaseFirestore.FieldValue.serverTimestamp(),
 
       });
@@ -106,6 +112,8 @@ export default function MealPlanForm() {
       setNotify(false);
       setFoods([]);
       setSelectedDays({ segunda: false, terca: false, quarta: false, quinta: false, sexta: false, sabado: false, domingo: false });
+
+      router.back();
 
     } catch (error) {
       console.error("Erro ao salvar no Firestore: ", error);
@@ -130,9 +138,13 @@ export default function MealPlanForm() {
 
       {foods.map((food, index) => (
         <View key={index} style={styles.addedFoodItem}>
-            <Text style={styles.addedFoodText}>{food.name} - {food.quantity}g</Text>
+          <Text style={styles.addedFoodText}>{food.name} - {food.quantity}g</Text>
+          <TouchableOpacity onPress={() => handleRemoveFood(index)}>
+            <Feather name="trash-2" size={20} color="red" />
+          </TouchableOpacity>
         </View>
       ))}
+
 
       <View style={styles.foodInputContainer}>
         <View style={{ flex: 2, marginRight: 8 }}>
