@@ -2,17 +2,36 @@ import { StyleSheet } from 'react-native';
 import { colors } from '../../../constants/colors';
 
 export default StyleSheet.create({
-   container: {
+  container: {
     flex: 1,
     padding: 20,
     backgroundColor: colors.background,
     marginTop: 0,
   },
-
+  buttonDisabled: {
+    backgroundColor: '#ccc', // Cor para botao desabilitado
+    opacity: 0.6,
+    borderWidth: 2,
+    borderColor: '#ccc',
+  },exerciseRow: {
+    marginBottom: 16,
+    padding: 12,
+    borderWidth: 1,
+    borderColor:  '#ddd',
+    borderRadius: 8,
+    backgroundColor: '#fff',
+    position: 'relative', // para o ícone de remover ficar posicionado relativo a essa view
+  },
   formContainer: {
     width: '100%',
     gap: 12,
     marginTop: 20,
+  }, removeIcon: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: '#fff',
+    borderRadius: 12,
   },
 
   label: {
@@ -26,31 +45,6 @@ export default StyleSheet.create({
     fontSize: 14,
     color: '#555',
     marginBottom: 10,
-    flexWrap: 'wrap',
-    height: 50,
-    padding: 4
-  },
-
-   exerciseRow: {
-    marginBottom: 10,
-    position: 'relative',
-    padding: 10,
-    borderRadius: 8,
-  },
-  removeIcon: {
-    position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: '#fff',
-    borderRadius: 12,
-  },
-  buttonRemover: {
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc', // Cor para botao desabilitado
-    opacity: 0.6,
-     borderWidth: 2,
-    borderColor: '#ccc',
   },
 
   button: {
@@ -77,7 +71,7 @@ export default StyleSheet.create({
   inputHalf: {
     flex: 1,
   },
-   checkboxContainer: {
+  checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
@@ -89,12 +83,12 @@ export default StyleSheet.create({
     fontSize: 16,
     color: colors.vermEscuro,
     paddingHorizontal: 10,
-    
+
   },
   buttonAdicionar: {
     backgroundColor: colors.white,
     borderRadius: 30,
-    width: '100%',
+    width: '45%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -115,7 +109,6 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 80
   },
 
   buttonText: {
@@ -123,4 +116,34 @@ export default StyleSheet.create({
     color: colors.vermEscuro,
     fontWeight: 'bold',
   },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#3D0000',
+    padding: 12,
+    borderRadius: 12,
+    marginBottom: 16,
+    alignSelf: 'center',
+  },
+  addText: {
+    color: '#fff',
+    fontSize: 16,
+    marginLeft: 8,
+  },
+  itemContainer: {
+    padding: 12,
+    borderBottomWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 12,
+    marginBottom: 12,
+  },
+  selectedBorder: {
+    borderColor: '#3D0000',
+    borderWidth: 2,
+  },
+  itemText: {
+    fontWeight: 'bold',
+    marginBottom: 4,
+  },
+
 });

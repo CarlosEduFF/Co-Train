@@ -1,9 +1,21 @@
 // services/authService.ts
 import { auth, firestore } from '../config/firebase';
-import firebase from 'firebase/compat/app';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendPasswordResetEmail,
+} from 'firebase/auth';
+
+import {
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
+} from 'firebase/firestore';
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Alert } from 'react-native';
-import { sendPasswordResetEmail } from 'firebase/auth';
+
 export interface RegisterData {
   nome: string;
   email: string;
@@ -11,6 +23,9 @@ export interface RegisterData {
   confirmarSenha: string;
 }
 
+/**
+ * Registra um novo usuário com Firebase Auth + Firestore
+ */
 export const registerUser = async (data: RegisterData): Promise<string> => {
   const { nome, email, senha, confirmarSenha } = data;
 
@@ -23,48 +38,46 @@ export const registerUser = async (data: RegisterData): Promise<string> => {
   }
 
   try {
-    const userCredential = await auth.createUserWithEmailAndPassword(email, senha);
+    const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
     const uid = userCredential.user?.uid;
 
     if (!uid) {
       throw new Error('Não foi possível obter o ID do usuário.');
     }
 
-    await firestore.collection('Usuarios').doc(uid).set({
+    const userRef = doc(firestore, 'Usuarios', uid);
+    await setDoc(userRef, {
       nome,
       email,
-      criadoEm: firebase.firestore.FieldValue.serverTimestamp(),
+      criadoEm: serverTimestamp(),
     });
 
-    return uid; // sucesso
+    return uid;
   } catch (error: any) {
     throw new Error(error.message || 'Erro inesperado ao cadastrar usuário.');
   }
 };
 
-
-
-
-
+/**
+ * Realiza login do usuário com email/senha e salva dados no AsyncStorage
+ */
 export const loginUser = async (email: string, senha: string) => {
   if (!email || !senha) {
     throw new Error('Preencha todos os campos.');
   }
 
   try {
-    // Autentica o user
-    const userCredential = await auth.signInWithEmailAndPassword(email, senha);
+    const userCredential = await signInWithEmailAndPassword(auth, email, senha);
     const user = userCredential.user;
 
     if (!user) {
       throw new Error('Usuário não encontrado.');
     }
 
-    // Busca dados adicionais do user no Firestore
-    const doc = await firestore.collection('Usuarios').doc(user.uid).get();
-    const userData = doc.data();
+    const userDocRef = doc(firestore, 'Usuarios', user.uid);
+    const userDoc = await getDoc(userDocRef);
+    const userData = userDoc.data();
 
-    // Salva dados no AsyncStorage
     await AsyncStorage.setItem('@userId', user.uid);
     await AsyncStorage.setItem('@userEmail', user.email || '');
     if (userData?.nome) {
@@ -77,6 +90,9 @@ export const loginUser = async (email: string, senha: string) => {
   }
 };
 
+/**
+ * Envia email de redefinição de senha
+ */
 export const handlePasswordReset = async (email: string) => {
   try {
     if (!email) {

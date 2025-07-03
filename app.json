@@ -3,7 +3,6 @@
     "name": "co-train",
     "slug": "co-train",
     "version": "1.0.0",
-
     "scheme": "co-train",
     "web": {
       "bundler": "metro",
@@ -12,6 +11,7 @@
     },
     "plugins": [
       "expo-router",
+      "@react-native-google-signin/google-signin",
       [
         "expo-dev-launcher",
         {
@@ -21,28 +21,34 @@
     ],
     "experiments": {
       "typedRoutes": true,
-
       "tsconfigPaths": true
     },
-
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-
     "userInterfaceStyle": "light",
-
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "googleServicesFile": "./google-services.json", 
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "package": "com.carloseduss.cotrain"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7c2eb30f-0e42-484e-a292-0a8f8809c758"
       }
     }
   }

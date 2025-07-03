@@ -3,55 +3,27 @@ import { View, Text, TextInput, TouchableOpacity, ScrollView, Alert, ActivityInd
 import { Feather } from '@expo/vector-icons';
 import { useLocalSearchParams, router } from 'expo-router';
 import styles from './style';
-import { firestore, auth, FirebaseFirestore } from '../../../config/firebase';
+import { MealPlan } from '~/constants/mealPlan';
+import { DayKey } from '~/constants/diasSemana';
+import { deleteMealPlanById, getMealsByDay, updateMealPlanById } from '~/services/dietService';
 
-type DayKey = 'segunda' | 'terca' | 'quarta' | 'quinta' | 'sexta' | 'sabado' | 'domingo';
 
-interface FoodItem {
-  name: string;
-  quantity: number;
-}
-
-interface MealPlan {
-  id: string;
-  mealName: string;
-  mealTime: string;
-  foods: FoodItem[];
-  days: DayKey[];
-  notify: boolean;
-}
 
 export default function FormEditar() {
-  const { dia } = useLocalSearchParams();
+  const { dia } = useLocalSearchParams<{ dia?: string | string[] }>();
   const [meals, setMeals] = useState<MealPlan[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchMeals = async () => {
-      try {
-        const user = auth.currentUser;
-        if (!user || typeof dia !== 'string') return;
-
-        const snapshot = await firestore
-          .collection('plano_alimentar')
-          .where('userId', '==', user.uid)
-          .get();
-
-        const filtered = snapshot.docs
-          .map(doc => ({ id: doc.id, ...doc.data() } as MealPlan))
-          .filter(meal => meal.days.includes(dia as DayKey));
-
-        setMeals(filtered);
-      } catch (error) {
-        Alert.alert('Erro', 'Não foi possível carregar as refeições.');
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
+      if (!dia || Array.isArray(dia)) return;
+      const validDia = dia as DayKey;
+      const data = await getMealsByDay(validDia);
+      setMeals(data);
     };
-
     fetchMeals();
   }, [dia]);
+
 
   const handleRemoveFood = (mealIndex: number, foodIndex: number) => {
     const updated = [...meals];
@@ -61,17 +33,8 @@ export default function FormEditar() {
 
   const handleUpdateMeal = async (meal: MealPlan) => {
     try {
-      await firestore.collection('plano_alimentar').doc(meal.id).update({
-        mealName: meal.mealName,
-        mealTime: meal.mealTime,
-        foods: meal.foods,
-        days: meal.days,
-        notify: meal.notify,
-        updatedAt: FirebaseFirestore.FieldValue.serverTimestamp(),
-      });
-      Alert.alert('Sucesso', 'Refeição atualizada com sucesso!');
+      await updateMealPlanById(meal);
     } catch (error) {
-      Alert.alert('Erro', 'Não foi possível salvar.');
       console.error(error);
     }
   };
@@ -84,15 +47,15 @@ export default function FormEditar() {
         style: 'destructive',
         onPress: async () => {
           try {
-            await firestore.collection('plano_alimentar').doc(id).delete();
+            await deleteMealPlanById(id);
             setMeals(prev => prev.filter(meal => meal.id !== id));
             Alert.alert('Deletado', 'Refeição excluída com sucesso!');
           } catch (error) {
             Alert.alert('Erro', 'Falha ao deletar.');
             console.error(error);
           }
-        }
-      }
+        },
+      },
     ]);
   };
 
@@ -105,7 +68,7 @@ export default function FormEditar() {
       {meals.map((meal, mealIndex) => (
         <View key={meal.id} style={styles.mealCard}>
           <TextInput
-           
+
             placeholder="Nome da Refeição"
             value={meal.mealName}
             onChangeText={text => {
@@ -116,7 +79,7 @@ export default function FormEditar() {
           />
 
           <TextInput
-           
+
             placeholder="Hora da Refeição (opcional)"
             value={meal.mealTime}
             onChangeText={text => {

@@ -1,10 +1,23 @@
 import styles from "./style"
 import { View ,Image,TouchableOpacity,Text,ScrollView} from 'react-native';
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import { images } from '~/constants/images';
 import { routes } from "~/constants/routes";
+import { useAuth } from "~/components/AuthContext";
+import { useEffect } from "react";
 
 export default function home() {
+
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace(routes.login);
+    }
+  }, [loading, user]);
+
+
  return (
   <ScrollView contentContainerStyle={styles.scrollContainer}>
     <View style={styles.container}>

@@ -2,22 +2,33 @@ import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { View, Text, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import * as Animatable from "react-native-animatable";
-import { router } from 'expo-router';
+import { router, useRouter } from 'expo-router';
 import { routes } from '~/constants/routes';
 import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, firestore } from '~/config/firebase';
+import { useAuth } from '~/components/AuthContext';
 
 export default function Perfil() {
   const [userData, setUserData] = useState<any>(null);
 
+
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace(routes.login);
+    }
+  }, [loading, user]);
+
+  // Busca os dados do usuário autenticado
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const userId = auth.currentUser?.uid;
-        if (!userId) return;
+        if (!user?.uid) return;
 
-        const userRef = doc(firestore, 'Usuarios', userId);
+        const userRef = doc(firestore, 'Usuarios', user.uid);
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
@@ -30,8 +41,13 @@ export default function Perfil() {
       }
     };
 
-    fetchUserData();
-  }, []);
+    if (user) {
+      fetchUserData();
+    }
+  }, [user]);
+
+  if (loading) return null;
+
 
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>

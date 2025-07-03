@@ -1,24 +1,14 @@
-import { colors } from '../../constants/colors';
 import styles from "./style";
 import { View, Text, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Header } from '../../components/header/header';
-
-const DIAS_SEMANA = [
-  { nome: 'SEGUNDA', valor: 'segunda' },
-  { nome: 'TERÇA-FEIRA', valor: 'terca' },
-  { nome: 'QUARTA-FEIRA', valor: 'quarta' },
-  { nome: 'QUINTA-FEIRA', valor: 'quinta' },
-  { nome: 'SEXTA-FEIRA', valor: 'sexta' },
-  { nome: 'SÁBADO', valor: 'sabado' },
-];
 
 export default function Planejamentos() {
 
   const handleDayPress = (dia: string) => {
     router.push({
       pathname: '/planejamentos/Adicionar/adicionar',
-      params: { dia: dia } // envia o dia da semana
+      params: { dia: dia } 
     });
   };
 

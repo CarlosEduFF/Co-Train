@@ -1,31 +1,22 @@
-import firebase from 'firebase/compat/app';
-import 'firebase/compat/auth'; // Importa o módulo de Auth
-import 'firebase/compat/firestore';
-import 'firebase/compat/storage'; // Importa o módulo de Storage
+// config/firebase.ts
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
 
-
-// config firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDjGBX2IKO9bTBP4NgvXhkLXp_coQzDCp4",
   authDomain: "co-train-84be9.firebaseapp.com",
   projectId: "co-train-84be9",
-  storageBucket: "co-train-84be9.firebasestorage.app",
+  storageBucket: "co-train-84be9.appspot.com",
   messagingSenderId: "620962951335",
   appId: "1:620962951335:web:d2c72d9b6e2e451058eb82"
 };
 
-if (!firebase.apps.length) {
-  console.log(`Conectando... Status:${firebase.apps.length}`);
-  firebase.initializeApp(firebaseConfig);
-  console.log(`Conectado. Status:${firebase.apps.length}`);
-}
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-// Exporta Firestore, Auth e Storage
-export const firestore = firebase.firestore();
-export const auth = firebase.auth();       
-export const storage = firebase.storage(); 
+export const firestore = getFirestore(app);
+export const auth = getAuth(app);
+export const storage = getStorage(app);
 
-export const FirebaseFirestore = firebase.firestore;
-
-
-export default firebase;
+export default app;

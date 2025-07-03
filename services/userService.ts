@@ -1,14 +1,19 @@
 import { Alert } from 'react-native';
-import { auth, firestore } from '~/config/firebase';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  Firestore,
+} from 'firebase/firestore';
 import { uploadToCloudinary } from '~/services/uploadService';
 
-export const getUserData = async () => {
+/**
+ * Obtém os dados do usuário no Firestore com base no UID
+ * @param uid UID do usuário autenticado
+ */
+export const getUserData = async (firestore: Firestore, uid: string) => {
   try {
-    const userId = auth.currentUser?.uid;
-    if (!userId) return null;
-
-    const userRef = doc(firestore, 'Usuarios', userId);
+    const userRef = doc(firestore, 'Usuarios', uid);
     const userSnap = await getDoc(userRef);
 
     if (userSnap.exists()) {
@@ -23,10 +28,21 @@ export const getUserData = async () => {
   }
 };
 
-export const updateUserData = async (data: any, localImageUri?: string) => {
+/**
+ * Atualiza os dados do usuário no Firestore
+ * @param firestore Instância do Firestore
+ * @param uid UID do usuário autenticado
+ * @param data Objeto com os dados atualizados
+ * @param localImageUri Caminho da nova imagem (opcional)
+ */
+export const updateUserData = async (
+  firestore: Firestore,
+  uid: string,
+  data: any,
+  localImageUri?: string
+) => {
   try {
-    const userId = auth.currentUser?.uid;
-    if (!userId) {
+    if (!uid) {
       Alert.alert('Erro', 'Usuário não autenticado');
       return;
     }
@@ -37,7 +53,7 @@ export const updateUserData = async (data: any, localImageUri?: string) => {
       imageUrl = await uploadToCloudinary(localImageUri);
     }
 
-    const userRef = doc(firestore, 'Usuarios', userId);
+    const userRef = doc(firestore, 'Usuarios', uid);
 
     await updateDoc(userRef, {
       ...data,

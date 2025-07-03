@@ -2,7 +2,7 @@ import { StyleSheet } from 'react-native';
 import { colors } from '../../../constants/colors';
 
 export default StyleSheet.create({
-   container: {
+  container: {
     flex: 1,
     padding: 20,
     backgroundColor: colors.background,
@@ -13,6 +13,7 @@ export default StyleSheet.create({
     width: '100%',
     gap: 12,
     marginTop: 20,
+    padding: 10
   },
 
   label: {
@@ -52,7 +53,7 @@ export default StyleSheet.create({
   inputHalf: {
     flex: 1,
   },
-   checkboxContainer: {
+  checkboxContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
@@ -64,7 +65,7 @@ export default StyleSheet.create({
     fontSize: 16,
     color: colors.vermEscuro,
     paddingHorizontal: 10,
-    
+
   },
   buttonAdicionar: {
     backgroundColor: colors.white,
@@ -80,6 +81,12 @@ export default StyleSheet.create({
     paddingVertical: 8,
     gap: 6,
   },
+  buttonDisabled: {
+    backgroundColor: '#ccc', // Cor para botao desabilitado
+    opacity: 0.6,
+    borderWidth: 2,
+    borderColor: '#ccc',
+  },
 
   buttonSave: {
     backgroundColor: colors.white,
@@ -90,11 +97,20 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 80
   },
 
   buttonText: {
     fontSize: 16,
     color: colors.vermEscuro,
     fontWeight: 'bold',
+  },
+
+  removeIcon: {
+    position: 'absolute',
+    top: -5,
+    right: -5,
+    backgroundColor: '#fff',
+    borderRadius: 12,
   },
 });

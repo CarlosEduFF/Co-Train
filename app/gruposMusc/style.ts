@@ -42,41 +42,8 @@ export default StyleSheet.create({
         gap: 16,
     },
 
-     card: {
-        alignContent:'center',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        margin:'5%',
-        height: '100%',
-    },
-
-     containerCard:{
-        alignItems:'center',
-        alignContent:'center',
-        maxWidth: '100%',
-        height: '100%',
-
-
-  
-     },
-     MuscImage:{
-        width: 100,
-        height: 100,
-        borderRadius: 75,
-        borderWidth: 1,
-        borderColor: colors.vermEscuro,
-
-     },
-     cardTitulo: {
-       color: colors.Vermelho,
-       fontWeight: 'bold',
-       fontSize: 15,
-       marginBottom: 4,
-       maxWidth: 90, 
-       textAlign: "center",
-  
-     },
+    
+     
 
      cardDescricao: {
        fontSize: 18,

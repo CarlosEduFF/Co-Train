@@ -1,12 +1,11 @@
 import { Feather } from '@expo/vector-icons';
 import styles from "./style"
-import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Input } from '~/components/input/inputNormal'
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import * as Animatable from "react-native-animatable";
 import { useForm } from 'react-hook-form'
-import { router } from 'expo-router';
+import { useRouter } from 'expo-router';
 import { images } from '~/constants/images';
 import { useEffect, useState } from 'react';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -17,6 +16,8 @@ import { routes } from '~/constants/routes';
 import { pickImage } from '~/utils/handleMediaManeger';
 import { getUserData, updateUserData } from '~/services/userService';
 import { UserFormData, userSchema } from '~/schemas/userSchema';
+import { useAuth } from '~/components/AuthContext';
+import { firestore } from '~/config/firebase';
 
 export default function EditarPerfil() {
   const [logoUri, setLogoUri] = useState(images.logo);
@@ -25,13 +26,35 @@ export default function EditarPerfil() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showPicker, setShowPicker] = useState(false);
 
+  const { user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    console.log('Auth state:', { loading, user });
+
+    if (!loading && !user) {
+      router.replace(routes.login);
+    }
+  }, [loading, user]);
+
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace(routes.login);
+    }
+  }, [loading, user]);
+
+  if (loading) return null;
+
   const { control, handleSubmit, reset, formState: { errors } } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
   });
 
   useEffect(() => {
     const fetchData = async () => {
-      const userData = await getUserData();
+      if (!user?.uid) return;
+
+      const userData = await getUserData(firestore, user.uid);
       if (userData) {
         reset({
           nome: userData.nome || '',
@@ -52,19 +75,31 @@ export default function EditarPerfil() {
       }
     };
 
-    fetchData();
-  }, []);
+    if (!loading && user) {
+      fetchData();
+    }
+  }, [loading, user]);
 
   const onSubmit = async (form: UserFormData) => {
-    const success = await updateUserData({
-      nome: form.nome,
-      email: form.email,
-      dataNascimento: form.dataNascimento,
-      sexo: form.sexo,
-      altura: Number(form.altura),
-      peso: Number(form.peso),
-      objetivo: form.objetivo,
-    }, logoUri?.uri);
+    if (!user?.uid) {
+      Alert.alert('Erro', 'Usuário não autenticado');
+      return;
+    }
+
+    const success = await updateUserData(
+      firestore,
+      user.uid,
+      {
+        nome: form.nome,
+        email: form.email,
+        dataNascimento: form.dataNascimento,
+        sexo: form.sexo,
+        altura: Number(form.altura),
+        peso: Number(form.peso),
+        objetivo: form.objetivo,
+      },
+      logoUri?.uri
+    );
 
     if (success) {
       router.push(routes.profile);

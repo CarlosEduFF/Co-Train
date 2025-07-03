@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "620962951335",
+    "project_id": "co-train-84be9",
+    "storage_bucket": "co-train-84be9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:620962951335:android:00d0dc160f8931e058eb82",
+        "android_client_info": {
+          "package_name": "com.carloseduss.cotrain"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "620962951335-havos3dqp03rgt2vumnrk2voribssp5s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carloseduss.cotrain",
+            "certificate_hash": "89da30c8fead1aa54b499a710e4dddec71b18d99"
+          }
+        },
+        {
+          "client_id": "620962951335-pd6f6kbcp5o142snvrrrur956cppharp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carloseduss.cotrain",
+            "certificate_hash": "78c2168c3537f082dda6857976fec68663d28a24"
+          }
+        },
+        {
+          "client_id": "620962951335-jjvgnqms3mbh3bb9p7atu3m94970l4if.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjZP956da_IB2p6xBQAzHJ4L1rnFmCSdw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "620962951335-jjvgnqms3mbh3bb9p7atu3m94970l4if.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

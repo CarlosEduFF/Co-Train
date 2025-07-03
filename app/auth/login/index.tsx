@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Image, Alert, Pressable, TextInput, ScrollView } from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Alert,
+  TextInput,
+  ScrollView,
+  Pressable
+} from 'react-native';
 import { router } from 'expo-router';
 import styles from './style';
 import { Feather, Entypo, Ionicons } from '@expo/vector-icons';
@@ -7,63 +16,56 @@ import * as Animatable from 'react-native-animatable';
 import { images } from '~/constants/images';
 import { routes } from '~/constants/routes';
 import { handlePasswordReset, loginUser } from '~/services/authService';
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
-import { makeRedirectUri } from 'expo-auth-session';
+import 'expo-dev-client';
 
-WebBrowser.maybeCompleteAuthSession();
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { onAuthStateChanged, signInWithCredential, GoogleAuthProvider, User } from 'firebase/auth';
+import { auth } from '~/config/firebase'; // do firebase SDK web
+import { onGoogleButtonPress } from '~/services/googleService';
 
 export default function Login() {
-  const [hidePass, setHidePass] = useState(true);
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [emailFocused, setEmailFocused] = useState(false);
-  const [senhaFocused, setSenhaFocused] = useState(false);
-  /*
-    // Configuração do login Google
-    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-      clientId: '620962951335-jjvgnqms3mbh3bb9p7atu3m94970l4if.apps.googleusercontent.com',
-      redirectUri: makeRedirectUri(),
-      scopes: ['profile', 'email'],
-    });
-  
-  
-    useEffect(() => {
-      if (response?.type === 'success') {
-        const { id_token } = response.params;
-        handleGoogleLogin(id_token);
-      } else if (response?.type === 'error') {
-        Alert.alert('Erro no login Google');
-      }
-    }, [response]);
-  */
-  /*
-  // Função para fazer login com Google (exemplo usando Firebase)
-  async function handleGoogleLogin(idToken: string) {
-    try {
-      // Aqui você precisa implementar o login via Firebase ou seu backend
-      // Exemplo com Firebase Authentication:
-      // import { GoogleAuthProvider, signInWithCredential } from "firebase/auth";
-      // const credential = GoogleAuthProvider.credential(idToken);
-      // await signInWithCredential(auth, credential);
+  const [hidePass, setHidePass] = useState<boolean>(true);
+  const [email, setEmail] = useState<string>('');
+  const [senha, setSenha] = useState<string>('');
+  const [emailFocused, setEmailFocused] = useState<boolean>(false);
+  const [senhaFocused, setSenhaFocused] = useState<boolean>(false);
+  const [initializing, setInitializing] = useState<boolean>(true);
+  const [user, setUser] = useState<User | null>(null);
 
-      // Para exemplo, só vamos alertar e redirecionar
-      Alert.alert('Login Google bem-sucedido');
+  useEffect(() => {
+    GoogleSignin.configure({
+      webClientId: '620962951335-jjvgnqms3mbh3bb9p7atu3m94970l4if.apps.googleusercontent.com',
+    });
+
+    const unsubscribe = onAuthStateChanged(auth, handleAuthStateChanged);
+    return unsubscribe;
+  }, []);
+
+  function handleAuthStateChanged(currentUser: User | null): void {
+    setUser(currentUser);
+    if (initializing) setInitializing(false);
+  }
+
+  if (initializing) return null;
+
+  const handleGoogleLogin = async () => {
+    try {
+      const userCredential = await onGoogleButtonPress(); // já retorna credencial e faz signIn
+      console.log('Usuário logado com Google:', userCredential.user);
       router.replace(routes.home);
     } catch (error: any) {
-      Alert.alert('Erro no login Google', error.message);
+      Alert.alert('Erro no login com Google', error.message);
     }
-  }*/
+  };
 
   const handleLogin = async () => {
     try {
-      const uid = await loginUser(email, senha);
+      await loginUser(email, senha); // função que chama signInWithEmailAndPassword
       router.replace(routes.home);
     } catch (error: any) {
       Alert.alert('Erro no login', error.message);
     }
   };
-
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -150,8 +152,8 @@ export default function Login() {
 
           <TouchableOpacity
             style={styles.googleButtonContaine}
-          /*onPress={() => promptAsync()}
-          disabled={!request}*/
+            onPress={() => handleGoogleLogin()}
+
           >
             <Image source={images.google} style={styles.googleImage} />
             <Text style={styles.TextGoogle}>Google</Text>

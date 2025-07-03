@@ -1,175 +1,140 @@
-import React, { useState, useEffect  } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Switch, Alert } from 'react-native';
+import React, { useState, useEffect, useCallback } from 'react';
+import { View, Text, FlatList, ActivityIndicator, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import { useAuth } from '~/components/AuthContext'; // Seu hook de autenticação
+import { atualizarDiasDaSemanaTreino, subscribeToTreinosGrupados } from '~/services/trainsService';
+import { Treino } from '~/constants/train';
+import { User } from 'firebase/auth';
+import { TreinoCard } from '~/components/trainCard/trainCard';
+import { mapPlanoToTreino } from '~/utils/myPlantoTrain';
 import { Feather } from '@expo/vector-icons';
-import styles from "./style";
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { useForm, useFieldArray } from 'react-hook-form';
-import { colors } from '../../../constants/colors';
-import { Input } from '../../../components/input/inputNormal';
-import { Select } from '../../../components/input/select';
-import { Header } from '../../../components/header/header';
-import { router, useLocalSearchParams  } from 'expo-router';
-import { auth, firestore } from '../../../config/firebase';
+import styles from './style';
+import { router, useLocalSearchParams } from 'expo-router';
+import { doc, getDoc } from 'firebase/firestore';
+import { firestore } from '~/config/firebase';
 
-const schema = z.object({
-  parte: z.string().min(1, { message: "Informe o grupo muscular" }),
-  horaTreino: z.string().optional(),
-  exercicios: z.array(
-    z.object({
-      nome: z.string().min(1, { message: "Informe o exercício" }),
-      series: z.string().min(1, { message: "Informe as séries" }),
-    })
-  ).min(1, { message: "Adicione pelo menos um exercício." }) // Garante que nao esteja vazio
-});
-
-type FormData = z.infer<typeof schema>;
-
-export default function FormAdicionar() {
-  const { dia } = useLocalSearchParams<{ dia: string }>();
-    useEffect(() => {
-    console.log("DIA RECEBIDO NO FORMULÁRIO DE ADIÇÃO:", dia);
-    if (!dia) {
-      Alert.alert(
-        "Erro Crítico",
-        "Nenhum dia da semana foi especificado. Por favor, volte e tente novamente.",
-        [{ text: "OK", onPress: () => router.back() }]
-      );
-    }
-  }, [dia]);
-
-  const { control, handleSubmit, formState: { errors } } = useForm<FormData>({
-    resolver: zodResolver(schema),
-    defaultValues: {
-      parte: '',
-      horaTreino: '',
-      exercicios: [{ nome: '', series: '' }]
-    }
-  });
-  
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "exercicios"
-  });
-
-  const [notify, setNotify] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-
- const ExercicieOptions = [
-    { label: 'Peito', value: 'Peito' },
-    { label: 'Costas', value: 'Costas' },
-    { label: 'Ombros', value: 'Ombros' },
-    { label: 'Bíceps', value: 'Bíceps' },
-    { label: 'Tríceps', value: 'Tríceps' },
-    { label: 'Abdômen', value: 'Abdômen' },
-    { label: 'Posterior de Coxa', value: 'Posterior de Coxa'},
-    { label: 'Quadríceps', value: 'Quadríceps'},
-    { label: 'Glúteo', value: 'Glúteo'},
-    { label: 'Panturrilha', value: 'Panturrilha'},
-    { label: 'Antebraço', value: 'Antebraço'},
-
-  ];
-  
-  //salvar
-  const handleSavePlano = async (data: FormData) => {
-    const user = auth.currentUser;
-
-    //verificacao
-    if (!user || !dia) {
-      Alert.alert("Erro", "Dia da semana não especificado ou usuário não logado. Não é possível salvar.");
+export default function ListaTreinos() {
+  const { user, loading: authLoading } = useAuth();
+  const [treinos, setTreinos] = useState<Treino[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const { dia } = useLocalSearchParams<{ dia?: string }>();
+  useEffect(() => {
+    if (!user) {
+      Alert.alert('Erro', 'Usuário não autenticado');
+      setLoading(false);
       return;
     }
 
-    setIsLoading(true);
+    setLoading(true);
+
+    const unsubscribe = subscribeToTreinosGrupados(
+      user as User,
+      undefined, // <<< não passar o dia
+      (treinosData) => {
+        setTreinos(treinosData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error(error);
+        setLoading(false);
+      }
+    );
+
+    return () => unsubscribe();
+  }, [user]);
+
+  if (loading || authLoading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
+
+  if (treinos.length === 0) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text>Nenhum treino encontrado.</Text>
+      </View>
+    );
+  }
+
+
+
+  const handleCardPress = (id: string) => {
+    setSelectedIds((prevSelected) =>
+      prevSelected.includes(id)
+        ? prevSelected.filter((selectedId) => selectedId !== id) // desmarca
+        : [...prevSelected, id] // adiciona
+    );
+  };
+
+
+  const handleAddPress = async () => {
+    if (!dia) {
+      Alert.alert('Erro', 'Dia não informado.');
+      return;
+    }
+
+    if (selectedIds.length === 0) {
+      Alert.alert('Atenção', 'Selecione ao menos um treino.');
+      return;
+    }
 
     try {
-      await firestore.collection('planejamentos').add({
-        userId: user.uid,
-        diaDaSemana: dia,
-        ...data,
-        notify: notify,
-        createdAt: new Date(),
-      });
+      await Promise.all(
+        selectedIds.map(async (treinoId) => {
+          const treinoRef = doc(firestore, 'treinos_grupados', treinoId);
+          const treinoSnap = await getDoc(treinoRef);
 
-      Alert.alert("Sucesso!", "Seu plano foi salvo.");
-      router.back();
+          if (treinoSnap.exists()) {
+            const treinoData = treinoSnap.data();
+            const diasAtuais: string[] = treinoData.diasDaSemana || [];
 
+            // Adiciona o dia se não estiver no array ainda
+            const novosDias = diasAtuais.includes(dia.toLowerCase())
+              ? diasAtuais
+              : [...diasAtuais, dia.toLowerCase()];
+
+            await atualizarDiasDaSemanaTreino(treinoId, novosDias);
+          }
+        })
+      );
+
+      Alert.alert('Sucesso', `Treinos atualizados para o dia ${dia}!`);
+      setSelectedIds([]); // limpa seleção
+      router.push('/planejamentos');
     } catch (error) {
-      console.error("Erro ao salvar: ", error);
-      Alert.alert("Erro ao Salvar", (error as Error).message);
-    } finally {
-      setIsLoading(false);
+      console.error('Erro ao atualizar treinos:', error);
+      Alert.alert('Erro', 'Não foi possível atualizar os treinos.');
     }
   };
 
+
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.container}>
-        <Header title='Planejamento Semanal' text="Gerencie seus treinos" />
+    <View style={{ flex: 1, padding: 16 }}>
+      {/* Botão de adicionar */}
+      <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
+        <Feather name="plus-circle" size={24} color="#fff" />
+        <Text style={styles.addText}>Adicionar Treino</Text>
+      </TouchableOpacity>
 
-        <View style={styles.formContainer}>
-          <Text style={styles.label}>Músculo:</Text>
-          <Select control={control} name="parte" error={errors.parte?.message} options={ExercicieOptions} />
-          
-          {}
-          {fields.map((field, index) => (
-            <View key={field.id} style={styles.exerciseRow}>
-              <View style={styles.row}>
-                <View style={styles.inputHalf}>
-                  <Text style={styles.label}>Exercício:</Text>
-                  <Input
-                    name={`exercicios.${index}.nome`}
-                    control={control}
-                    placeholder="--"
-                    error={errors.exercicios?.[index]?.nome?.message}
-                    keyboardType="default"
-                  />
-                </View>
-                <View style={styles.inputHalf}>
-                  <Text style={styles.label}>Séries:</Text>
-                  <Input
-                    name={`exercicios.${index}.series`}
-                    control={control}
-                    placeholder="--"
-                    error={errors.exercicios?.[index]?.series?.message}
-                    keyboardType="default"
-                  />
-                </View>
-              </View>
-              {}
-              {index > 0 && (
-                 <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
-                    <Feather name="x-circle" size={20} color={colors.vermEscuro} />
-                 </TouchableOpacity>
-              )}
-            </View>
-          ))}
-          
-          {}
-          <Text style={styles.label}>Hora do treino (opcional):</Text>
-          <Input name="horaTreino" control={control} placeholder="Hora do treino" keyboardType="default"/>
+      {/* Lista de treinos */}
+      <FlatList
+        data={treinos}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <TreinoCard
+            treino={mapPlanoToTreino(item)}
+            onPress={handleCardPress}
+            isSelected={selectedIds.includes(item.id)} // <<< agora checa se está na lista
+          />
+        )}
+        contentContainerStyle={{ paddingBottom: 32 }}
+      />
 
-          <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
-            <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
-            <Feather name="plus-circle" size={20} color="#3D0000" />
-          </TouchableOpacity>
-          
-          <TouchableOpacity 
-            style={[styles.buttonAdicionar, fields.length <= 1 && styles.buttonDisabled]} 
-            onPress={() => remove(fields.length - 1)}
-            disabled={fields.length <= 1}
-          >
-            <Text>REMOVER ÚLTIMO EXERCÍCIO</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(handleSavePlano)} disabled={isLoading}>
-            <Text style={styles.buttonText}>{isLoading ? 'SALVANDO...' : 'SALVAR'}</Text>
-          </TouchableOpacity>
-          
-          
-        </View>
-      </View>
-    </ScrollView>
+    </View>
   );
 }
+
 

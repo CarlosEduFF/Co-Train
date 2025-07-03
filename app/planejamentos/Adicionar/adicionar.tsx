@@ -1,148 +1,149 @@
-import React, { useState, useCallback } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert, StyleSheet } from 'react-native';
+import { useState, useCallback, useEffect } from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  FlatList,
+  ActivityIndicator,
+  Alert,
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import styles from "./style";
-import { router, useFocusEffect, useLocalSearchParams  } from 'expo-router';
+import { useFocusEffect, useLocalSearchParams, router } from 'expo-router';
+import styles from './style';
 import { Header } from '../../../components/header/header';
-import { auth, firestore } from '../../../config/firebase';
-import { colors } from '../../../constants/colors';
-
-interface Plano {
-  id: string;
-  parte: string;
-  exercicios: Array<{ nome: string; series: string }>;
-}
-
+import { colors } from '~/constants/colors';
+import { routes } from '~/constants/routes';
+import { useAuth } from '~/components/AuthContext';
+import { TreinoCard } from '~/components/trainCard/trainCard';
+import { mapPlanoToTreino } from '~/utils/myPlantoTrain';
+import { deleteTreinoById, removerDiaEspecifico, subscribeToTreinosGrupados } from '~/services/trainsService';
+import { Treino } from '~/constants/train';
 export default function Adicionar() {
   const { dia } = useLocalSearchParams<{ dia?: string }>();
 
-  const [planos, setPlanos] = useState<Plano[]>([]);
-  const [loading, setLoading] = useState(true);
 
-  const getDayName = (diaParam: string | undefined) => {
-    if (!diaParam) return 'Seu Treino';
-    return diaParam.charAt(0).toUpperCase() + diaParam.slice(1);
-  }
+  const [planos, setPlanos] = useState<Treino[]>([]);
+  const [loadingPlanos, setLoadingPlanos] = useState(true);
+  const getDayName = (diaParam?: string) =>
+    diaParam ? diaParam.charAt(0).toUpperCase() + diaParam.slice(1) : 'Seu Treino';
+  const { user, loading } = useAuth();
+
+  useEffect(() => {
+    console.log('Auth state:', { loading, user });
+
+    if (!loading && !user) {
+      router.replace(routes.login);
+    }
+  }, [loading, user]);
+
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.replace(routes.login);
+    }
+  }, [loading, user]);
+
 
   useFocusEffect(
     useCallback(() => {
-      if (!dia) {
-        setLoading(false);
+      if (!user || !dia) {
+        setLoadingPlanos(false);
         return;
       }
-      const user = auth.currentUser;
-      if (!user) {
-        setLoading(false);
-        setPlanos([]);
-        return;
-      }
-      
-      setLoading(true);
 
-      const subscriber = firestore
-        .collection('planejamentos')
-        .where('userId', '==', user.uid)
-        .where('diaDaSemana', '==', dia)
-        .orderBy('createdAt', 'desc')
-        .onSnapshot(querySnapshot => {
-          const planosData: Plano[] = [];
-          querySnapshot.forEach(documentSnapshot => {
-            planosData.push({ id: documentSnapshot.id, ...documentSnapshot.data() } as Plano);
-          });
-          setPlanos(planosData);
-          setLoading(false);
-        }, error => {
-            console.error(error);
-            Alert.alert("Erro", "Não foi possível carregar os planos.");
-            setLoading(false);
-        });
+      setLoadingPlanos(true);
 
-      return () => subscriber();
-    }, [dia])
+      const unsubscribe = subscribeToTreinosGrupados(
+        user,
+        dia.toLowerCase(), // passa o dia para filtrar
+        (treinosData) => {
+          setPlanos(treinosData);
+          setLoadingPlanos(false);
+        },
+        (error) => {
+          console.error('Erro ao carregar treinos:', error);
+          setPlanos([]);
+          setLoadingPlanos(false);
+        }
+      );
+
+      return () => {
+        if (unsubscribe) unsubscribe();
+      };
+    }, [user, dia]) // inclua `dia` nas dependências
   );
 
-  const handleDelete = (planoId: string) => {
-    Alert.alert( 
-      "Excluir Plano", 
-      "Você tem certeza?", 
-      [ 
-        { text: "Cancelar" }, 
-        { text: "Excluir", onPress: async () => {
-            try {
-              await firestore.collection('planejamentos').doc(planoId).delete();
-            } catch (error) {
-              console.error("Erro ao deletar o plano: ", error);
-              Alert.alert("Erro", "Não foi possível excluir o plano. Tente novamente.");
-            }
-          } 
-        } 
-      ]
-    );
-  };
-
-  const renderItem = ({ item }: { item: Plano }) => {
-    const primeiroExercicio = item.exercicios?.[0] || { nome: 'Plano sem exercícios', series: '' };
-    return (
-      <View style={styles.card}>
-        <TouchableOpacity style={styles.cardContent} onPress={() => handleCardPress(item.id)}>
-          <Text style={styles.cardTitulo}>{item.parte}</Text>
-          <Text style={styles.cardDescricao}>{primeiroExercicio.nome}</Text>
-          <Text style={styles.cardRepeticoes}>{primeiroExercicio.series} Séries</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-          <Feather name="trash-2" size={24} color={colors.vermEscuro} />
-        </TouchableOpacity>
-      </View>
-    );
-  };
-  
-  const handleCardPress = (id: string) => {
-     router.push({
-        pathname: "/planejamentos/FormEditar/[id]", 
-        params: { id: id },
-     });
-  };
-
-  //func para passar o parametro dia
-  const handleAddPress = () => {
+  const handleDelete = (treinoId: string) => {
     if (!dia) {
-      Alert.alert("Erro", "Dia não identificado. Por favor, volte e tente novamente.");
+      Alert.alert('Erro', 'Dia não informado.');
       return;
     }
+
+    Alert.alert('Remover do Dia', 'Você quer remover este treino do planejamento semanal?', [
+      { text: 'Cancelar', style: 'cancel' },
+      {
+        text: 'Remover',
+        style: 'destructive',
+        onPress: async () => {
+          try {
+            await removerDiaEspecifico(treinoId, dia);
+          } catch {
+            Alert.alert('Erro', 'Não foi possível remover o treino do dia.');
+          }
+        },
+      },
+    ]);
+  };
+
+  const handleCardPress = (id: string) => {
+    router.push(`/planejamentos/FormEditar/${id}`);
+  };
+
+  const handleAddPress = () => {
     router.push({
       pathname: '/planejamentos/FormAdicionar/formAdicionar',
-      params: { dia: dia } 
+      params: { dia }, // expo-router transforma isso em `?dia=segunda`
     });
   };
+
+
+  if (loading || loadingPlanos) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size="large" color={colors.vermEscuro} />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <Header
         title='Planejamento Semanal'
         text={`Gerencie seus treinos de ${getDayName(dia)}`}
-      />  
+      />
 
-      {}
       <TouchableOpacity style={styles.button} onPress={handleAddPress}>
         <Text style={styles.adicionarButton}>Adicionar</Text>
         <Feather name='plus-circle' size={30} color='#3D0000' />
       </TouchableOpacity>
 
-      {loading ? (
-        <ActivityIndicator size="large" color={colors.vermEscuro} style={{ marginTop: 20 }} />
+      {planos.length === 0 ? (
+        <View style={{ alignItems: 'center', marginTop: 50 }}>
+          <Text>Nenhum plano adicionado para este dia..</Text>
+          <Text>Clique em "Adicionar" para começar!</Text>
+        </View>
       ) : (
         <FlatList
           data={planos}
           keyExtractor={(item) => item.id}
-          renderItem={renderItem}
+          renderItem={({ item }) => (
+            <TreinoCard
+              treino={mapPlanoToTreino(item)}
+              onPress={handleCardPress}
+              onDelete={handleDelete}
+            />
+          )}
           contentContainerStyle={styles.listContainer}
-          ListEmptyComponent={
-            <View style={{alignItems: 'center', marginTop: 50}}>
-              <Text>Nenhum plano adicionado para este dia..</Text>
-              <Text>Clique em "Adicionar" para começar!</Text>
-            </View>
-          }
-      
         />
       )}
     </View>

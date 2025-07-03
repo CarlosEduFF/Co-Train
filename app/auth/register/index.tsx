@@ -28,35 +28,6 @@ export default function Cadastro() {
   const [confirmarSenhaFocused, setConfirmarSenhaFocused] = useState(false);
   const [userId, setUserId] = useState('');
 
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    clientId: '620962951335-jjvgnqms3mbh3bb9p7atu3m94970l4if.apps.googleusercontent.com',
-    redirectUri: makeRedirectUri(),
-    scopes: ['profile', 'email'],
-  });
-
-
-
-  // Observa a resposta da autenticação
-  useEffect(() => {
-    if (response?.type === 'success' && response.authentication) {
-      const { idToken } = response.authentication;
-      if (!idToken) {
-        Alert.alert('Erro', 'Token do Google não foi retornado.');
-        return;
-      }
-
-      const credential = GoogleAuthProvider.credential(idToken);
-      signInWithCredential(auth, credential)
-        .then((userCredential) => {
-          Alert.alert('Sucesso', `Bem-vindo, ${userCredential.user.displayName}`);
-          router.push(routes.login);
-        })
-        .catch((error) => {
-          Alert.alert('Erro no login Google', error.message);
-        });
-    }
-
-  }, [response]);
 
   const handleRegister = async () => {
     try {
@@ -189,18 +160,6 @@ export default function Cadastro() {
             </View>
           </View>
         </View>
-
-        {/* Botão de login com Google */}
-        <TouchableOpacity
-          style={styles.googleButtonContaine}
-          onPress={() => {
-            // Inicia o fluxo de login com Google através do promptAsync
-            promptAsync();
-          }}
-        >
-          <Image source={images.google} style={styles.googleImage} />
-          <Text style={styles.TextGoogle}>Google</Text>
-        </TouchableOpacity>
 
         <TouchableOpacity style={styles.button} onPress={handleRegister}>
           <Text style={styles.buttonText}>Cadastrar</Text>
