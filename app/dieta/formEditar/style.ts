@@ -15,7 +15,16 @@ export default StyleSheet.create({
     marginTop: 20,
     paddingVertical: 15,
   },
-
+   title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: colors.vermEscuro,
+    textAlign: 'center',
+    marginBottom: 20,
+    borderBottomWidth: 2,
+    borderBottomColor: colors.vermEscuro,
+    paddingBottom: 10,
+  },
   label: {
     fontSize: 16,
     color: colors.vermEscuro,

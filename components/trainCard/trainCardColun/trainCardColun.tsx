@@ -17,14 +17,13 @@ export const TreinoCard: React.FC<Props> = ({ treino, onPress, onDelete, isSelec
   return (
     <View style={[styles.card, isSelected && styles.selectedBorder]}>
       <TouchableOpacity style={styles.containerCard} onPress={() => onPress(treino.id)}>
-        <View style={styles.imageTextContainer}>
         <Image
           source={{ uri: treino.imagemUrl || 'https://via.placeholder.com/150' }}
           style={styles.MuscImage}
           resizeMode="cover"
         />
         <Text style={styles.cardTitulo}>{treino.parte}</Text>
-      </View>
+      </TouchableOpacity>
 
       {onDelete && (
         <TouchableOpacity
@@ -35,7 +34,7 @@ export const TreinoCard: React.FC<Props> = ({ treino, onPress, onDelete, isSelec
         </TouchableOpacity>
         
       )}
-      </TouchableOpacity>
+      
     </View>
   );
 };

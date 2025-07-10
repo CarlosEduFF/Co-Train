@@ -12,8 +12,17 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { TreinoFormData, treinoSchema } from '~/schemas/trainMuscleSchema';
 import { deleteTreinoById, getTreinoyId, updateTreinoById } from '~/services/trainsService';
 import { ExercicieOptionsImages } from '~/constants/exerciseOptions';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
+import ModalDelete from '~/components/modal/ModalDelete'
 
 export default function FormEditar() {
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [treinoIdToDelete, setTreinoIdToDelete] = useState<string | null>(null);
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
   const { id } = useLocalSearchParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
@@ -50,13 +59,16 @@ export default function FormEditar() {
             setSelectedImage(planoData.imagemUrl);
           }
         } else {
-          Alert.alert('Plano não encontrado');
-          router.back();
+           setErrorMessage('Plano não encontrado')
+           setShowErrorModal(true)
+         
         }
       } catch (error) {
         console.error('Erro ao buscar plano:', error);
-        Alert.alert('Erro ao carregar o plano.');
-        router.back();
+        
+           setErrorMessage('Erro ao carregar o plano.')
+           setShowErrorModal(true)
+        
       } finally {
         setIsFetching(false);
       }
@@ -77,43 +89,36 @@ export default function FormEditar() {
       };
 
       await updateTreinoById(id, dataToUpdate, notify);
-      Alert.alert("Sucesso", "Treino atualizado!");
-      router.back();
+       setSucessoMessage('Treino atualizado com sucesso!');
+       setShowSucessoModal(true);
     } catch (error) {
       console.error(error);
-      Alert.alert("Erro", "Não foi possível atualizar o treino.");
+       setErrorMessage('Erro ao atualizar treino.');
+       setShowErrorModal(true);
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleDeleteTreino = () => {
-    if (!id) return;
+    setDeleteModalVisible(true);
+  };
 
-    Alert.alert(
-      "Excluir Treino",
-      "Você tem certeza que deseja excluir este treino?",
-      [
-        { text: "Cancelar", style: 'cancel' },
-        {
-          text: "Excluir",
-          style: 'destructive',
-          onPress: async () => {
-            setIsLoading(true);
-            try {
-              await deleteTreinoById(id);
-              Alert.alert("Sucesso", "Treino excluído.");
-              router.back();
-            } catch (error) {
-              console.error(error);
-              Alert.alert("Erro", "Não foi possível excluir o treino.");
-            } finally {
-              setIsLoading(false);
-            }
-          },
-        },
-      ]
-    );
+  const confirmDelete = async () => {
+    if (!id) return;
+    setDeleteModalVisible(false);
+    setIsLoading(true);
+    try {
+      await deleteTreinoById(id);
+      setSucessoMessage('Treino excluído com sucesso!');
+      setShowSucessoModal(true);
+    } catch (error) {
+      console.error(error);
+      setErrorMessage('Erro ao excluir treino.');
+      setShowErrorModal(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   if (isFetching) {
@@ -205,7 +210,31 @@ export default function FormEditar() {
           {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>}
         </TouchableOpacity>
 
-
+      <Modal
+        visible={showErrorModal}
+        title='Erro'
+        message={errorMessage}
+          onClose={() => {
+          setShowErrorModal(false);
+           router.back(); 
+          }}
+      />
+      <CustomModalSucesso
+        visible={showSucessoModal}
+        title='Sucesso'
+        message={SucessoMessage}
+          onClose={() => {
+          setShowSucessoModal(false);
+           router.back(); 
+          }}
+      />
+      <ModalDelete
+        visible={deleteModalVisible}
+        title="Remover Treino"
+        message="Deseja remover este treino do planejamento semanal?"
+        onCancel={() => setDeleteModalVisible(false)}
+        onConfirm={confirmDelete}
+       />
       </View>
     </ScrollView >
 

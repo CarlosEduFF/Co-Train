@@ -37,9 +37,9 @@ export default StyleSheet.create({
     },
   
      listContainer: {
-      alignItems: 'center',
-    paddingHorizontal: 10,
-        gap: 16,
+      paddingHorizontal: 12,
+    gap: 12,
+    paddingBottom: 60,
     },
 
     

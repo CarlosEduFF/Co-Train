@@ -61,16 +61,16 @@ export default StyleSheet.create({
   },
 
 
-  adicionarButton: {
+ adicionarButton: {
     fontSize: 16,
     color: colors.vermEscuro,
     paddingHorizontal: 10,
-
+    
   },
   buttonAdicionar: {
     backgroundColor: colors.white,
     borderRadius: 30,
-    width: '45%',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',

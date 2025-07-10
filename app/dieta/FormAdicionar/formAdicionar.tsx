@@ -11,6 +11,8 @@ import { useAuth } from '~/components/AuthContext';
 import { routes } from '~/constants/routes';
 import { savePlanoAlimentar } from '~/services/dietService';
 import { FoodItem } from '~/constants/foodItem';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
 
 
 
@@ -18,6 +20,10 @@ export default function MealPlanForm() {
   const [mealName, setMealName] = useState('');
   const [mealTime, setMealTime] = useState('');
   const [notify, setNotify] = useState(false);
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
 
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [currentFood, setCurrentFood] = useState('');
@@ -40,12 +46,14 @@ export default function MealPlanForm() {
   //funcao add alimento a lista da refeicao
   const handleAddFood = () => {
     if (!currentFood.trim() || !currentQuantity.trim()) {
-      Alert.alert('Atenção', 'Preencha o nome e a quantidade do alimento.');
+      setErrorMessage('Preencha o nome e a quantidade do alimento.')
+      setShowErrorModal(true)
       return;
     }
     const quantityNum = parseInt(currentQuantity, 10);
     if (isNaN(quantityNum) || quantityNum <= 0) {
-      Alert.alert('Atenção', 'A quantidade deve ser um número válido.');
+      setErrorMessage('A quantidade deve ser um número válido.')
+      setShowErrorModal(true)
       return;
     }
 
@@ -66,16 +74,19 @@ export default function MealPlanForm() {
 
   const handleSavePlan = async () => {
     if (!mealName.trim()) {
-      Alert.alert('Erro de Validação', 'Por favor, informe o nome da refeição.');
+      setErrorMessage('Por favor, informe o nome da refeição.')
+      setShowErrorModal(true)
       return;
     }
     if (foods.length === 0) {
-      Alert.alert('Erro de Validação', 'Adicione pelo menos um alimento à refeição.');
+      setErrorMessage('Adicione pelo menos um alimento à refeição.')
+      setShowErrorModal(true)
       return;
     }
     const activeDays = Object.keys(selectedDays).filter(day => selectedDays[day as DayKey]);
     if (activeDays.length === 0) {
-      Alert.alert('Erro de Validação', 'Selecione pelo menos um dia para esta refeição.');
+      setErrorMessage('Selecione pelo menos um dia para esta refeição.')
+      setShowErrorModal(true)
       return;
     }
 
@@ -90,7 +101,9 @@ export default function MealPlanForm() {
         days: activeDays,
       });
 
-      Alert.alert('Sucesso!', 'Seu plano alimentar foi salvo.');
+      
+      setSucessoMessage('Seu plano alimentar foi salvo.')
+      setShowSucessoModal(true)
 
       // Resetar campos após salvar
       setMealName('');
@@ -110,7 +123,8 @@ export default function MealPlanForm() {
       router.back();
 
     } catch (error) {
-      Alert.alert('Erro', 'Ocorreu um problema ao salvar seu plano. Tente novamente.');
+      setErrorMessage('Ocorreu um problema ao salvar seu plano. Tente novamente.')
+      setShowErrorModal(true)
     } finally {
       setIsLoading(false);
     }
@@ -194,6 +208,19 @@ export default function MealPlanForm() {
           <Text style={styles.saveButtonText}>SALVAR</Text>
         )}
       </TouchableOpacity>
+
+      <Modal
+        visible={showErrorModal}
+        title='Erro'
+        message={errorMessage}
+         onClose={() => setShowErrorModal(false)}
+      />
+      <CustomModalSucesso
+        visible={showSucessoModal}
+        title='Sucesso'
+        message={SucessoMessage}
+         onClose={() => setShowSucessoModal(false)}
+      />
     </ScrollView>
   );
 };

@@ -22,6 +22,8 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { onAuthStateChanged, signInWithCredential, GoogleAuthProvider, User } from 'firebase/auth';
 import { auth } from '~/config/firebase'; // do firebase SDK web
 import { onGoogleButtonPress } from '~/services/googleService';
+import Modal from '~/components/modal/modalAlert';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
 
 export default function Login() {
   const [hidePass, setHidePass] = useState<boolean>(true);
@@ -31,6 +33,11 @@ export default function Login() {
   const [senhaFocused, setSenhaFocused] = useState<boolean>(false);
   const [initializing, setInitializing] = useState<boolean>(true);
   const [user, setUser] = useState<User | null>(null);
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal] = useState(false);
+  const [SucessoMessage, setSucessoMessage] = useState('');
+
 
   useEffect(() => {
     GoogleSignin.configure({
@@ -54,7 +61,8 @@ export default function Login() {
       console.log('Usuário logado com Google:', userCredential.user);
       router.replace(routes.home);
     } catch (error: any) {
-      Alert.alert('Erro no login com Google', error.message);
+      setErrorMessage('Erro no login com Google');
+      setShowErrorModal(true);
     }
   };
 
@@ -63,9 +71,22 @@ export default function Login() {
       await loginUser(email, senha); // função que chama signInWithEmailAndPassword
       router.replace(routes.home);
     } catch (error: any) {
-      Alert.alert('Erro no login', error.message);
+      setErrorMessage('E-mail ou senha inválidos');
+      setShowErrorModal(true);
     }
   };
+
+  const handleResetPassword = async () => {
+  try {
+    const message = await handlePasswordReset(email);
+    setSucessoMessage(message);
+    setShowSucessoModal(true);
+  } catch (error: any) {
+    setErrorMessage(error.message);
+    setShowErrorModal(true);
+  }
+};
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -142,7 +163,7 @@ export default function Login() {
             </View>
 
           </View>
-          <Pressable style={styles.headingText} onPress={() => handlePasswordReset(email)}>
+          <Pressable style={styles.headingText} onPress={handleResetPassword}>
             <Text style={styles.passwordText}>Esqueci minha senha</Text>
           </Pressable>
 
@@ -166,6 +187,18 @@ export default function Login() {
             </Pressable>
           </View>
         </View>
+        <Modal
+        visible={showErrorModal}
+        title="Error no login"
+        message={errorMessage}
+        onClose={() => setShowErrorModal(false)}
+        />
+        <CustomModalSucesso
+          visible={showSucessoModal}
+          title="Sucesso"
+          message={SucessoMessage}
+         onClose={() => setShowSucessoModal(false)}
+        />
       </ScrollView>
     </View>
   );

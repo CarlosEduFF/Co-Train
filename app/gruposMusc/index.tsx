@@ -7,7 +7,7 @@ import { Header } from '../../components/header/header';
 import { colors } from '../../constants/colors';
 import { Treino } from '~/constants/train';
 import { subscribeToTreinosGrupados } from '~/services/trainsService';
-import { TreinoCard } from '~/components/trainCard/trainCard';
+import { TreinoCard } from '~/components/trainCard/trainCardColun/trainCardColun';
 import { useAuth } from '~/components/AuthContext';
 import { routes } from '~/constants/routes';
 

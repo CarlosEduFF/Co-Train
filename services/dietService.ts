@@ -50,12 +50,12 @@ export const savePlanoAlimentar = async (plano: {
 export const getMealsByDay = async (dia: DayKey): Promise<MealPlan[]> => {
     const user = auth.currentUser;
     if (!user) {
-        Alert.alert('Erro', 'Usuário não autenticado.');
+       
         return [];
     }
 
     if (typeof dia !== 'string') {
-        Alert.alert('Erro', 'Dia inválido.');
+       
         return [];
     }
 
@@ -70,7 +70,7 @@ export const getMealsByDay = async (dia: DayKey): Promise<MealPlan[]> => {
 
         return filtered;
     } catch (error) {
-        Alert.alert('Erro', 'Não foi possível carregar as refeições.');
+     
         console.error(error);
         return [];
     }
@@ -93,10 +93,10 @@ export const updateMealPlanById = async (meal: MealPlan): Promise<void> => {
       updatedAt: serverTimestamp(),
     });
 
-    Alert.alert('Sucesso', 'Refeição atualizada com sucesso!');
+    
   } catch (error) {
     console.error('Erro ao atualizar refeição:', error);
-    Alert.alert('Erro', 'Não foi possível salvar.');
+   
     throw error;
   }
 };

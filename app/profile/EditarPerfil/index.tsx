@@ -18,6 +18,8 @@ import { getUserData, updateUserData } from '~/services/userService';
 import { UserFormData, userSchema } from '~/schemas/userSchema';
 import { useAuth } from '~/components/AuthContext';
 import { firestore } from '~/config/firebase';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
 
 export default function EditarPerfil() {
   const [logoUri, setLogoUri] = useState(images.logo);
@@ -25,6 +27,10 @@ export default function EditarPerfil() {
   const [objetivoSelecionado, setObjetivoSelecionado] = useState('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [showPicker, setShowPicker] = useState(false);
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
 
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -82,7 +88,8 @@ export default function EditarPerfil() {
 
   const onSubmit = async (form: UserFormData) => {
     if (!user?.uid) {
-      Alert.alert('Erro', 'Usuário não autenticado');
+      setErrorMessage('Usuário não autenticado');
+      setShowErrorModal(true);
       return;
     }
 
@@ -102,7 +109,9 @@ export default function EditarPerfil() {
     );
 
     if (success) {
-      router.push(routes.profile);
+      setSucessoMessage('Perfil atualizado com sucesso!');
+      setShowSucessoModal(true);
+      
     }
   };
 
@@ -258,6 +267,24 @@ export default function EditarPerfil() {
             <Text style={styles.buttonText}>Salvar Perfil</Text>
           </TouchableOpacity>
         </View>
+
+        <Modal
+                visible={showErrorModal}
+                title='Erro'
+                message={errorMessage}
+                 onClose={() => setShowErrorModal(false)}
+              />
+              <CustomModalSucesso
+                visible={showSucessoModal}
+                title='Sucesso'
+                message={SucessoMessage}
+                onClose={() => {
+                 setShowSucessoModal(false);
+                  router.push(routes.profile);
+                  }}
+
+                 
+              />
       </ScrollView>
     </View>
   );

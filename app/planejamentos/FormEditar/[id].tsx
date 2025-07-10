@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import styles from "../FormAdicionar/style";
+import styles from "../FormEditar/style"
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { colors } from '../../../constants/colors';
@@ -14,6 +14,8 @@ import { useAuth } from '~/components/AuthContext';
 import { ExercicieOptionsImages } from '~/constants/exerciseOptions';
 import { TreinoFormData, treinoSchema } from '~/schemas/trainMuscleSchema';
 import { getTreinoyId, updateTreinoById } from '~/services/trainsService';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
 
 export default function FormEditar() {
   const { id } = useLocalSearchParams();
@@ -23,6 +25,10 @@ export default function FormEditar() {
   const [notify, setNotify] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
 
   const { control, handleSubmit, reset, formState: { errors } } = useForm<TreinoFormData>({
     resolver: zodResolver(treinoSchema),
@@ -62,13 +68,15 @@ export default function FormEditar() {
             setSelectedImage(planoData.imagemUrl);
           }
         } else {
-          Alert.alert('Plano não encontrado');
-          router.back();
+          setErrorMessage('Plano não encontrado')
+          setShowErrorModal(true)
+          
         }
       } catch (error) {
         console.error('Erro ao buscar plano:', error);
-        Alert.alert('Erro ao carregar o plano.');
-        router.back();
+        setErrorMessage('Erro ao carregar o plano.')
+        setShowErrorModal(true)
+        
       } finally {
         setIsFetching(false);
       }
@@ -81,10 +89,12 @@ export default function FormEditar() {
     setIsLoading(true);
     try {
       await updateTreinoById(id as string, data, notify);
-      Alert.alert("Sucesso!", "Seu plano foi atualizado.");
-      router.back();
+      setSucessoMessage('Seu plano foi atualizado.')
+      setShowSucessoModal(true)
     } catch (error) {
       Alert.alert("Erro", (error as Error).message);
+      setErrorMessage('Preencha todos os campos')
+      setShowErrorModal(true)
     } finally {
       setIsLoading(false);
     }
@@ -157,7 +167,7 @@ export default function FormEditar() {
 
 
 
-          { }
+          
           <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
             <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
             <Feather name="plus-circle" size={20} color="#3D0000" />
@@ -175,6 +185,23 @@ export default function FormEditar() {
             {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR</Text>}
           </TouchableOpacity>
         </View>
+         <Modal
+        visible={showErrorModal}
+        title='Erro'
+        message={errorMessage}
+         onClose={() => { setShowErrorModal(false);
+          router.back();
+         }}
+      />
+      <CustomModalSucesso
+        visible={showSucessoModal}
+        title='Sucesso'
+        message={SucessoMessage}
+         onClose={() => {
+          setShowSucessoModal(false);
+           router.back(); 
+          }}
+      />
       </View>
     </ScrollView>
   );

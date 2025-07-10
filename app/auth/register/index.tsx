@@ -12,6 +12,8 @@ import { routes } from '~/constants/routes';
 import { auth } from '~/config/firebase';
 import { registerUser } from '~/services/authService';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
+import Modal from '~/components/modal/modalAlert'
+import CustomModalSucesso from '~/components/modal/modalSucesso';
 
 // Completa o fluxo do WebBrowser para autenticação
 WebBrowser.maybeCompleteAuthSession();
@@ -27,20 +29,26 @@ export default function Cadastro() {
   const [nomeFocused, setNomeFocused] = useState(false);
   const [confirmarSenhaFocused, setConfirmarSenhaFocused] = useState(false);
   const [userId, setUserId] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal] = useState(false);
+  const [SucessoMessage, setSucessoMessage] = useState('');
 
 
   const handleRegister = async () => {
     try {
       const uid = await registerUser({ nome, email, senha, confirmarSenha });
       setUserId(uid);
-      Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
+      setShowSucessoModal(true);
+      setSucessoMessage("Usuário cadastrado com sucesso!")
       setNome('');
       setEmail('');
       setSenha('');
       setConfirmarSenha('');
       router.push(routes.home);
     } catch (error: any) {
-      Alert.alert('Erro', error.message);
+     setShowErrorModal(true),
+     setErrorMessage("Erro ao cadastrar, tente novamente")
     }
   };
 
@@ -172,6 +180,18 @@ export default function Cadastro() {
           </Pressable>
         </View>
       </View>
+      <Modal
+        visible={showErrorModal}
+        title='Erro de Cadastro'
+        message={errorMessage}
+        onClose={() => setShowErrorModal(false)}
+      />
+      <CustomModalSucesso
+        visible={showSucessoModal}
+        title='Sucesso de Cadastro'
+        message={SucessoMessage}
+        onClose={()=> setShowSucessoModal}
+      />
     </View>
   );
 }

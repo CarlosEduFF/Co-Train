@@ -11,6 +11,8 @@ import styles from './style';
 import { router, useLocalSearchParams } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '~/config/firebase';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
 
 export default function ListaTreinos() {
   const { user, loading: authLoading } = useAuth();
@@ -18,9 +20,15 @@ export default function ListaTreinos() {
   const [loading, setLoading] = useState(true);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const { dia } = useLocalSearchParams<{ dia?: string }>();
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
+
   useEffect(() => {
     if (!user) {
-      Alert.alert('Erro', 'Usuário não autenticado');
+      setErrorMessage('Usuário não autenticado')
+      setShowErrorModal(true)
       setLoading(false);
       return;
     }
@@ -72,12 +80,14 @@ export default function ListaTreinos() {
 
   const handleAddPress = async () => {
     if (!dia) {
-      Alert.alert('Erro', 'Dia não informado.');
+      setErrorMessage('Dia não informado.')
+      setShowErrorModal(true)
       return;
     }
 
     if (selectedIds.length === 0) {
-      Alert.alert('Atenção', 'Selecione ao menos um treino.');
+      setErrorMessage('Selecione ao menos um treino.')
+      setShowErrorModal(true)
       return;
     }
 
@@ -101,12 +111,14 @@ export default function ListaTreinos() {
         })
       );
 
-      Alert.alert('Sucesso', `Treinos atualizados para o dia ${dia}!`);
+      setSucessoMessage( `Treinos atualizados para o dia ${dia}!`)
+      setShowSucessoModal(true)
       setSelectedIds([]); // limpa seleção
       router.push('/planejamentos');
     } catch (error) {
       console.error('Erro ao atualizar treinos:', error);
-      Alert.alert('Erro', 'Não foi possível atualizar os treinos.');
+      setErrorMessage('Não foi possível atualizar os treinos.')
+      setShowErrorModal(true)
     }
   };
 
@@ -133,6 +145,18 @@ export default function ListaTreinos() {
         contentContainerStyle={{ paddingBottom: 32 }}
       />
 
+<Modal
+  visible={showErrorModal}
+  title='Erro'
+  message={errorMessage}
+   onClose={() => setShowErrorModal(false)}
+/>
+<CustomModalSucesso
+  visible={showSucessoModal}
+  title='Sucesso'
+  message={SucessoMessage}
+   onClose={() => setShowSucessoModal(false)}
+/>
     </View>
   );
 }

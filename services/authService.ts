@@ -1,4 +1,5 @@
 // services/authService.ts
+import Modal from '~/components/modal/modalAlert';
 import { auth, firestore } from '../config/firebase';
 import {
   createUserWithEmailAndPassword,
@@ -96,14 +97,13 @@ export const loginUser = async (email: string, senha: string) => {
 export const handlePasswordReset = async (email: string) => {
   try {
     if (!email) {
-      Alert.alert('Erro', 'Por favor, insira seu email para redefinir a senha.');
-      return;
+      throw new Error('Por favor, insira seu email para redefinir a senha.');
     }
 
     await sendPasswordResetEmail(auth, email);
-    Alert.alert('Sucesso', 'Um link de redefinição foi enviado para seu email.');
+    return 'Um link de redefinição foi enviado para seu email.';
   } catch (error: any) {
     console.error('Erro ao redefinir senha:', error);
-    Alert.alert('Erro', error.message || 'Não foi possível enviar o link de redefinição.');
+    throw new Error('Não foi possível enviar o link de redefinição.');
   }
 };

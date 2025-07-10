@@ -43,7 +43,7 @@ export const updateUserData = async (
 ) => {
   try {
     if (!uid) {
-      Alert.alert('Erro', 'Usuário não autenticado');
+      
       return;
     }
 
@@ -60,11 +60,9 @@ export const updateUserData = async (
       ...(imageUrl && { fotoPerfil: imageUrl }),
     });
 
-    Alert.alert('Sucesso', 'Perfil atualizado com sucesso!');
     return true;
   } catch (error: any) {
     console.error('Erro ao atualizar:', error);
-    Alert.alert('Erro ao atualizar perfil', error.message || 'Erro inesperado');
     return false;
   }
 };

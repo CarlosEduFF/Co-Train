@@ -15,12 +15,18 @@ import { router } from 'expo-router';
 import { ExercicieOptionsImages } from '~/constants/exerciseOptions';
 import { saveTreinoGrupado } from '~/services/trainsService';
 import { TreinoFormData, treinoSchema } from '~/schemas/trainMuscleSchema';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
 
 
 
 export default function FormAdicionar() {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
 
   const { control, handleSubmit, formState: { errors } } = useForm<TreinoFormData>({
     resolver: zodResolver(treinoSchema),
@@ -37,7 +43,8 @@ export default function FormAdicionar() {
 
   const handleSaveTreino = async (data: TreinoFormData) => {
     if (!selectedImage) {
-      Alert.alert("Erro", "Imagem do grupo muscular não selecionada. Por favor, selecione o músculo novamente.");
+        setErrorMessage('Imagem do grupo muscular não selecionada. Por favor, selecione o músculo novamente.')
+        setShowErrorModal(true)
       return;
     }
 
@@ -53,12 +60,14 @@ export default function FormAdicionar() {
       dataToSave,
       selectedImage,
       () => {
-        Alert.alert("Sucesso", "Treino salvo!");
-        router.push('/gruposMusc');
+         setSucessoMessage('Treino salvo!')
+         setShowSucessoModal(true)
+         router.push('/gruposMusc');
       },
       (error) => {
         console.error("Erro ao salvar treino:", error);
-        Alert.alert("Erro", "Não foi possível salvar o treino.");
+        setErrorMessage('Não foi possível salvar o treino.')
+        setShowErrorModal(true)
       }
     );
     router.push("/gruposMusc");
@@ -149,6 +158,18 @@ export default function FormAdicionar() {
           {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR</Text>}
         </TouchableOpacity>
       </View>
+      <Modal
+        visible={showErrorModal}
+        title='Erro'
+        message={errorMessage}
+         onClose={() => setShowErrorModal(false)}
+      />
+      <CustomModalSucesso
+        visible={showSucessoModal}
+        title='Sucesso'
+        message={SucessoMessage}
+         onClose={() => setShowSucessoModal(false)}
+      />
     </ScrollView>
   );
 }

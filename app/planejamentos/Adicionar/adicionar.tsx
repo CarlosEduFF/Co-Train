@@ -18,10 +18,20 @@ import { TreinoCard } from '~/components/trainCard/trainCard';
 import { mapPlanoToTreino } from '~/utils/myPlantoTrain';
 import { deleteTreinoById, removerDiaEspecifico, subscribeToTreinosGrupados } from '~/services/trainsService';
 import { Treino } from '~/constants/train';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
+import ModalDelete from '~/components/modal/ModalDelete'
+
+
 export default function Adicionar() {
   const { dia } = useLocalSearchParams<{ dia?: string }>();
 
-
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [treinoIdToDelete, setTreinoIdToDelete] = useState<string | null>(null);
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
   const [planos, setPlanos] = useState<Treino[]>([]);
   const [loadingPlanos, setLoadingPlanos] = useState(true);
   const getDayName = (diaParam?: string) =>
@@ -75,24 +85,27 @@ export default function Adicionar() {
 
   const handleDelete = (treinoId: string) => {
     if (!dia) {
-      Alert.alert('Erro', 'Dia não informado.');
+      setErrorMessage('Dia não informado');
+      setShowErrorModal(true);
       return;
     }
+    setTreinoIdToDelete(treinoId)
+    setDeleteModalVisible(true);
+ };
 
-    Alert.alert('Remover do Dia', 'Você quer remover este treino do planejamento semanal?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Remover',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await removerDiaEspecifico(treinoId, dia);
-          } catch {
-            Alert.alert('Erro', 'Não foi possível remover o treino do dia.');
-          }
-        },
-      },
-    ]);
+  const confirmDelete = async () => {
+    if (treinoIdToDelete && dia) {
+      try {
+        await removerDiaEspecifico(treinoIdToDelete, dia);
+        setDeleteModalVisible(false);
+        setSucessoMessage('Treino removido com sucesso');
+        setShowSucessoModal(true);
+      } catch (error) {
+        setDeleteModalVisible(false);
+        setErrorMessage('Erro ao remover treino');
+        setShowErrorModal(true);
+      }
+    }
   };
 
   const handleCardPress = (id: string) => {
@@ -146,6 +159,25 @@ export default function Adicionar() {
           contentContainerStyle={styles.listContainer}
         />
       )}
+      <Modal
+        visible={showErrorModal}
+        title='Erro'
+        message={errorMessage}
+         onClose={() => setShowErrorModal(false)}
+      />
+      <CustomModalSucesso
+        visible={showSucessoModal}
+        title='Sucesso'
+        message={SucessoMessage}
+         onClose={() => setShowSucessoModal(false)}
+      />
+      <ModalDelete
+        visible={deleteModalVisible}
+        title="Remover Treino"
+        message="Deseja remover este treino do planejamento semanal?"
+        onCancel={() => setDeleteModalVisible(false)}
+        onConfirm={confirmDelete}
+       />
     </View>
   );
 }

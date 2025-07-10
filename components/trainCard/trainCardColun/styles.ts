@@ -3,18 +3,16 @@ import { colors } from "~/constants/colors";
 
 export default StyleSheet.create({
   card: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    backgroundColor: '#fff',
-    borderRadius: 16,
-    padding: 12,
-    marginVertical: 8,
-    elevation: 3, // sombra Android
-    shadowColor: '#000', // sombra iOS
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 4,
+   width: '45%', // 2 colunas
+  aspectRatio: 1, // quadrado
+  backgroundColor: '#fff',
+  borderRadius: 16,
+  paddingVertical: 16,
+  paddingHorizontal: 8,
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  margin: 8,
+  elevation: 4,
   },
 
   selectedBorder: {
@@ -23,16 +21,9 @@ export default StyleSheet.create({
   },
 
   containerCard: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 12,
-  },
-  
-   imageTextContainer: {
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
   },
 
   MuscImage: {
@@ -54,12 +45,10 @@ export default StyleSheet.create({
 
   deleteButton: {
     backgroundColor: '#FEE',
-    borderRadius: 35,
+    borderRadius: 24,
     padding: 8,
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 2,
-    width: 70,
-    height: 70,
   },
 });

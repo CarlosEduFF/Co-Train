@@ -98,12 +98,12 @@ export const saveTreinoGrupado = async (
   const user = auth.currentUser;
 
   if (!user) {
-    Alert.alert("Erro", "Usuário não autenticado.");
+   
     return;
   }
 
   if (!selectedImage) {
-    Alert.alert("Erro", "Imagem do grupo muscular não selecionada. Por favor, selecione o músculo novamente.");
+   
     return;
   }
 
@@ -115,12 +115,12 @@ export const saveTreinoGrupado = async (
       createdAt: new Date(),
     });
 
-    Alert.alert("Sucesso", "Treino salvo!");
+    
     onSuccess?.();
     router.back();
   } catch (error) {
     console.error("Erro ao salvar treino:", error);
-    Alert.alert("Erro", "Não foi possível salvar o treino.");
+   
     onError?.(error);
   }
 };

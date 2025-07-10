@@ -6,10 +6,19 @@ import styles from './style';
 import { MealPlan } from '~/constants/mealPlan';
 import { DayKey } from '~/constants/diasSemana';
 import { deleteMealPlanById, getMealsByDay, updateMealPlanById } from '~/services/dietService';
+import CustomModalSucesso from '~/components/modal/modalSucesso';
+import Modal from '~/components/modal/modalAlert'
+import ModalDelete from '~/components/modal/ModalDelete'
 
 
 
 export default function FormEditar() {
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [mealToDeleteId, setMealToDeleteId] = useState<string | null>(null);
+  const [showErrorModal, setShowErrorModal]= useState(false);
+  const [errorMessage,setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal]= useState(false);
+  const [SucessoMessage,setSucessoMessage] = useState('');
   const { dia } = useLocalSearchParams<{ dia?: string | string[] }>();
   const [meals, setMeals] = useState<MealPlan[]>([]);
   const [loading, setLoading] = useState(false);
@@ -34,36 +43,39 @@ export default function FormEditar() {
   const handleUpdateMeal = async (meal: MealPlan) => {
     try {
       await updateMealPlanById(meal);
+      setSucessoMessage("Refeição atualizada!");
+      setShowSucessoModal(true);
     } catch (error) {
       console.error(error);
+      setErrorMessage("Erro ao salvar.");
+      setShowErrorModal(true);
     }
   };
 
   const handleDeleteMeal = async (id: string) => {
-    Alert.alert('Tem certeza?', 'Deseja realmente deletar essa refeição?', [
-      { text: 'Cancelar', style: 'cancel' },
-      {
-        text: 'Deletar',
-        style: 'destructive',
-        onPress: async () => {
-          try {
-            await deleteMealPlanById(id);
-            setMeals(prev => prev.filter(meal => meal.id !== id));
-            Alert.alert('Deletado', 'Refeição excluída com sucesso!');
-          } catch (error) {
-            Alert.alert('Erro', 'Falha ao deletar.');
-            console.error(error);
-          }
-        },
-      },
-    ]);
+     setMealToDeleteId(id);
+    setDeleteModalVisible(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!mealToDeleteId) return;
+
+    try {
+      await deleteMealPlanById(mealToDeleteId);
+      setMeals(prev => prev.filter(meal => meal.id !== mealToDeleteId));
+    } catch (error) {
+      console.error('Erro ao deletar refeição:', error);
+    } finally {
+      setDeleteModalVisible(false);
+      setMealToDeleteId(null);
+    }
   };
 
   if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" color="#A14545" />;
 
   return (
     <ScrollView style={styles.container} >
-      <Text >Refeições de {String(dia).toUpperCase()}</Text>
+      <Text style={styles.title} >Refeições de {String(dia).toUpperCase()}</Text>
 
       {meals.map((meal, mealIndex) => (
         <View key={meal.id} style={styles.mealCard}>
@@ -108,6 +120,31 @@ export default function FormEditar() {
           </TouchableOpacity>
         </View>
       ))}
+      <Modal
+              visible={showErrorModal}
+              title='Erro'
+              message={errorMessage}
+                onClose={() => {
+                setShowErrorModal(false);
+                 router.back(); 
+                }}
+            />
+            <CustomModalSucesso
+              visible={showSucessoModal}
+              title='Sucesso'
+              message={SucessoMessage}
+                onClose={() => {
+                setShowSucessoModal(false);
+                 router.back(); 
+                }}
+            />
+            <ModalDelete
+              visible={deleteModalVisible}
+              title="Remover Treino"
+              message="Deseja remover este treino do planejamento semanal?"
+              onCancel={() => setDeleteModalVisible(false)}
+              onConfirm={confirmDelete}
+             />
     </ScrollView>
   );
 }
