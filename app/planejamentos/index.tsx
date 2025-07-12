@@ -2,6 +2,7 @@ import styles from "./style";
 import { View, Text, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Header } from '../../components/header/header';
+import TabLayout from '~/components/Tabs';
 
 export default function Planejamentos() {
 
@@ -14,10 +15,12 @@ export default function Planejamentos() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.containerHeader}>
       <Header
         title='Planejamento Semanal'
         text='Gerencie de segunda a domingo: seus treinos organizados'
       />
+      </View>
       <View style={styles.centerContent}>
         <View style={styles.rigthcontent}>
           <TouchableOpacity style={styles.button} onPress={() => handleDayPress('segunda')}>
@@ -48,6 +51,7 @@ export default function Planejamentos() {
           </TouchableOpacity>
         </View>
       </View>
+      <TabLayout />
     </View>
   );
 }

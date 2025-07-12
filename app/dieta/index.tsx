@@ -5,6 +5,7 @@ import styles from "./style";
 import { router } from 'expo-router';
 import { Header } from '../../components/header/header';
 import { DayKey, DIAS_SEMANA } from '~/constants/diasSemana';
+import TabLayout from '~/components/Tabs';
 
 
 
@@ -22,6 +23,7 @@ export default function Dieta() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.subContainer}>
       <Header title='Plano Alimentar' text='Escolha um dia da semana para ver ou editar sua alimentação' />
       <TouchableOpacity style={styles.button} onPress={handleAddMeal}>
         <Text style={styles.adicionarButton}>Adicionar Refeição</Text>
@@ -57,6 +59,8 @@ export default function Dieta() {
 
         contentContainerStyle={{ paddingBottom: 20 }} // Adicionei um padding para a lista não colar no final
       />
+      </View>
+    <TabLayout />
     </View>
   );
 }

@@ -12,6 +12,13 @@ export const routes = {
     //Profile
     profile: '/profile/perfil',
     editProfile: '/profile/EditarPerfil',
+    
+    //Grupos Musculares
+    gruposMusc: '/gruposMusc',
 
+    //Dieta
+    dieta: '/dieta',
+
+    //Planejamentos
     plane: '/planejamentos'
 } as const;

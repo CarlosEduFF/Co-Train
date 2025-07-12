@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, firestore } from '~/config/firebase';
 import { useAuth } from '~/components/AuthContext';
+import TabLayout from '~/components/Tabs';
 
 export default function Perfil() {
   const [userData, setUserData] = useState<any>(null);
@@ -91,6 +92,7 @@ export default function Perfil() {
           <Text style={styles.buttonText}>Editar Perfil</Text>
         </TouchableOpacity>
       </View>
+      <TabLayout />
     </ScrollView>
   );
 }

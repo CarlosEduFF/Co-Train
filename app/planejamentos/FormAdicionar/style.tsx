@@ -83,6 +83,7 @@ export default StyleSheet.create({
     fontSize: 16,
     color: colors.vermEscuro,
     paddingHorizontal: 10,
+    marginTop:20
 
   },
   buttonAdicionar: {
@@ -124,6 +125,7 @@ export default StyleSheet.create({
     borderRadius: 12,
     marginBottom: 16,
     alignSelf: 'center',
+     marginTop:20
   },
   addText: {
     color: '#fff',

@@ -10,9 +10,12 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    padding:20,
     marginTop:'13%',
+   
     backgroundColor:colors.background,
+    },
+    containerHeader:{
+        margin:"2%"
     },
     input: {
         height: 50,
@@ -44,7 +47,7 @@ export default StyleSheet.create({
     },
     centerContent: {
         height: '35%',
-        width: '100%',  
+        width: '90%',  
         marginTop:20,
         borderRadius:20,
         justifyContent: 'space-between',
@@ -52,6 +55,7 @@ export default StyleSheet.create({
         flexDirection: 'row',
         borderWidth: 2,
         borderColor: colors.Vermelho,
+        
     },
     rigthcontent: {
         flex: 1,

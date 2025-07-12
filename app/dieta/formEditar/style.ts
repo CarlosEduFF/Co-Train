@@ -24,6 +24,7 @@ export default StyleSheet.create({
     borderBottomWidth: 2,
     borderBottomColor: colors.vermEscuro,
     paddingBottom: 10,
+    marginTop:20
   },
   label: {
     fontSize: 16,

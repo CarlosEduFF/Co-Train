@@ -13,6 +13,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '~/config/firebase';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
+import { Header } from '~/components/header/header';
 
 export default function ListaTreinos() {
   const { user, loading: authLoading } = useAuth();
@@ -125,6 +126,10 @@ export default function ListaTreinos() {
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
+      <Header
+        title='Planejamento Semanal'
+        text='Adicione seu planejamento'
+      />
       {/* Botão de adicionar */}
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Feather name="plus-circle" size={24} color="#fff" />

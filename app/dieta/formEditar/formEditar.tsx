@@ -9,6 +9,7 @@ import { deleteMealPlanById, getMealsByDay, updateMealPlanById } from '~/service
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
 import ModalDelete from '~/components/modal/ModalDelete'
+import { Header } from '~/components/header/header';
 
 
 
@@ -75,6 +76,7 @@ export default function FormEditar() {
 
   return (
     <ScrollView style={styles.container} >
+      <Header title='Plano Alimentar' text="Acompanhe sua alimentação diária" />
       <Text style={styles.title} >Refeições de {String(dia).toUpperCase()}</Text>
 
       {meals.map((meal, mealIndex) => (
@@ -140,8 +142,8 @@ export default function FormEditar() {
             />
             <ModalDelete
               visible={deleteModalVisible}
-              title="Remover Treino"
-              message="Deseja remover este treino do planejamento semanal?"
+              title="Remover Alimento"
+              message="Deseja remover este alimento de seu planejamento?"
               onCancel={() => setDeleteModalVisible(false)}
               onConfirm={confirmDelete}
              />

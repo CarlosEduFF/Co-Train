@@ -5,6 +5,7 @@ import { images } from '~/constants/images';
 import { routes } from "~/constants/routes";
 import { useAuth } from "~/components/AuthContext";
 import { useEffect } from "react";
+import TabLayout from '~/components/Tabs';
 
 export default function home() {
 
@@ -66,7 +67,7 @@ export default function home() {
               </Text>
             </TouchableOpacity>
 
-         </View>  
+         </View>
     </ScrollView>
   );
 }

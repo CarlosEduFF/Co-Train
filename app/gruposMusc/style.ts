@@ -8,9 +8,12 @@ export default StyleSheet.create({
     },
     container:{
         flex: 1,
-        padding:20,
         backgroundColor:colors.background,
         marginTop:30
+    },
+    containerHeader: {
+        margin: "2%",
+        padding: '2%',
     },
     button:{
           backgroundColor: colors.white,

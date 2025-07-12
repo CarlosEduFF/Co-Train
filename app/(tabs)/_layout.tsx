@@ -2,7 +2,7 @@
 import { Tabs } from 'expo-router';
 import { TabBarIcon } from '../../components/TabBarIcon';
 
-export default function MainLayout() {
+export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{

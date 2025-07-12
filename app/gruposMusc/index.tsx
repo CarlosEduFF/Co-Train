@@ -10,6 +10,8 @@ import { subscribeToTreinosGrupados } from '~/services/trainsService';
 import { TreinoCard } from '~/components/trainCard/trainCardColun/trainCardColun';
 import { useAuth } from '~/components/AuthContext';
 import { routes } from '~/constants/routes';
+import TabLayout from '~/components/Tabs';
+import { Vi } from 'zod/v4/locales';
 
 export default function GruposMusc() {
   const [treinos, setTreinos] = useState<Treino[]>([]);
@@ -70,14 +72,17 @@ export default function GruposMusc() {
 
   return (
     <View style={styles.container}>
-      <Header
+      <View style={styles.containerHeader}>
+        <Header
         title='Divisão por Grupos Musculares'
         text='Gerencie por grupos musculares seus treinos organizados'
       />
+      
       <TouchableOpacity style={styles.button} onPress={() => router.push('/gruposMusc/FormAdicionar/formAdicionar')}>
         <Text style={styles.adicionarButton}>Adicionar</Text>
         <Feather name='plus-circle' size={30} color='#3D0000' />
       </TouchableOpacity>
+      </View>
 
       {loadingTreinos ? (
         <ActivityIndicator size="large" color={colors.vermEscuro} style={{ flex: 1 }} />
@@ -98,6 +103,7 @@ export default function GruposMusc() {
           }
         />
       )}
+      <TabLayout />
     </View>
   );
 }
