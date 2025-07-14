@@ -1,7 +1,7 @@
 import styles from "./style";
 import { View, Text, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
-import { Header } from '../../components/header/header';
+import { Header } from '../../components/header/headerNoButton';
 import TabLayout from '~/components/Tabs';
 
 export default function Planejamentos() {

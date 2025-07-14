@@ -58,8 +58,7 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     try {
       const userCredential = await onGoogleButtonPress(); // já retorna credencial e faz signIn
-      console.log('Usuário logado com Google:', userCredential.user);
-      router.replace(routes.home);
+      router.replace('/planejamentos');
     } catch (error: any) {
       setErrorMessage('Erro no login com Google');
       setShowErrorModal(true);
@@ -69,7 +68,7 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       await loginUser(email, senha); // função que chama signInWithEmailAndPassword
-      router.replace(routes.home);
+      router.replace('/planejamentos');
     } catch (error: any) {
       setErrorMessage('E-mail ou senha inválidos');
       setShowErrorModal(true);

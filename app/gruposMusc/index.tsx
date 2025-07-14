@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert } from
 import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { router, useFocusEffect } from 'expo-router';
-import { Header } from '../../components/header/header';
+import { Header } from '../../components/header/headerNoButton';
 import { colors } from '../../constants/colors';
 import { Treino } from '~/constants/train';
 import { subscribeToTreinosGrupados } from '~/services/trainsService';

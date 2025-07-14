@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, FlatList } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { router } from 'expo-router';
-import { Header } from '../../components/header/header';
+import { Header } from '../../components/header/headerNoButton';
 import { DayKey, DIAS_SEMANA } from '~/constants/diasSemana';
 import TabLayout from '~/components/Tabs';
 

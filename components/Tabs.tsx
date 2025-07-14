@@ -7,23 +7,18 @@ import {colors} from '../constants/colors';
 import { routes } from '~/constants/routes';
 
 const tabs = [
+  
   {
-    label: 'Início',
-    route: routes.home,
-    Icon: Ionicons,
-    iconName: 'home-outline',
+    label: 'GRP-Musc',
+    route: routes.gruposMusc,
+    Icon: MaterialCommunityIcons,
+    iconName: 'arm-flex-outline',
   },
   {
     label: 'Semanal',
     route: routes.plane,
     Icon: MaterialIcons,
     iconName: 'event-note',
-  },
-  {
-    label: 'GRP-Musc',
-    route: routes.gruposMusc,
-    Icon: MaterialCommunityIcons,
-    iconName: 'arm-flex-outline',
   },
   {
     label: 'Dieta',
@@ -86,18 +81,21 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 15,
-    alignItems: 'center',          // centraliza horizontalmente
-    justifyContent: 'center',      // centraliza verticalmente
+    alignItems: 'center',          
+    justifyContent: 'center',      
     flexDirection: 'column', 
   },
   text: {
     fontSize: 14,
     color: '#333',
-    alignItems: 'center',          // centraliza horizontalmente
+    alignItems: 'center',          
     justifyContent: 'center', 
   },
   activeTab: {
     borderBottomWidth: 2,
     borderBottomColor: '#007AFF',
   },
+  activeText:{
+
+  }
 });

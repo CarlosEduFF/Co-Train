@@ -37,10 +37,10 @@ export const onGoogleButtonPress = async (): Promise<UserCredential> => {
     // Etapa 4: salvar usuário no Firestore
     await createUserIfNotExists(userCredential.user);
 
-    router.replace(routes.home);
+    router.push('/planejamentos');
     return userCredential;
   } catch (error: any) {
-    console.error('❌ Erro ao fazer login com Google:', error);
+    console.error(' Erro ao fazer login com Google:', error);
     throw new Error(error.message || 'Erro inesperado no login com Google');
   }
 };

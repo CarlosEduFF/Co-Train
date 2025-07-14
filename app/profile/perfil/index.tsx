@@ -53,9 +53,6 @@ export default function Perfil() {
   return (
     <ScrollView contentContainerStyle={styles.scrollContainer}>
       <View style={styles.header}>
-        <TouchableOpacity style={styles.buttonLeft} onPress={() => router.push(routes.home)}>
-          <Feather name='arrow-left' size={40} color='#fff' />
-        </TouchableOpacity>
 
         <View style={styles.headerButton}>
           <Image
