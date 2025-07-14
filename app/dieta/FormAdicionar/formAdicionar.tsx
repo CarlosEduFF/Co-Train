@@ -20,10 +20,10 @@ export default function MealPlanForm() {
   const [mealName, setMealName] = useState('');
   const [mealTime, setMealTime] = useState('');
   const [notify, setNotify] = useState(false);
-  const [showErrorModal, setShowErrorModal]= useState(false);
-  const [errorMessage,setErrorMessage] = useState('');
-  const [showSucessoModal, setShowSucessoModal]= useState(false);
-  const [SucessoMessage,setSucessoMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal] = useState(false);
+  const [SucessoMessage, setSucessoMessage] = useState('');
 
   const [foods, setFoods] = useState<FoodItem[]>([]);
   const [currentFood, setCurrentFood] = useState('');
@@ -101,7 +101,7 @@ export default function MealPlanForm() {
         days: activeDays,
       });
 
-      
+
       setSucessoMessage('Seu plano alimentar foi salvo.')
       setShowSucessoModal(true)
 
@@ -137,7 +137,7 @@ export default function MealPlanForm() {
       <Text style={styles.label}>Refeição</Text>
       <TextInput
         style={styles.input}
-        placeholder="-- Ex: Café da Manhã"
+        placeholder="Ex: Café da Manhã"
         value={mealName}
         onChangeText={setMealName}
         placeholderTextColor="#999"
@@ -213,13 +213,13 @@ export default function MealPlanForm() {
         visible={showErrorModal}
         title='Erro'
         message={errorMessage}
-         onClose={() => setShowErrorModal(false)}
+        onClose={() => setShowErrorModal(false)}
       />
       <CustomModalSucesso
         visible={showSucessoModal}
         title='Sucesso'
         message={SucessoMessage}
-         onClose={() => setShowSucessoModal(false)}
+        onClose={() => setShowSucessoModal(false)}
       />
     </ScrollView>
   );

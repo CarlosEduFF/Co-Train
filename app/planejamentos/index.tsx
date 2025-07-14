@@ -24,30 +24,30 @@ export default function Planejamentos() {
       <View style={styles.centerContent}>
         <View style={styles.rigthcontent}>
           <TouchableOpacity style={styles.button} onPress={() => handleDayPress('segunda')}>
-            <Text style={styles.dayText}>SEGUNDA</Text>
+            <Text style={styles.dayText}>Segunda-Feira</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => handleDayPress('quarta')}>
-            <Text style={styles.dayText}>QUARTA-FEIRA</Text>
+            <Text style={styles.dayText}>Quarta-Feira</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => handleDayPress('sexta')}>
-            <Text style={styles.dayText}>SEXTA-FEIRA</Text>
+            <Text style={styles.dayText}>Sexta-Feira</Text>
           </TouchableOpacity>
         </View>
         <View style={styles.leftcontent}>
           <TouchableOpacity style={styles.button} onPress={() => handleDayPress('terca')}>
-            <Text style={styles.dayText}>TERÇA-FEIRA</Text>
+            <Text style={styles.dayText}>Terça-Feira</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => handleDayPress('quinta')}>
-            <Text style={styles.dayText}>QUINTA-FEIRA</Text>
+            <Text style={styles.dayText}>Quinta-Feira</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button} onPress={() => handleDayPress('sabado')}>
-            <Text style={styles.dayText}>SÁBADO</Text>
+            <Text style={styles.dayText}>Sábado</Text>
           </TouchableOpacity>
         </View>
         
         <View style={styles.bottomContent}>
           <TouchableOpacity style={styles.buttonBottom} onPress={() => handleDayPress('domingo')}>
-            <Text style={styles.dayText}>DOMINGO</Text>
+            <Text style={styles.dayText}>Domingo</Text>
           </TouchableOpacity>
         </View>
       </View>

@@ -11,7 +11,6 @@ import { TreinoCard } from '~/components/trainCard/trainCardColun/trainCardColun
 import { useAuth } from '~/components/AuthContext';
 import { routes } from '~/constants/routes';
 import TabLayout from '~/components/Tabs';
-import { Vi } from 'zod/v4/locales';
 
 export default function GruposMusc() {
   const [treinos, setTreinos] = useState<Treino[]>([]);

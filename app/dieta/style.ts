@@ -41,42 +41,27 @@ export default StyleSheet.create({
  
 
      card: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.white,
+        borderRadius: 5,
+        width: '45%',
         justifyContent: 'center',
         alignItems: 'center',
-        
-        paddingVertical: 13,   // Aumenta a altura do botão
-        paddingHorizontal: 0, // Espaçamento nas laterais, dentro do botão
-        
-        borderRadius: 50,      // Borda bem arredondada
-        borderWidth: 1.5,      // Largura da borda
-        borderColor: colors.Vermelho, // Cor da borda
-        
-        marginBottom: 16,      // Espaçamento entre os botões
-        // Sombra suave para dar o efeito de "elevação"
-        elevation: 4,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.15,
-        shadowRadius: 3,
-        minWidth:"48%",
-        maxWidth: "48%",
-
-
+        marginBottom: 16,
+        borderWidth: 2,
+        borderColor: colors.Vermelho,
+        paddingVertical: 12,
     },
     row: {
-        justifyContent: 'space-between', // Cria um espaço igual entre os cards
-        alignItems: 'center',
-        alignContent: 'center',
+       justifyContent: 'space-evenly',
+       paddingHorizontal: '2%',
     },
 
     // --- ESTILO DO TÍTULO DO CARD ATUALIZADO ---
     cardTitulo: {
-        color: colors.Vermelho,
-        fontWeight: 'bold',
-        fontSize: 12,
-        textTransform: 'uppercase', // Deixa o texto em maiúsculas
-        textAlign: "center"
+       fontSize: 16,
+       color: colors.Vermelho,
+       textAlign: 'center',
+       fontWeight: '500',
     },
 
      containerCard:{
@@ -89,7 +74,8 @@ export default StyleSheet.create({
   
      },
       lastCard: {
-        width: '100%', // Sobrescreve a largura para ocupar a linha inteira
+        width: '95%',
+        alignSelf: 'center',
     },
      MuscImage:{
         width: 100,

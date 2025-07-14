@@ -12,6 +12,12 @@ import TabLayout from '~/components/Tabs';
 export default function Dieta() {
   const handleDayPress = (day: DayKey) => {
     router.push({
+      pathname: '/dieta/meals', // Corrigido para minúsculo
+      params: { dia: day }
+    });
+  };
+  const handleEditMeal = (day: DayKey) => {
+    router.push({
       pathname: '/dieta/formEditar/formEditar', // Corrigido para minúsculo
       params: { dia: day }
     });
@@ -20,6 +26,7 @@ export default function Dieta() {
   const handleAddMeal = () => {
     router.push('/dieta/FormAdicionar/formAdicionar');
   };
+
 
   return (
     <View style={styles.container}>
@@ -41,13 +48,13 @@ export default function Dieta() {
           // Verifica se é o último item e se a lista tem um número ímpar de itens
           const isLastItem = index === DIAS_SEMANA.length - 1;
           const isOddLength = DIAS_SEMANA.length % 2 !== 0;
-
+          const isLastAndAlone = isLastItem && isOddLength;
           return (
             <TouchableOpacity
               // Aplica o estilo do card e, se for o caso, o estilo especial para o último item
               style={[
                 styles.card,
-                isLastItem && isOddLength && styles.lastCard
+                 isLastAndAlone && styles.lastCard
               ]}
               onPress={() => handleDayPress(item.key)}
             >
@@ -55,6 +62,7 @@ export default function Dieta() {
             </TouchableOpacity>
           );
         }}
+        
         // --- FIM DA MUDANÇA ---
 
         contentContainerStyle={{ paddingBottom: 20 }} // Adicionei um padding para a lista não colar no final

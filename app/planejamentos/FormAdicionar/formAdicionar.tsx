@@ -12,7 +12,8 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { doc, getDoc } from 'firebase/firestore';
 import { firestore } from '~/config/firebase';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
-import Modal from '~/components/modal/modalAlert'
+import Modal from '~/components/modal/modalAlert';
+import ModalPlanejamento from '~/components/modal/modalPlanejamentos';
 import { Header } from '~/components/header/header';
 
 export default function ListaTreinos() {
@@ -25,6 +26,8 @@ export default function ListaTreinos() {
   const [errorMessage,setErrorMessage] = useState('');
   const [showSucessoModal, setShowSucessoModal]= useState(false);
   const [SucessoMessage,setSucessoMessage] = useState('');
+  const [showPlanejamentosModal, setShowPlanejamentosModal]= useState(true);
+  const [planejamentosMessage,setPlanejamentosMessage] = useState('Você ainda não tem treinos planejados.');
 
   useEffect(() => {
     if (!user) {
@@ -63,7 +66,12 @@ export default function ListaTreinos() {
   if (treinos.length === 0) {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Nenhum treino encontrado.</Text>
+          <ModalPlanejamento
+            visible={showPlanejamentosModal}
+           title="Necessário ter criado um treino na aba de grupo muscular"
+           message={planejamentosMessage}
+           onClose={() => setShowPlanejamentosModal(false)}
+         />
       </View>
     );
   }

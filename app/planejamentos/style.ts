@@ -10,7 +10,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop:'13%',
+    marginTop:'10%',
    
     backgroundColor:colors.background,
     },
@@ -36,25 +36,24 @@ export default StyleSheet.create({
         backgroundColor: colors.white,
     },
     button:{
+        height:'15%',
         backgroundColor: colors.white,
-        borderRadius: 5,
-        width: '90%',
+        borderRadius: 8,
+        width: '95%',
         justifyContent: 'center',
         alignItems: 'center',
-        marginBottom: 20,
+        marginBottom: 13,
         borderWidth: 2,
         borderColor: colors.Vermelho,
     },
     centerContent: {
-        height: '35%',
+        height: '45%',
         width: '90%',  
-        marginTop:20,
         borderRadius:20,
         justifyContent: 'space-between',
         alignItems: 'center',
         flexDirection: 'row',
-        borderWidth: 2,
-        borderColor: colors.Vermelho,
+       
         
     },
     rigthcontent: {
@@ -71,14 +70,16 @@ export default StyleSheet.create({
     },
     bottomContent: {
         width: '100%',
+         height:'75%',
         justifyContent: 'center',
         alignItems: 'center',
         paddingBottom: Platform.OS === 'ios' ? 20 : 0,
         position:'absolute',
-        marginTop:'40%'
+        marginTop:'65%'
         
     },
     buttonBottom: {
+        height: 50, // ✅ Aqui está o que estava faltando!
         backgroundColor: colors.white,
         borderRadius: 5,
         width: '95%',
@@ -87,7 +88,7 @@ export default StyleSheet.create({
         marginBottom: 20,
         borderWidth: 2,
         borderColor: colors.Vermelho,
-        marginTop:30
+        marginTop: 40,
     },
     dayText: {
         fontSize: 16,

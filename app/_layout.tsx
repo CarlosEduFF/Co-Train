@@ -16,8 +16,7 @@ export default function RootLayout() {
         <Stack.Screen name="planejamentos/index" options={{ headerShown: false }} />
         <Stack.Screen name="planejamentos/Adicionar/adicionar" options={{ headerShown: false }} />
         <Stack.Screen name="planejamentos/FormAdicionar/formAdicionar" options={{ headerShown: false }} />
-        
-        <Stack.Screen name="nutricional/index" options={{ headerShown: false }} />
+        <Stack.Screen name="dieta/meals/index" options={{headerShown: false}}></Stack.Screen>
         <Stack.Screen name="planejamentos/FormEditar/[id]" options={{headerShown: false}}></Stack.Screen>
         <Stack.Screen name="dieta/index" options={{headerShown: false}}></Stack.Screen>
         <Stack.Screen name="dieta/FormAdicionar/formAdicionar" options={{headerShown: false}}></Stack.Screen>

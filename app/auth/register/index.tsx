@@ -1,17 +1,13 @@
-import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Image, Pressable, TextInput, Alert } from 'react-native';
+import { useState } from 'react';
+import { View, Text, TouchableOpacity, Image, Pressable, TextInput } from 'react-native';
 import { router } from 'expo-router';
 import styles from './style';
 import { Feather, Entypo, Ionicons } from '@expo/vector-icons';
 import * as Animatable from 'react-native-animatable';
 import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import { makeRedirectUri } from 'expo-auth-session';
 import { images } from '~/constants/images';
 import { routes } from '~/constants/routes';
-import { auth } from '~/config/firebase';
 import { registerUser } from '~/services/authService';
-import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
 import Modal from '~/components/modal/modalAlert'
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 
@@ -45,7 +41,7 @@ export default function Cadastro() {
       setEmail('');
       setSenha('');
       setConfirmarSenha('');
-      router.push(routes.home);
+      router.replace('/gruposMusc');
     } catch (error: any) {
      setShowErrorModal(true),
      setErrorMessage("Erro ao cadastrar, tente novamente")

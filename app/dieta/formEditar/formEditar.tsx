@@ -16,10 +16,10 @@ import { Header } from '~/components/header/header';
 export default function FormEditar() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [mealToDeleteId, setMealToDeleteId] = useState<string | null>(null);
-  const [showErrorModal, setShowErrorModal]= useState(false);
-  const [errorMessage,setErrorMessage] = useState('');
-  const [showSucessoModal, setShowSucessoModal]= useState(false);
-  const [SucessoMessage,setSucessoMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal] = useState(false);
+  const [SucessoMessage, setSucessoMessage] = useState('');
   const { dia } = useLocalSearchParams<{ dia?: string | string[] }>();
   const [meals, setMeals] = useState<MealPlan[]>([]);
   const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ export default function FormEditar() {
   };
 
   const handleDeleteMeal = async (id: string) => {
-     setMealToDeleteId(id);
+    setMealToDeleteId(id);
     setDeleteModalVisible(true);
   };
 
@@ -72,6 +72,22 @@ export default function FormEditar() {
     }
   };
 
+  const handleFoodChange = (
+    mealIndex: number,
+    foodIndex: number,
+    field: 'name' | 'quantity',
+    value: string
+  ) => {
+    const updated = [...meals];
+    if (field === 'name') {
+      updated[mealIndex].foods[foodIndex].name = value;
+    } else {
+      // força número, ou mantém zero se vier vazio
+      updated[mealIndex].foods[foodIndex].quantity = value ? Number(value) : 0;
+    }
+    setMeals(updated);
+  };
+
   if (loading) return <ActivityIndicator style={{ flex: 1 }} size="large" color="#A14545" />;
 
   return (
@@ -81,10 +97,11 @@ export default function FormEditar() {
 
       {meals.map((meal, mealIndex) => (
         <View key={meal.id} style={styles.mealCard}>
+          <Text style={styles.label}>Nome da Refeição:</Text>
           <TextInput
-
             placeholder="Nome da Refeição"
             value={meal.mealName}
+            style={styles.input}
             onChangeText={text => {
               const updated = [...meals];
               updated[mealIndex].mealName = text;
@@ -92,10 +109,11 @@ export default function FormEditar() {
             }}
           />
 
+          <Text style={styles.label}>Hora da Refeição:</Text>
           <TextInput
-
             placeholder="Hora da Refeição (opcional)"
             value={meal.mealTime}
+            style={styles.input}
             onChangeText={text => {
               const updated = [...meals];
               updated[mealIndex].mealTime = text;
@@ -106,7 +124,23 @@ export default function FormEditar() {
           <Text style={styles.label}>Alimentos:</Text>
           {meal.foods.map((food, foodIndex) => (
             <View key={foodIndex} style={styles.foodItemRow}>
-              <Text>{food.name} - {food.quantity}g</Text>
+              <TextInput
+                placeholder="Nome do alimento"
+                value={food.name}
+                style={[styles.input, { flex: 2 }]}
+                onChangeText={text =>
+                  handleFoodChange(mealIndex, foodIndex, 'name', text)
+                }
+              />
+              <TextInput
+                placeholder="Qtd (g)"
+                value={food.quantity?.toString() ?? ''}
+                style={[styles.input, { flex: 1, marginHorizontal: 8 }]}
+                keyboardType="numeric"
+                onChangeText={text =>
+                  handleFoodChange(mealIndex, foodIndex, 'quantity', text)
+                }
+              />
               <TouchableOpacity onPress={() => handleRemoveFood(mealIndex, foodIndex)}>
                 <Feather name="trash-2" size={18} color="red" />
               </TouchableOpacity>
@@ -123,30 +157,30 @@ export default function FormEditar() {
         </View>
       ))}
       <Modal
-              visible={showErrorModal}
-              title='Erro'
-              message={errorMessage}
-                onClose={() => {
-                setShowErrorModal(false);
-                 router.back(); 
-                }}
-            />
-            <CustomModalSucesso
-              visible={showSucessoModal}
-              title='Sucesso'
-              message={SucessoMessage}
-                onClose={() => {
-                setShowSucessoModal(false);
-                 router.back(); 
-                }}
-            />
-            <ModalDelete
-              visible={deleteModalVisible}
-              title="Remover Alimento"
-              message="Deseja remover este alimento de seu planejamento?"
-              onCancel={() => setDeleteModalVisible(false)}
-              onConfirm={confirmDelete}
-             />
+        visible={showErrorModal}
+        title='Erro'
+        message={errorMessage}
+        onClose={() => {
+          setShowErrorModal(false);
+          router.back();
+        }}
+      />
+      <CustomModalSucesso
+        visible={showSucessoModal}
+        title='Sucesso'
+        message={SucessoMessage}
+        onClose={() => {
+          setShowSucessoModal(false);
+          router.replace('/dieta');
+        }}
+      />
+      <ModalDelete
+        visible={deleteModalVisible}
+        title="Remover Alimento"
+        message="Deseja remover este alimento de seu planejamento?"
+        onCancel={() => setDeleteModalVisible(false)}
+        onConfirm={confirmDelete}
+      />
     </ScrollView>
   );
 }
