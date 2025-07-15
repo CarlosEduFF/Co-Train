@@ -169,11 +169,12 @@ export default function FormEditar() {
             </View>
 
             <View style={{ marginTop: 10 }}>
-              <Text style={styles.optionalLabel}>Carga (opcional):</Text>
+              <Text style={styles.optionalLabel}>Carga:</Text>
               <Input
                 name={`exercicios.${index}.carga`}
                 control={control}
                 placeholder="Ex: 10 kg"
+                error={errors.exercicios?.[index]?.carga?.message}
                 keyboardType="default"
               />
             </View>
@@ -188,7 +189,7 @@ export default function FormEditar() {
 
 
 
-        <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '' })}>
+        <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '', carga: '' })}>
           <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
           <Feather name="plus-circle" size={20} color="#3D0000" />
         </TouchableOpacity>
@@ -197,11 +198,11 @@ export default function FormEditar() {
           onPress={() => remove(fields.length - 1)}
           disabled={fields.length <= 1}
         >
-          <Text>REMOVER ÚLTIMO EXERCÍCIO</Text>
+          <Text>Remover Último Exercício</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.buttonAdicionar} onPress={handleDeleteTreino} disabled={isLoading}>
-          <Text >DELETAR TREINO</Text>
+          <Text >Deletar Treino</Text>
         </TouchableOpacity>
 
         { }

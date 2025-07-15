@@ -7,7 +7,7 @@ export const treinoSchema = z.object({
     z.object({
       nome: z.string().min(1, { message: "Informe o exercício" }),
       series: z.string().min(1, { message: "Informe as séries" }),
-      carga: z.string().optional(),  // Agora cada exercício tem sua própria carga
+      carga: z.string().min(1, { message: "Informe a carga" }), // Agora cada exercício tem sua própria carga
     })
   ).min(1, { message: "Adicione pelo menos um exercício." }),
 });

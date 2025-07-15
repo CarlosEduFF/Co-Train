@@ -98,12 +98,12 @@ export const saveTreinoGrupado = async (
   const user = auth.currentUser;
 
   if (!user) {
-   
+
     return;
   }
 
   if (!selectedImage) {
-   
+
     return;
   }
 
@@ -115,12 +115,12 @@ export const saveTreinoGrupado = async (
       createdAt: new Date(),
     });
 
-    
+
     onSuccess?.();
     router.back();
   } catch (error) {
     console.error("Erro ao salvar treino:", error);
-   
+
     onError?.(error);
   }
 };

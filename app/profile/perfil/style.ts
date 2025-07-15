@@ -13,6 +13,8 @@ export default StyleSheet.create({
           alignItems:'center',
           paddingBottom: 10,
           marginBottom: 10,
+           borderColor: colors.vermEscuro,
+    
       },
       headerBackground: {
         width: '100%',
@@ -40,6 +42,8 @@ export default StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: colors.vermEscuro,
+    
   },
   email: {
     fontSize: 16,
@@ -52,6 +56,8 @@ export default StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     marginVertical: 10,
+    color: colors.vermEscuro,
+    
   },
   infocaixa: {
     backgroundColor: '#fff',

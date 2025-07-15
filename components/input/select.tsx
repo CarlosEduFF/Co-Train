@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
           backgroundColor:colors.white,
           paddingHorizontal:10,
           borderRadius:4,
-          borderColor: colors.Vermelho,
+          borderColor: '#3D0000',
       }, 
         errorText:{
           color:"red"

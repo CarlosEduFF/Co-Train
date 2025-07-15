@@ -25,10 +25,10 @@ export default function Meals() {
     const [meals, setMeals] = useState<MealPlan[]>([]);
     const [loading, setLoading] = useState(false);
 
-    const handleEditMeal = (day: DayKey) => {
+    const handleEditMeal = (mealId: string, day: DayKey) => {
         router.push({
-            pathname: '/dieta/formEditar/formEditar', // Corrigido para minúsculo
-            params: { dia: day }
+            pathname: '/dieta/formEditar/formEditar',
+            params: { mealId, dia: day },
         });
     };
 
@@ -129,9 +129,13 @@ export default function Meals() {
                         <Text style={styles.saveButtonText}>Salvar</Text>
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.saveButton} onPress={() => validDia && handleEditMeal(validDia)}>
+                    <TouchableOpacity
+                        style={styles.saveButton}
+                        onPress={() => validDia && handleEditMeal(meal.id, validDia)}
+                    >
                         <Text style={styles.saveButtonText}>Editar</Text>
                     </TouchableOpacity>
+
 
                     <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteMeal(meal.id)}>
                         <Text style={styles.deleteButtonText}>Deletar</Text>

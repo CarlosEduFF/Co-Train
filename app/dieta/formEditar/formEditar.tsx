@@ -5,7 +5,7 @@ import { useLocalSearchParams, router } from 'expo-router';
 import styles from './style';
 import { MealPlan } from '~/constants/mealPlan';
 import { DayKey } from '~/constants/diasSemana';
-import { deleteMealPlanById, getMealsByDay, updateMealPlanById } from '~/services/dietService';
+import { deleteMealPlanById, getMealById, getMealsByDay, updateMealPlanById } from '~/services/dietService';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
 import ModalDelete from '~/components/modal/ModalDelete'
@@ -23,16 +23,23 @@ export default function FormEditar() {
   const { dia } = useLocalSearchParams<{ dia?: string | string[] }>();
   const [meals, setMeals] = useState<MealPlan[]>([]);
   const [loading, setLoading] = useState(false);
+  const { mealId } = useLocalSearchParams<{ mealId?: string }>();
+  const [meal, setMeal] = useState<MealPlan | null>(null);
 
   useEffect(() => {
-    const fetchMeals = async () => {
-      if (!dia || Array.isArray(dia)) return;
-      const validDia = dia as DayKey;
-      const data = await getMealsByDay(validDia);
-      setMeals(data);
+    const fetchMeal = async () => {
+      if (!mealId) return;
+      try {
+        const data = await getMealById(mealId); // <- precisa existir
+        setMeal(data);
+      } catch (err) {
+        setErrorMessage("Erro ao carregar a refeição.");
+        setShowErrorModal(true);
+      }
     };
-    fetchMeals();
-  }, [dia]);
+    fetchMeal();
+  }, [mealId]);
+
 
 
   const handleRemoveFood = (mealIndex: number, foodIndex: number) => {
@@ -95,18 +102,14 @@ export default function FormEditar() {
       <Header title='Plano Alimentar' text="Acompanhe sua alimentação diária" />
       <Text style={styles.title} >Refeições de {String(dia).toUpperCase()}</Text>
 
-      {meals.map((meal, mealIndex) => (
-        <View key={meal.id} style={styles.mealCard}>
+      {meal && (
+        <View style={styles.mealCard}>
           <Text style={styles.label}>Nome da Refeição:</Text>
           <TextInput
             placeholder="Nome da Refeição"
             value={meal.mealName}
             style={styles.input}
-            onChangeText={text => {
-              const updated = [...meals];
-              updated[mealIndex].mealName = text;
-              setMeals(updated);
-            }}
+            onChangeText={text => setMeal({ ...meal, mealName: text })}
           />
 
           <Text style={styles.label}>Hora da Refeição:</Text>
@@ -114,11 +117,7 @@ export default function FormEditar() {
             placeholder="Hora da Refeição (opcional)"
             value={meal.mealTime}
             style={styles.input}
-            onChangeText={text => {
-              const updated = [...meals];
-              updated[mealIndex].mealTime = text;
-              setMeals(updated);
-            }}
+            onChangeText={text => setMeal({ ...meal, mealTime: text })}
           />
 
           <Text style={styles.label}>Alimentos:</Text>
@@ -128,20 +127,27 @@ export default function FormEditar() {
                 placeholder="Nome do alimento"
                 value={food.name}
                 style={[styles.input, { flex: 2 }]}
-                onChangeText={text =>
-                  handleFoodChange(mealIndex, foodIndex, 'name', text)
-                }
+                onChangeText={text => {
+                  const updatedFoods = [...meal.foods];
+                  updatedFoods[foodIndex].name = text;
+                  setMeal({ ...meal, foods: updatedFoods });
+                }}
               />
               <TextInput
                 placeholder="Qtd (g)"
                 value={food.quantity?.toString() ?? ''}
                 style={[styles.input, { flex: 1, marginHorizontal: 8 }]}
                 keyboardType="numeric"
-                onChangeText={text =>
-                  handleFoodChange(mealIndex, foodIndex, 'quantity', text)
-                }
+                onChangeText={text => {
+                  const updatedFoods = [...meal.foods];
+                  updatedFoods[foodIndex].quantity = text ? Number(text) : 0;
+                  setMeal({ ...meal, foods: updatedFoods });
+                }}
               />
-              <TouchableOpacity onPress={() => handleRemoveFood(mealIndex, foodIndex)}>
+              <TouchableOpacity onPress={() => {
+                const updatedFoods = meal.foods.filter((_, i) => i !== foodIndex);
+                setMeal({ ...meal, foods: updatedFoods });
+              }}>
                 <Feather name="trash-2" size={18} color="red" />
               </TouchableOpacity>
             </View>
@@ -155,7 +161,7 @@ export default function FormEditar() {
             <Text style={styles.deleteButtonText}>DELETAR</Text>
           </TouchableOpacity>
         </View>
-      ))}
+      )}
       <Modal
         visible={showErrorModal}
         title='Erro'

@@ -117,17 +117,22 @@ export default StyleSheet.create({
   },
 
   radioButtonSelected: {
-    backgroundColor: '#4F46E5', // azul forte
-    borderColor: '#4F46E5',
+    backgroundColor: colors.vermEscuro, // azul forte
+    borderColor: colors.vermEscuro,
+    
   },
 
   radioText: {
-    color: '#000',
+    fontWeight: 'bold',
   },
 
-  radioButtonSelectedText: {
-    color: '#fff',
-  },
+radioTextSelected: {
+  color: '#fff',
+},
+
+radioTextUnselected: {
+  color: colors.vermEscuro,
+},
   pickerContainer: {
     borderWidth: 1,
     borderColor: '#ccc',

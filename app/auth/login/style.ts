@@ -37,7 +37,8 @@ export default StyleSheet.create({
    headingText:{
     fontSize:35,
     fontWeight:'bold',
-    marginTop:5
+    marginTop:5,
+    color:colors.vermEscuro
    },
   
    formContainer:{

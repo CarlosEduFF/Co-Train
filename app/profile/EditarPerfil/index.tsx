@@ -214,7 +214,7 @@ export default function EditarPerfil() {
                     ]}
                     onPress={() => onChange(sexo)}
                   >
-                    <Text style={styles.radioText}>{sexo}</Text>
+                    <Text style={[styles.radioText, value ===sexo ? styles.radioTextSelected:styles.radioTextUnselected]}>{sexo}</Text>
                   </TouchableOpacity>
                 ))}
               </View>

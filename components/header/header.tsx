@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   
     },
     textos:{
-        color:colors.black,
+        color:colors.vermEscuro,
         fontSize: 20,
         fontWeight: 'bold',
     },
