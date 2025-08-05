@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageSourcePropType,Dimensions  } from 'react-native';
 import { colors } from '../constants/colors';
 import * as Animatable from "react-native-animatable";
 import { router } from 'expo-router';
@@ -7,12 +7,14 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { images } from "~/constants/images";
 import { routes } from "~/constants/routes";
+const { height, width } = Dimensions.get("window");
 export default function Index() {
   const backgroundImages: ImageSourcePropType[] = [
     images.backg1,
     images.backg2,
     images.backg3,
   ];
+  
 
   const [backgroundImage, setBackgroundImage] = useState<ImageSourcePropType | null>(null);
 
@@ -79,9 +81,9 @@ const styles = StyleSheet.create({
   },
 
   logo: {
-    width: 150,
-    height: 150,
-    borderRadius: 80,
+    width: width < 400 ? 120 : 180,
+    height: width < 400 ? 120 : 180,
+    borderRadius: width < 400 ? 60 : 90,
     marginBottom: 20,
     backgroundColor: 'rgba(255,255,255,0.3)',
   },
@@ -108,7 +110,7 @@ const styles = StyleSheet.create({
   },
 
   buttonText: {
-    fontSize: 18,
+    fontSize: width < 400 ? 16 : 18,
     color: '#fff',
     fontWeight: 'bold',
   },

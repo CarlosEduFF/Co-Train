@@ -1,18 +1,25 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet,Dimensions } from "react-native";
 import { colors } from "~/constants/colors";
+
+const { width } = Dimensions.get('window');
+
+// Escala responsiva baseada na largura de 375 (iPhone 11 como referência)
+const scale = width / 375;
+const scaleSize = (size: number) => Math.round(size * scale);
+
 
 export default StyleSheet.create({
   card: {
-   width: '45%', // 2 colunas
-  aspectRatio: 1, // quadrado
-  backgroundColor: '#fff',
-  borderRadius: 16,
-  paddingVertical: 16,
-  paddingHorizontal: 8,
-  alignItems: 'center',
-  justifyContent: 'space-between',
-  margin: 8,
-  elevation: 4,
+   width: width < 400 ? '100%' : '45%', // em telas pequenas ocupa 100%
+    aspectRatio: 1,
+    backgroundColor: '#fff',
+    borderRadius: scaleSize(16),
+    paddingVertical: scaleSize(16),
+    paddingHorizontal: scaleSize(8),
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    margin: scaleSize(8),
+    elevation: 4,
   },
 
   selectedBorder: {
@@ -27,20 +34,20 @@ export default StyleSheet.create({
   },
 
   MuscImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
+    width: scaleSize(80),
+    height: scaleSize(80),
+    borderRadius: scaleSize(40),
     borderWidth: 2,
     borderColor: colors.vermEscuro,
-    marginBottom: 8,
+    marginBottom: scaleSize(8),
   },
 
   cardTitulo: {
     color: colors.Vermelho,
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: scaleSize(16),
     textAlign: 'center',
-    maxWidth: 100,
+    maxWidth: scaleSize(100),
   },
 
   deleteButton: {

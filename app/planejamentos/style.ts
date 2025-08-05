@@ -1,5 +1,8 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform,Dimensions } from 'react-native';
 import {colors} from '../../constants/colors'
+
+const { width } = Dimensions.get('window');
+const isTablet = width >= 768;
 
 export default StyleSheet.create({
     scrollContainer:{
@@ -10,9 +13,8 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'flex-start',
-    marginTop:'10%',
-   
-    backgroundColor:colors.background,
+    marginTop: '10%',
+    backgroundColor: colors.background,
     },
     containerHeader:{
         margin:"2%"
@@ -36,7 +38,7 @@ export default StyleSheet.create({
         backgroundColor: colors.white,
     },
     button:{
-        height:'15%',
+        height: isTablet ? 70 : 50, 
         backgroundColor: colors.white,
         borderRadius: 8,
         width: '95%',
@@ -47,26 +49,24 @@ export default StyleSheet.create({
         borderColor: colors.Vermelho,
     },
     centerContent: {
-        height: '45%',
-        width: '90%',  
-        borderRadius:20,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexDirection: 'row',
+         width: '90%',
+         flexDirection: isTablet ? 'column' : 'row',
+         justifyContent: 'center',
+         alignItems: 'center',
        
         
     },
     rigthcontent: {
-        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column',
+        width: isTablet ? '100%' : '50%',
     },
     leftcontent: {
-        flex: 1,
+        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column',
+        width: isTablet ? '100%' : '50%',
     },
     bottomContent: {
         width: '100%',
@@ -79,7 +79,7 @@ export default StyleSheet.create({
         
     },
     buttonBottom: {
-        height: 50, // ✅ Aqui está o que estava faltando!
+        height: isTablet ? 70 :60,
         backgroundColor: colors.white,
         borderRadius: 5,
         width: '95%',
@@ -88,11 +88,11 @@ export default StyleSheet.create({
         marginBottom: 20,
         borderWidth: 2,
         borderColor: colors.Vermelho,
-        marginTop: 40,
+        marginTop:isTablet ? 130: 40,
     },
     dayText: {
-        fontSize: 16,
-        color: colors.Vermelho,
-        textAlign: 'center',
+       fontSize: isTablet ? 18 : 16,
+       color: colors.Vermelho,
+       textAlign: 'center',
     },
 });

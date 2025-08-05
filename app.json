@@ -38,7 +38,7 @@
       "supportsTablet": true
     },
     "android": {
-      "googleServicesFile": "./google-services.json", 
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -50,6 +50,7 @@
       "eas": {
         "projectId": "7c2eb30f-0e42-484e-a292-0a8f8809c758"
       }
-    }
+    },
+    "owner": "co-train"
   }
 }

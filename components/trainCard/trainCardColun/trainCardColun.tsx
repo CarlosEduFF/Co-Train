@@ -1,6 +1,6 @@
 // components/TreinoCard.tsx
 import React from 'react';
-import { TouchableOpacity, View, Text, Image } from 'react-native';
+import { TouchableOpacity, View, Text, Image,Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { Treino } from '~/constants/train';
 import styles from './styles';

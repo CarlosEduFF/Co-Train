@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
-import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, FlatList, ActivityIndicator, Alert,Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { router, useFocusEffect } from 'expo-router';
@@ -11,7 +11,7 @@ import { TreinoCard } from '~/components/trainCard/trainCardColun/trainCardColun
 import { useAuth } from '~/components/AuthContext';
 import { routes } from '~/constants/routes';
 import TabLayout from '~/components/Tabs';
-
+const { width } = Dimensions.get('window');
 export default function GruposMusc() {
   const [treinos, setTreinos] = useState<Treino[]>([]);
   const [loadingTreinos, setLoadingTreinos] = useState(true);
