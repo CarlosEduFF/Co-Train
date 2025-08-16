@@ -15,7 +15,11 @@ export default StyleSheet.create({
     marginTop: 20,
     padding: 10
   },
-
+  valueText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 8,
+  },
   label: {
     fontSize: 16,
     color: colors.vermEscuro,
@@ -61,11 +65,11 @@ export default StyleSheet.create({
   },
 
 
- adicionarButton: {
+  adicionarButton: {
     fontSize: 16,
     color: colors.vermEscuro,
     paddingHorizontal: 10,
-    
+
   },
   buttonAdicionar: {
     backgroundColor: colors.white,

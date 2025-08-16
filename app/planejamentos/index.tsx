@@ -3,23 +3,35 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { router } from 'expo-router';
 import { Header } from '../../components/header/headerNoButton';
 import TabLayout from '~/components/Tabs';
+import { Feather } from "@expo/vector-icons";
 
 export default function Planejamentos() {
 
   const handleDayPress = (dia: string) => {
     router.push({
-      pathname: '/planejamentos/Adicionar/adicionar',
-      params: { dia: dia } 
+      pathname: '/planejamentos/ViewScreen/ViewScreen',
+      params: { dia: dia }
+    });
+  };
+
+  const AddDayPress = () => {
+    router.push({
+      pathname: '/planejamentos/AddScreen/AddScreen',
     });
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.containerHeader}>
-      <Header
-        title='Planejamento Semanal'
-        text='Gerencie de segunda a domingo: seus treinos organizados'
-      />
+        <Header
+          title='Planejamento Semanal'
+          text='Gerencie de segunda a domingo: seus treinos organizados'
+        />
+
+        <TouchableOpacity style={styles.addbutton} onPress={AddDayPress}>
+          <Text style={styles.TextadicionarButton}>Adicionar Refeição</Text>
+          <Feather name='plus-circle' size={24} color='#3D0000' />
+        </TouchableOpacity>
       </View>
       <View style={styles.centerContent}>
         <View style={styles.rigthcontent}>
@@ -44,7 +56,7 @@ export default function Planejamentos() {
             <Text style={styles.dayText}>Sábado</Text>
           </TouchableOpacity>
         </View>
-        
+
         <View style={styles.bottomContent}>
           <TouchableOpacity style={styles.buttonBottom} onPress={() => handleDayPress('domingo')}>
             <Text style={styles.dayText}>Domingo</Text>

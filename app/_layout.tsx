@@ -13,11 +13,14 @@ export default function RootLayout() {
         <Stack.Screen name="auth/register/index" options={{ headerShown: false }} />
         <Stack.Screen name="profile/perfil/index" options={{ headerShown: false }} />
         <Stack.Screen name="profile/EditarPerfil/index" options={{ headerShown: false }} />
+        
+        {/* Weekly Planning*/}
         <Stack.Screen name="planejamentos/index" options={{ headerShown: false }} />
-        <Stack.Screen name="planejamentos/Adicionar/adicionar" options={{ headerShown: false }} />
-        <Stack.Screen name="planejamentos/FormAdicionar/formAdicionar" options={{ headerShown: false }} />
+        <Stack.Screen name="planejamentos/ViewScreen/ViewScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="planejamentos/AddScreen/AddScreen" options={{ headerShown: false }} />
+        <Stack.Screen name="planejamentos/ViewTrain/ViewTrain" options={{headerShown: false}}/>
+        
         <Stack.Screen name="dieta/meals/index" options={{headerShown: false}}></Stack.Screen>
-        <Stack.Screen name="planejamentos/FormEditar/[id]" options={{headerShown: false}}></Stack.Screen>
         <Stack.Screen name="dieta/index" options={{headerShown: false}}></Stack.Screen>
         <Stack.Screen name="dieta/FormAdicionar/formAdicionar" options={{headerShown: false}}></Stack.Screen>
         <Stack.Screen name="dieta/formEditar/formEditar" options={{headerShown: false}}></Stack.Screen>

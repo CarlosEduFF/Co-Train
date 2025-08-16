@@ -21,6 +21,7 @@ import { Treino } from '~/constants/train';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
 import ModalDelete from '~/components/modal/ModalDelete'
+import { id } from 'zod/v4/locales';
 
 
 export default function Adicionar() {
@@ -28,10 +29,10 @@ export default function Adicionar() {
 
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [treinoIdToDelete, setTreinoIdToDelete] = useState<string | null>(null);
-  const [showErrorModal, setShowErrorModal]= useState(false);
-  const [errorMessage,setErrorMessage] = useState('');
-  const [showSucessoModal, setShowSucessoModal]= useState(false);
-  const [SucessoMessage,setSucessoMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal] = useState(false);
+  const [SucessoMessage, setSucessoMessage] = useState('');
   const [planos, setPlanos] = useState<Treino[]>([]);
   const [loadingPlanos, setLoadingPlanos] = useState(true);
   const getDayName = (diaParam?: string) =>
@@ -91,7 +92,7 @@ export default function Adicionar() {
     }
     setTreinoIdToDelete(treinoId)
     setDeleteModalVisible(true);
- };
+  };
 
   const confirmDelete = async () => {
     if (treinoIdToDelete && dia) {
@@ -108,16 +109,15 @@ export default function Adicionar() {
     }
   };
 
-  const handleCardPress = (id: string) => {
-    router.push(`/planejamentos/FormEditar/${id}`);
-  };
 
-  const handleAddPress = () => {
+  const handleCardPress = (id: string) => {
     router.push({
-      pathname: '/planejamentos/FormAdicionar/formAdicionar',
-      params: { dia }, // expo-router transforma isso em `?dia=segunda`
+      pathname: '/planejamentos/ViewTrain/ViewTrain',
+      params: { id: id }
     });
   };
+
+
 
 
   if (loading || loadingPlanos) {
@@ -135,10 +135,6 @@ export default function Adicionar() {
         text={`Gerencie seus treinos de ${getDayName(dia)}`}
       />
 
-      <TouchableOpacity style={styles.button} onPress={handleAddPress}>
-        <Text style={styles.adicionarButton}>Adicionar</Text>
-        <Feather name='plus-circle' size={30} color='#3D0000' />
-      </TouchableOpacity>
 
       {planos.length === 0 ? (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
@@ -153,6 +149,7 @@ export default function Adicionar() {
             <TreinoCard
               treino={mapPlanoToTreino(item)}
               onPress={handleCardPress}
+              onPurpose='View'
               onDelete={handleDelete}
             />
           )}
@@ -163,13 +160,13 @@ export default function Adicionar() {
         visible={showErrorModal}
         title='Erro'
         message={errorMessage}
-         onClose={() => setShowErrorModal(false)}
+        onClose={() => setShowErrorModal(false)}
       />
       <CustomModalSucesso
         visible={showSucessoModal}
         title='Sucesso'
         message={SucessoMessage}
-         onClose={() => setShowSucessoModal(false)}
+        onClose={() => setShowSucessoModal(false)}
       />
       <ModalDelete
         visible={deleteModalVisible}
@@ -177,7 +174,7 @@ export default function Adicionar() {
         message="Deseja remover este treino do planejamento semanal?"
         onCancel={() => setDeleteModalVisible(false)}
         onConfirm={confirmDelete}
-       />
+      />
     </View>
   );
 }

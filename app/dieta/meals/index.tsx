@@ -119,15 +119,8 @@ export default function Meals() {
                     {meal.foods.map((food, foodIndex) => (
                         <View key={foodIndex} style={styles.foodItemRow}>
                             <Text>{food.name} - {food.quantity}g</Text>
-                            <TouchableOpacity onPress={() => handleRemoveFood(mealIndex, foodIndex)}>
-                                <Feather name="trash-2" size={18} color="red" />
-                            </TouchableOpacity>
                         </View>
                     ))}
-
-                    <TouchableOpacity style={styles.saveButton} onPress={() => handleUpdateMeal(meal)}>
-                        <Text style={styles.saveButtonText}>Salvar</Text>
-                    </TouchableOpacity>
 
                     <TouchableOpacity
                         style={styles.saveButton}

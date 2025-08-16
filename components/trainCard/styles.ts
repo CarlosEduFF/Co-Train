@@ -1,5 +1,9 @@
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import { colors } from "~/constants/colors";
+
+const PRIMARY_COLOR = '#A14545';
+const TEXT_COLOR = '#333';
+const FONT_FAMILY = Platform.OS === 'ios' ? 'Avenir' : 'Roboto';
 
 export default StyleSheet.create({
   card: {
@@ -23,14 +27,21 @@ export default StyleSheet.create({
   },
 
   containerCard: {
-    flexDirection: 'row',
+    flexDirection: 'row', // default = VIEW
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '100%',
     paddingHorizontal: 12,
   },
-  
-   imageTextContainer: {
+  containerCardEdit: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  editContent: {
+    marginTop: 16,
+    width: '100%',
+  },
+  imageTextContainer: {
     flexDirection: 'column',
     alignItems: 'center',
   },
@@ -61,5 +72,39 @@ export default StyleSheet.create({
     elevation: 2,
     width: 70,
     height: 70,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: PRIMARY_COLOR,
+    marginBottom: 16,
+    fontFamily: FONT_FAMILY,
+  },
+  daysContainer: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  dayItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    width: '48%',
+    marginBottom: 12,
+  },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderWidth: 1.5,
+    borderColor: PRIMARY_COLOR,
+    borderRadius: 4,
+    marginRight: 10,
+  },
+  checkboxChecked: {
+    backgroundColor: PRIMARY_COLOR,
+  },
+  checkboxLabel: {
+    fontSize: 14,
+    color: TEXT_COLOR,
+    fontFamily: FONT_FAMILY,
   },
 });
