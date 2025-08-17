@@ -32,6 +32,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  containerImage:{},
 
   MuscImage: {
     width: scaleSize(80),

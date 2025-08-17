@@ -14,7 +14,7 @@ import { Header } from '../../../components/header/header';
 import { colors } from '~/constants/colors';
 import { routes } from '~/constants/routes';
 import { useAuth } from '~/components/AuthContext';
-import { TreinoCard } from '~/components/trainCard/trainCard';
+
 import { mapPlanoToTreino } from '~/utils/myPlantoTrain';
 import { deleteTreinoById, removerDiaEspecifico, subscribeToTreinosGrupados } from '~/services/trainsService';
 import { Treino } from '~/constants/train';
@@ -22,6 +22,8 @@ import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
 import ModalDelete from '~/components/modal/ModalDelete'
 import { id } from 'zod/v4/locales';
+import { TreinoCard } from '~/components/trainCard/trainCardColunSema/trainCardColun';
+
 
 
 export default function Adicionar() {

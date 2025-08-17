@@ -11,7 +11,7 @@ type Props = {
   treino: Treino;
   onPress: (id: string) => void;
   onDelete?: (id: string) => void;
-  onPurpose: 'View' | 'Edit';
+  onPurpose?: 'View' | 'Edit';
   isSelected?: boolean;
   onDaysChange?: (id: string, dias: DayKey[]) => void; // <<< novo
 };
@@ -81,12 +81,14 @@ export const TreinoCard: React.FC<Props> = ({
 
   return (
     <Container>
-      <Image
-        source={{ uri: treino.imagemUrl || 'https://via.placeholder.com/150' }}
-        style={styles.MuscImage}
-        resizeMode="cover"
-      />
-      <Text style={styles.cardTitulo}>{treino.parte}</Text>
+      <View style={styles.containerImage}>
+          <Image
+            source={{ uri: treino.imagemUrl || 'https://via.placeholder.com/150' }}
+            style={styles.MuscImage}
+            resizeMode="cover"
+          />
+          <Text style={styles.cardTitulo}>{treino.parte}</Text>
+     </View> 
 
       {onPurpose === 'Edit' && (
         <View style={styles.editContent}>

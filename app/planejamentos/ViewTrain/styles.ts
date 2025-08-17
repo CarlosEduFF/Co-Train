@@ -2,119 +2,116 @@ import { StyleSheet } from 'react-native';
 import { colors } from '../../../constants/colors';
 
 export default StyleSheet.create({
-  container: {
+ container: {
     flex: 1,
     padding: 20,
     backgroundColor: colors.background,
-    marginTop: 0,
   },
 
-  formContainer: {
-    width: '100%',
-    gap: 12,
-    marginTop: 20,
-    padding: 10
+  
+  trainCard: {
+    backgroundColor: colors.white,
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    marginBottom: 20,
+    alignItems: "center",
+    borderColor:colors.Vermelho,
+    borderWidth:2,
+    marginTop:20
   },
-  valueText: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 8,
+
+ 
+
+
+  trainMuscle: {
+    fontSize: 40,
+    fontWeight: "600",
+    color: colors.Vermelho,
+    marginBottom: 4,
   },
-  label: {
-    fontSize: 16,
+
+  
+  trainTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
     color: colors.vermEscuro,
-    fontWeight: 'bold',
-    marginBottom: 6,
+    marginBottom: 12,
   },
 
+ 
+  infoRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 6,
+    gap: 6,
+  },
+
+  infoText: {
+    fontSize: 14,
+    color: "#555",
+  },
+
+ 
+  onlineTag: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginLeft: 8,
+    gap: 4,
+    backgroundColor: "#e8f5e9",
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  onlineText: {
+    fontSize: 12,
+    fontWeight: "600",
+    color: "green",
+  },
+
+
+  exerciseCard: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 14,
+    marginTop: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 3,
+    elevation: 2,
+    width: "100%",
+  },
+
+
+  exerciseHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+    gap: 6,
+  },
+  exerciseTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: colors.vermEscuro,
+  },
+
+
+  label: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: colors.vermEscuro,
+  },
   optionalLabel: {
     fontSize: 14,
-    color: '#555',
-    marginBottom: 10,
+    color: "#777",
   },
-
-  button: {
-    backgroundColor: colors.white,
-    borderRadius: 30,
-    width: '45%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    alignSelf: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: colors.Vermelho,
-    paddingVertical: 8,
-    gap: 6,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-  },
-
-  inputHalf: {
-    flex: 1,
-  },
-  checkboxContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    gap: 10,
-  },
-
-
-  adicionarButton: {
-    fontSize: 16,
-    color: colors.vermEscuro,
-    paddingHorizontal: 10,
-
-  },
-  buttonAdicionar: {
-    backgroundColor: colors.white,
-    borderRadius: 30,
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 20,
-    marginBottom: 20,
-    borderWidth: 2,
-    borderColor: colors.Vermelho,
-    paddingVertical: 8,
-    gap: 6,
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc', // Cor para botao desabilitado
-    opacity: 0.6,
-    borderWidth: 2,
-    borderColor: '#ccc',
-  },
-
-  buttonSave: {
-    backgroundColor: colors.white,
-    borderRadius: 30,
-    height: 40,
-    width: '100%',
-    borderWidth: 2,
-    borderColor: colors.Vermelho,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 80
-  },
-
-  buttonText: {
-    fontSize: 16,
-    color: colors.vermEscuro,
-    fontWeight: 'bold',
-  },
-
-  removeIcon: {
-    position: 'absolute',
-    top: -5,
-    right: -5,
-    backgroundColor: '#fff',
-    borderRadius: 12,
+  valueText: {
+    fontSize: 14,
+    color: "#333",
   },
 });

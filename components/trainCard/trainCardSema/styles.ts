@@ -20,61 +20,38 @@ export default StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
   },
+   containerImage:{
+
+ },
 
   selectedBorder: {
     borderWidth: 2,
     borderColor: colors.vermEscuro,
   },
 
-  containerCard: {
-    flexDirection: 'row', // default = VIEW
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    paddingHorizontal: 12,
-  },
-  containerCardEdit: {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  editContent: {
-    marginTop: 16,
-    width: '100%',
-  },
-  imageTextContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-
   MuscImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    borderWidth: 2,
-    borderColor: colors.vermEscuro,
-    marginBottom: 8,
+      width: 80,
+      height: 80,
+      borderRadius: 40,
+      borderWidth: 2,
+      borderColor: colors.vermEscuro,
+      marginBottom: 8,
   },
-
-  cardTitulo: {
+    cardTitulo: {
     color: colors.Vermelho,
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
     maxWidth: 100,
   },
-
-  deleteButton: {
-    backgroundColor: '#FEE',
-    borderRadius: 35,
-    padding: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-    elevation: 2,
-    width: 70,
-    height: 70,
+ 
+  editContent: {
+    marginTop: 16,
+    width: '70%',
   },
+ 
   sectionTitle: {
-    fontSize: 16,
+    fontSize: 19,
     fontWeight: 'bold',
     color: PRIMARY_COLOR,
     marginBottom: 16,

@@ -116,33 +116,49 @@ export default function FormEditar() {
       <View style={styles.container}>
         <Header title="Planejamento Semanal" text="Visualize seus treinos" />
 
-        <View style={styles.formContainer}>
-          {/* Grupo Muscular */}
-          <Text style={styles.label}>Músculo:</Text>
-          <Text style={styles.valueText}>
-            {watch("parte") || "Não informado"}
+      
+        <View style={styles.trainCard}>
+          <Text style={styles.trainMuscle}>
+            {watch("parte") || "Músculo não informado"}
           </Text>
+          <Text style={styles.trainTitle}>Treinamento Semanal</Text>
 
-          {/* Lista de exercícios */}
+      
+          <View style={styles.infoRow}>
+            <View style={styles.onlineTag}>
+              <Feather name="zap" size={14} color="green" />
+              <Text style={styles.onlineText}>Ativo</Text>
+            </View>
+          </View>
+
+         
           {fields.map((field, index) => (
-            <View key={field.id} style={{ marginBottom: 16 }}>
-              <View style={styles.row}>
-                <View style={styles.inputHalf}>
-                  <Text style={styles.label}>Exercício {index + 1}:</Text>
-                  <Text style={styles.valueText}>
-                    {watch(`exercicios.${index}.nome`) || "Não informado"}
-                  </Text>
-                </View>
-
-                <View style={styles.inputHalf}>
-                  <Text style={styles.label}>Séries:</Text>
-                  <Text style={styles.valueText}>
-                    {watch(`exercicios.${index}.series`) || "Não informado"}
-                  </Text>
-                </View>
+            <View key={field.id} style={styles.exerciseCard}>
+              <View style={styles.exerciseHeader}>
+                <Feather name="check-circle" size={18} color={colors.vermEscuro} />
+                <Text style={styles.exerciseTitle}>
+                  Exercício {index + 1}
+                </Text>
               </View>
 
-              <View style={{ marginTop: 10 }}>
+              <View style={styles.infoRow}>
+                <Feather name="edit-3" size={16} color="#555" />
+                <Text style={styles.label}>Nome:</Text>
+                <Text style={styles.valueText}>
+                  {watch(`exercicios.${index}.nome`) || "Não informado"}
+                </Text>
+              </View>
+
+              <View style={styles.infoRow}>
+                <Feather name="list" size={16} color="#555" />
+                <Text style={styles.label}>Séries:</Text>
+                <Text style={styles.valueText}>
+                  {watch(`exercicios.${index}.series`) || "Não informado"}
+                </Text>
+              </View>
+
+              <View style={styles.infoRow}>
+                <Feather name="bar-chart-2" size={16} color="#555" />
                 <Text style={styles.optionalLabel}>Carga:</Text>
                 <Text style={styles.valueText}>
                   {watch(`exercicios.${index}.carga`) || "Não informada"}
@@ -150,28 +166,27 @@ export default function FormEditar() {
               </View>
             </View>
           ))}
+
+          <Modal
+            visible={showErrorModal}
+            title="Erro"
+            message={errorMessage}
+            onClose={() => {
+              setShowErrorModal(false);
+              router.back();
+            }}
+          />
+
+          <CustomModalSucesso
+            visible={showSucessoModal}
+            title="Sucesso"
+            message={SucessoMessage}
+            onClose={() => {
+              setShowSucessoModal(false);
+              router.back();
+            }}
+          />
         </View>
-
-        {/* Modais (mantidos para feedback de erro ou sucesso) */}
-        <Modal
-          visible={showErrorModal}
-          title="Erro"
-          message={errorMessage}
-          onClose={() => {
-            setShowErrorModal(false);
-            router.back();
-          }}
-        />
-
-        <CustomModalSucesso
-          visible={showSucessoModal}
-          title="Sucesso"
-          message={SucessoMessage}
-          onClose={() => {
-            setShowSucessoModal(false);
-            router.back();
-          }}
-        />
       </View>
     </ScrollView>
   );

@@ -4,7 +4,7 @@ import { useAuth } from '~/components/AuthContext';
 import { atualizarDiasDaSemanaTreino, subscribeToTreinosGrupados } from '~/services/trainsService';
 import { Treino } from '~/constants/train';
 import { User } from 'firebase/auth';
-import { TreinoCard } from '~/components/trainCard/trainCard';
+import { TreinoCard } from '~/components/trainCard/trainCardSema/trainCard';
 import { Feather } from '@expo/vector-icons';
 import styles from './style';
 import { router, useLocalSearchParams } from 'expo-router';

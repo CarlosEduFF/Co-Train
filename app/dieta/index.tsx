@@ -6,6 +6,7 @@ import { router } from 'expo-router';
 import { Header } from '../../components/header/headerNoButton';
 import { DayKey, DIAS_SEMANA } from '~/constants/diasSemana';
 import TabLayout from '~/components/Tabs';
+import { ButtomSemana } from '~/components/ButtomSemana/buttonSemana';
 
 
 
@@ -37,7 +38,7 @@ export default function Dieta() {
         <Feather name='plus-circle' size={24} color='#3D0000' />
       </TouchableOpacity>
 
-      <FlatList
+       <FlatList
         data={DIAS_SEMANA}
         keyExtractor={(item) => item.key}
         numColumns={2}
@@ -49,19 +50,22 @@ export default function Dieta() {
           const isLastItem = index === DIAS_SEMANA.length - 1;
           const isOddLength = DIAS_SEMANA.length % 2 !== 0;
           const isLastAndAlone = isLastItem && isOddLength;
+          const iconsMap: Record<DayKey, keyof typeof Feather.glyphMap> = {
+                segunda: "calendar", 
+                terca: "clock",        
+                quarta: "chevrons-up",    
+                quinta: "award",    
+                sexta: "activity",  
+                sabado: "activity",         
+                domingo: "plus"};
           return (
-            <TouchableOpacity
-              // Aplica o estilo do card e, se for o caso, o estilo especial para o último item
-              style={[
-                styles.card,
-                 isLastAndAlone && styles.lastCard
-              ]}
-              onPress={() => handleDayPress(item.key)}
-            >
-              <Text style={styles.cardTitulo}>{item.label}</Text>
-            </TouchableOpacity>
-          );
-        }}
+           <ButtomSemana
+           label={item.label}
+           dayKey={item.key}
+           isLastAndAlone={isLastAndAlone}
+           onPress={handleDayPress}
+           icon={iconsMap[item.key]}
+           />);}}
         
         // --- FIM DA MUDANÇA ---
 
