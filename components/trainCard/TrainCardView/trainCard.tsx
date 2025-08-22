@@ -2,9 +2,9 @@
 import React from 'react';
 import { TouchableOpacity, View, Text, Image,Dimensions } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { Treino } from '~/constants/train';
 import styles from './styles';
 import { colors } from '~/constants/colors';
+import { Treino } from '~/types/train';
 
 type Props = {
   treino: Treino;
@@ -21,11 +21,11 @@ export const TreinoCard: React.FC<Props> = ({ treino, onPress, onDelete, isSelec
       <TouchableOpacity style={styles.containerCard} onPress={() => onPress(treino.id)}>
         <View style={styles.containerImage}>
         <Image
-          source={{ uri: treino.imagemUrl || 'https://via.placeholder.com/150' }}
+          source={{ uri: treino.planoImagem || 'https://via.placeholder.com/150' }}
           style={styles.MuscImage}
           resizeMode="cover"
         />
-        <Text style={styles.cardTitulo}>{treino.parte}</Text>
+        <Text style={styles.cardTitulo}>{treino.parte}{treino.planoTitulo}</Text>
         </View>
       
 

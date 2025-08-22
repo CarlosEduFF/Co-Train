@@ -11,15 +11,15 @@ import { Header } from '../../../components/header/header';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { routes } from '~/constants/routes';
 import { useAuth } from '~/components/AuthContext';
-import { ExercicieOptionsImages } from '~/constants/exerciseOptions';
 import { TreinoFormData, treinoSchema } from '~/schemas/trainMuscleSchema';
-import { getTreinoyId, updateTreinoById } from '~/services/trainsService';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
+import { getTrainById, updateTrainById } from '~/services/Train';
+import { Treino } from '~/types/train';
 
 export default function FormEditar() {
   const { id } = useLocalSearchParams();
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+
   const { user, loading } = useAuth();
   const router = useRouter();
   const [notify, setNotify] = useState(false);
@@ -30,20 +30,10 @@ export default function FormEditar() {
   const [showSucessoModal, setShowSucessoModal] = useState(false);
   const [SucessoMessage, setSucessoMessage] = useState('');
 
-  const {
-    control,
-    handleSubmit,
-    reset,
-    watch,              // <<< adiciona aqui
-    formState: { errors }
-  } = useForm<TreinoFormData>({
-    resolver: zodResolver(treinoSchema),
-    defaultValues: {
-      parte: '',
-      exercicios: [{ nome: '', series: '', carga: '' }]
-    }
+  const { control, handleSubmit, reset, watch, formState: { errors } } = useForm<TreinoFormData>({
+    resolver: zodResolver(treinoSchema) as any, // forçar compatibilidade
+    defaultValues: treinoSchema.parse({})
   });
-
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -66,14 +56,10 @@ export default function FormEditar() {
     const fetchPlano = async () => {
       try {
         const planoId = Array.isArray(id) ? id[0] : id;
-        const planoData = await getTreinoyId(planoId);
+        const planoData = await getTrainById(planoId);
 
         if (planoData) {
           reset(planoData);
-          setNotify(planoData.notify || false);
-          if (planoData.imagemUrl) {
-            setSelectedImage(planoData.imagemUrl);
-          }
         } else {
           setErrorMessage('Plano não encontrado')
           setShowErrorModal(true)
@@ -92,20 +78,6 @@ export default function FormEditar() {
     fetchPlano();
   }, [id, reset, router]);
 
-  const handleUpdatePlano = async (data: any) => {
-    setIsLoading(true);
-    try {
-      await updateTreinoById(id as string, data, notify);
-      setSucessoMessage('Seu plano foi atualizado.')
-      setShowSucessoModal(true)
-    } catch (error) {
-      Alert.alert("Erro", (error as Error).message);
-      setErrorMessage('Preencha todos os campos')
-      setShowErrorModal(true)
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   if (isFetching) {
     return <ActivityIndicator size="large" color={colors.vermEscuro} style={{ flex: 1 }} />;
@@ -116,14 +88,14 @@ export default function FormEditar() {
       <View style={styles.container}>
         <Header title="Planejamento Semanal" text="Visualize seus treinos" />
 
-      
+
         <View style={styles.trainCard}>
           <Text style={styles.trainMuscle}>
-            {watch("parte") || "Músculo não informado"}
+            {watch("parte") || watch("planoTitulo") || "Músculo não informado"}
           </Text>
           <Text style={styles.trainTitle}>Treinamento Semanal</Text>
 
-      
+
           <View style={styles.infoRow}>
             <View style={styles.onlineTag}>
               <Feather name="zap" size={14} color="green" />
@@ -131,7 +103,7 @@ export default function FormEditar() {
             </View>
           </View>
 
-         
+
           {fields.map((field, index) => (
             <View key={field.id} style={styles.exerciseCard}>
               <View style={styles.exerciseHeader}>

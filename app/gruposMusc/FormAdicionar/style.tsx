@@ -113,5 +113,37 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
   },
-  
+
+  modeButton: {
+    flex: 1,
+    padding: 12,
+    borderWidth: 1,
+    borderColor: colors.vermEscuro,
+    borderRadius: 8,
+    alignItems: 'center',
+    marginHorizontal: 4,
+  },
+  modeButtonActive: {
+    backgroundColor: colors.vermEscuro,
+  },
+  modeText: {
+    color: 'white',
+    fontWeight: '600',
+  },
+  imageUpload: {
+    height: 150,
+    width: 100,
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+    backgroundColor: '#FAFAFA',
+  },
+  imagePreview: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+  },
 });

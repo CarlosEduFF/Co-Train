@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, FlatList, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { useAuth } from '~/components/AuthContext';
-import { atualizarDiasDaSemanaTreino, subscribeToTreinosGrupados } from '~/services/trainsService';
-import { Treino } from '~/constants/train';
+
 import { User } from 'firebase/auth';
-import { TreinoCard } from '~/components/trainCard/trainCardSema/trainCard';
+import { TreinoCard } from '~/components/trainCard/TrainCardMod/trainCard';
 import { Feather } from '@expo/vector-icons';
 import styles from './style';
 import { router, useLocalSearchParams } from 'expo-router';
@@ -13,6 +12,8 @@ import ModalAlert from '~/components/modal/modalAlert';
 import ModalPlanejamento from '~/components/modal/modalPlanejamentos';
 import { Header } from '~/components/header/header';
 import { DayKey } from '~/constants/diasSemana';
+import { Treino } from '~/types/train';
+import { subscribeToTrains, updateDaysWeekTrain } from '~/services/Train';
 
 export default function ListaTreinos() {
   const { user, loading: authLoading } = useAuth();
@@ -40,7 +41,7 @@ export default function ListaTreinos() {
 
     setLoading(true);
 
-    const unsubscribe = subscribeToTreinosGrupados(
+    const unsubscribe = subscribeToTrains(
       user as User,
       undefined, // não filtra pelo dia aqui
       (treinosData) => {
@@ -91,7 +92,7 @@ export default function ListaTreinos() {
 
     try {
       const updates = Object.entries(diasSelecionadosPorTreino).map(([treinoId, dias]) =>
-        atualizarDiasDaSemanaTreino(treinoId, dias)
+        updateDaysWeekTrain(treinoId, dias)
       );
       await Promise.all(updates);
 

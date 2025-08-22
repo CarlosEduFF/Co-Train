@@ -20,9 +20,21 @@ export default StyleSheet.create({
     shadowOpacity: 0.15,
     shadowRadius: 4,
   },
-   containerImage:{
-
- },
+  containerImage: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  deleteButton: {
+    backgroundColor: '#FEE',
+    borderRadius: 40,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 2,
+    width: 80,
+    height: 80,
+    marginLeft: '45%',
+  },
 
   selectedBorder: {
     borderWidth: 2,
@@ -30,26 +42,26 @@ export default StyleSheet.create({
   },
 
   MuscImage: {
-      width: 80,
-      height: 80,
-      borderRadius: 40,
-      borderWidth: 2,
-      borderColor: colors.vermEscuro,
-      marginBottom: 8,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: colors.vermEscuro,
+    marginBottom: 8,
   },
-    cardTitulo: {
+  cardTitulo: {
     color: colors.Vermelho,
     fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center',
     maxWidth: 100,
   },
- 
+
   editContent: {
     marginTop: 16,
     width: '70%',
   },
- 
+
   sectionTitle: {
     fontSize: 19,
     fontWeight: 'bold',
@@ -84,4 +96,24 @@ export default StyleSheet.create({
     color: TEXT_COLOR,
     fontFamily: FONT_FAMILY,
   },
+  // Container que envolve os botões
+  actionButtonsContainer: {
+    flexDirection: 'row',      // deixa os botões lado a lado
+    justifyContent: 'space-between', // espaça uniformemente
+    marginTop: 12,
+    paddingHorizontal: 16,     // dá espaço nas laterais do card
+  },
+
+  // Botão comum (pode ser usado tanto para delete quanto edit)
+  actionButton: {
+    backgroundColor: '#FEE',   // pode trocar para #EEF ou outra cor no edit
+    borderRadius: 40,
+    padding: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    elevation: 2,
+    width: 80,
+    height: 80,
+  }
+
 });

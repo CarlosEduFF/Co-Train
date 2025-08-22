@@ -1,34 +1,22 @@
 import { useState, useCallback, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  FlatList,
-  ActivityIndicator,
-  Alert,
-} from 'react-native';
-import { Feather } from '@expo/vector-icons';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { useFocusEffect, useLocalSearchParams, router } from 'expo-router';
 import styles from './style';
 import { Header } from '../../../components/header/header';
 import { colors } from '~/constants/colors';
 import { routes } from '~/constants/routes';
 import { useAuth } from '~/components/AuthContext';
-
 import { mapPlanoToTreino } from '~/utils/myPlantoTrain';
-import { deleteTreinoById, removerDiaEspecifico, subscribeToTreinosGrupados } from '~/services/trainsService';
-import { Treino } from '~/constants/train';
+
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
 import ModalDelete from '~/components/modal/ModalDelete'
-import { id } from 'zod/v4/locales';
-import { TreinoCard } from '~/components/trainCard/trainCardColunSema/trainCardColun';
-
-
+import { TreinoCard } from '~/components/trainCard/TrainCardMod/trainCard';
+import { Treino } from '~/types/train';
+import { removeDayEspecific, subscribeToTrains } from '~/services/Train';
 
 export default function Adicionar() {
   const { dia } = useLocalSearchParams<{ dia?: string }>();
-
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [treinoIdToDelete, setTreinoIdToDelete] = useState<string | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -49,14 +37,6 @@ export default function Adicionar() {
     }
   }, [loading, user]);
 
-
-  useEffect(() => {
-    if (!loading && !user) {
-      router.replace(routes.login);
-    }
-  }, [loading, user]);
-
-
   useFocusEffect(
     useCallback(() => {
       if (!user || !dia) {
@@ -66,9 +46,9 @@ export default function Adicionar() {
 
       setLoadingPlanos(true);
 
-      const unsubscribe = subscribeToTreinosGrupados(
+      const unsubscribe = subscribeToTrains(
         user,
-        dia.toLowerCase(), // passa o dia para filtrar
+        { dia: dia.toLowerCase() },
         (treinosData) => {
           setPlanos(treinosData);
           setLoadingPlanos(false);
@@ -86,27 +66,32 @@ export default function Adicionar() {
     }, [user, dia]) // inclua `dia` nas dependências
   );
 
-  const handleDelete = (treinoId: string) => {
+  const handleDelete = async (treinoId?: string, confirm?: boolean) => {
     if (!dia) {
       setErrorMessage('Dia não informado');
       setShowErrorModal(true);
       return;
     }
-    setTreinoIdToDelete(treinoId)
-    setDeleteModalVisible(true);
-  };
 
-  const confirmDelete = async () => {
-    if (treinoIdToDelete && dia) {
+    if (!confirm) {
+      // Etapa 1 → só abrir modal
+      setTreinoIdToDelete(treinoId || null);
+      setDeleteModalVisible(true);
+      return;
+    }
+
+    // Etapa 2 → confirmar e excluir
+    if (treinoIdToDelete) {
       try {
-        await removerDiaEspecifico(treinoIdToDelete, dia);
-        setDeleteModalVisible(false);
+        await removeDayEspecific(treinoIdToDelete, dia);
         setSucessoMessage('Treino removido com sucesso');
         setShowSucessoModal(true);
       } catch (error) {
-        setDeleteModalVisible(false);
         setErrorMessage('Erro ao remover treino');
         setShowErrorModal(true);
+      } finally {
+        setDeleteModalVisible(false);
+        setTreinoIdToDelete(null);
       }
     }
   };
@@ -118,9 +103,6 @@ export default function Adicionar() {
       params: { id: id }
     });
   };
-
-
-
 
   if (loading || loadingPlanos) {
     return (
@@ -136,8 +118,6 @@ export default function Adicionar() {
         title='Planejamento Semanal'
         text={`Gerencie seus treinos de ${getDayName(dia)}`}
       />
-
-
       {planos.length === 0 ? (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
           <Text>Nenhum plano adicionado para este dia..</Text>
@@ -151,8 +131,8 @@ export default function Adicionar() {
             <TreinoCard
               treino={mapPlanoToTreino(item)}
               onPress={handleCardPress}
-              onPurpose='View'
-              onDelete={handleDelete}
+              onPurpose="View"
+              onDelete={() => handleDelete(item.id)}
             />
           )}
           contentContainerStyle={styles.listContainer}
@@ -175,7 +155,7 @@ export default function Adicionar() {
         title="Remover Treino"
         message="Deseja remover este treino do planejamento semanal?"
         onCancel={() => setDeleteModalVisible(false)}
-        onConfirm={confirmDelete}
+        onConfirm={() => handleDelete(undefined, true)} // confirma exclusão
       />
     </View>
   );

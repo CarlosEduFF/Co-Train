@@ -1,6 +1,7 @@
 // app/(main)/_layout.tsx
 import { Tabs } from 'expo-router';
 import { TabBarIcon } from '../../components/TabBarIcon';
+import { Feather } from '@expo/vector-icons';
 
 export default function TabLayout() {
   return (
@@ -32,10 +33,10 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="perfil"
+        name="config"
         options={{
-          title: 'Perfil',
-          tabBarIcon: ({ color }) => <TabBarIcon name="user" color={color} />,
+          title: 'config',
+          tabBarIcon: ({ color, size }) => <Feather name="settings" color={color} size={size} />
         }}
       />
     </Tabs>

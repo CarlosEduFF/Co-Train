@@ -1,8 +1,7 @@
-
 import React, { useEffect, useState } from 'react';
 import { TouchableOpacity, View, Text, Image } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import { Treino } from '~/constants/train';
+import { Treino } from '~/types/train';
 import styles from './styles';
 import { colors } from '~/constants/colors';
 import { DayKey, DIAS_SEMANA } from '~/constants/diasSemana';
@@ -11,15 +10,17 @@ type Props = {
   treino: Treino;
   onPress: (id: string) => void;
   onDelete?: (id: string) => void;
+  onEdit?: (id: string) => void;
   onPurpose?: 'View' | 'Edit';
   isSelected?: boolean;
-  onDaysChange?: (id: string, dias: DayKey[]) => void; // <<< novo
+  onDaysChange?: (id: string, dias: DayKey[]) => void;
 };
 
 export const TreinoCard: React.FC<Props> = ({
   treino,
   onPress,
   onDelete,
+  onEdit,
   onPurpose,
   isSelected,
   onDaysChange,
@@ -62,34 +63,42 @@ export const TreinoCard: React.FC<Props> = ({
     }
   };
 
-  // Escolhe o container correto: TouchableOpacity no modo "View" ou View normal no "Edit"
-  const Container: React.FC<{ children: React.ReactNode }> =
-    onPurpose === 'View'
-      ? ({ children }) => (
-          <TouchableOpacity
-            onPress={() => onPress(treino.id)}
-            style={[styles.card, isSelected && styles.selectedBorder]}
-          >
-            {children}
-          </TouchableOpacity>
-        )
-      : ({ children }) => (
-          <View style={[styles.card, isSelected && styles.selectedBorder]}>
-            {children}
-          </View>
-        );
+  const getImageSource = () => {
+    if (typeof treino.planoImagem !== "string" || !treino.planoImagem) {
+      return { uri: "https://via.placeholder.com/150" };
+    }
+    return { uri: treino.planoImagem };
+  };
+
+
+
+
+
 
   return (
-    <Container>
+    <TouchableOpacity
+      activeOpacity={0.8}
+      onPress={() => onPress(treino.id)}
+      style={[styles.card, isSelected && styles.selectedBorder]}
+    >
+      {/* Conteúdo do card */}
       <View style={styles.containerImage}>
+        {typeof treino.planoImagem === "string" && treino.planoImagem.trim() !== "" ? (
           <Image
-            source={{ uri: treino.imagemUrl || 'https://via.placeholder.com/150' }}
+            source={getImageSource()}
             style={styles.MuscImage}
             resizeMode="cover"
           />
-          <Text style={styles.cardTitulo}>{treino.parte}</Text>
-     </View> 
+        ) : (
+          <View style={[styles.MuscImage, { justifyContent: "center", alignItems: "center" }]}>
+            <Text>Sem imagem</Text>
+          </View>
+        )}
 
+        <Text style={styles.cardTitulo}>{treino.parte}{treino.planoTitulo}</Text>
+      </View>
+
+      {/* Lista de dias (apenas no modo Edit) */}
       {onPurpose === 'Edit' && (
         <View style={styles.editContent}>
           <Text style={styles.sectionTitle}>Dias que tenho esse treino:</Text>
@@ -109,6 +118,28 @@ export const TreinoCard: React.FC<Props> = ({
           </View>
         </View>
       )}
-    </Container>
+
+      {/* Botões Edit e Delete lado a lado */}
+      {(onEdit || onDelete) && (
+        <View style={styles.actionButtonsContainer} pointerEvents="box-none">
+          {onEdit && (
+            <TouchableOpacity
+              style={[styles.actionButton, { backgroundColor: '#EEF' }]}
+              onPress={() => onEdit(treino.id)}
+            >
+              <Feather name="edit-2" size={25} color={colors.vermEscuro} />
+            </TouchableOpacity>
+          )}
+          {onDelete && (
+            <TouchableOpacity
+              style={[styles.actionButton, { backgroundColor: '#FEE' }]}
+              onPress={() => onDelete(treino.id)}
+            >
+              <Feather name="trash-2" size={25} color={colors.vermEscuro} />
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+    </TouchableOpacity>
   );
 };

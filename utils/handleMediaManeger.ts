@@ -4,7 +4,7 @@ type PickImageResult = {
   uri: string;
 } | null;
 
-export const pickImage = async (): Promise<PickImageResult> => {
+export const pickImage = async (): Promise<string | null> => {
   try {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -14,7 +14,7 @@ export const pickImage = async (): Promise<PickImageResult> => {
     });
 
     if (!result.canceled && result.assets?.length > 0) {
-      return { uri: result.assets[0].uri };
+      return result.assets[0].uri; // sempre retorna string
     }
 
     return null;

@@ -1,24 +1,32 @@
 
-export const routes = {
-    //(tabs)
 
-    //auth
+export const routes = {
+    // Auth
     login: '/auth/login',
     register: '/auth/register',
-    
-    //home
+
+    // Home (pasta home não detalhada, mas mantida)
     home: '/home',
-    
-    //Profile
-    profile: '/profile/perfil',
-    editProfile: '/profile/EditarPerfil',
-    
-    //Grupos Musculares
+
+    // Configurações / Perfil
+    config: '/config',
+    editProfile: '/config/EditarPerfil',
+    viewProfile: '/config/perfil',
+
+    // Grupos Musculares
+    gruposMuscAdd: '/gruposMusc/FormAdicionar',
+    gruposMuscEdit: '/gruposMusc/FormEditar',
     gruposMusc: '/gruposMusc',
 
-    //Dieta
+    // Dieta
+    dietaAdd: '/dieta/FormAdicionar',
+    dietaEdit: '/dieta/formEditar',
+    dietaMeals: '/dieta/meals',
     dieta: '/dieta',
 
-    //Planejamentos
+    // Planejamentos
+    planeAdd: '/planejamentos/AddScreen',
+    planeView: '/planejamentos/ViewScreen',
+    planeTrain: '/planejamentos/ViewTrain',
     plane: '/planejamentos'
 } as const;

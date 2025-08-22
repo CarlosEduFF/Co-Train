@@ -1,45 +1,79 @@
 import { useState, useEffect } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  ActivityIndicator,
+  Image,
+} from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import styles from "../FormAdicionar/style";
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useFieldArray } from 'react-hook-form';
+import { useForm, useFieldArray, SubmitHandler, Controller } from 'react-hook-form';
 import { colors } from '../../../constants/colors';
 import { Input } from '../../../components/input/inputNormal';
 import { Select } from '../../../components/input/select';
 import { Header } from '../../../components/header/header';
 import { router, useLocalSearchParams } from 'expo-router';
-import { TreinoFormData, treinoSchema } from '~/schemas/trainMuscleSchema';
-import { deleteTreinoById, getTreinoyId, updateTreinoById } from '~/services/trainsService';
+import { treinoSchema } from '~/schemas/trainMuscleSchema';
 import { ExercicieOptionsImages } from '~/constants/exerciseOptions';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
-import Modal from '~/components/modal/modalAlert'
-import ModalDelete from '~/components/modal/ModalDelete'
+import Modal from '~/components/modal/modalAlert';
+import ModalDelete from '~/components/modal/ModalDelete';
+import { getTrainById, updateTrainById } from '~/services/Train';
+import { Treino } from '~/types/train';
+import ExercisesFields from '~/components/ExercisesFields/exerciseField';
+import { pickImage } from '~/utils/handleMediaManeger';
 
 export default function FormEditar() {
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [treinoIdToDelete, setTreinoIdToDelete] = useState<string | null>(null);
-  const [showErrorModal, setShowErrorModal]= useState(false);
-  const [errorMessage,setErrorMessage] = useState('');
-  const [showSucessoModal, setShowSucessoModal]= useState(false);
-  const [SucessoMessage,setSucessoMessage] = useState('');
+  const [showErrorModal, setShowErrorModal] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSucessoModal, setShowSucessoModal] = useState(false);
+  const [SucessoMessage, setSucessoMessage] = useState('');
   const { id } = useLocalSearchParams<{ id: string }>();
   const [isLoading, setIsLoading] = useState(false);
   const [isFetching, setIsFetching] = useState(true);
+
+  // selectedImage será a imagem do grupo (ou imagem atual do plano)
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [notify, setNotify] = useState(false);
-  const { control, handleSubmit, reset, formState: { errors } } = useForm<TreinoFormData>({
-    resolver: zodResolver(treinoSchema),
+
+  // modo da UI (musculo | plano) — será ajustado ao carregar os dados
+  const [mode, setMode] = useState<'musculo' | 'plano'>('musculo');
+
+  // form
+  const { control, handleSubmit, reset, setValue, watch, formState: { errors } } = useForm<Treino>({
+    resolver: zodResolver(treinoSchema) as any,
     defaultValues: {
+      id: '',
+      modo: 'grupo',
       parte: '',
-      exercicios: [{ nome: '', series: '', carga: '' }]
-    }
+      planoTitulo: '',
+      planoImagem: '',
+      exercicios: [{ nome: '', series: '', carga: '' }],
+      diasDaSemana: [],
+    },
   });
 
   const { fields, append, remove } = useFieldArray({
     control,
-    name: "exercicios"
+    name: "exercicios",
   });
+
+  // helper: transforma qualquer valor em string-uri segura ou null
+  const safeImageUri = (value: unknown): string | null => {
+    if (!value) return null;
+    if (typeof value === 'string') return value;
+    if (typeof value === 'object' && value !== null && 'uri' in (value as any) && typeof (value as any).uri === 'string') {
+      return (value as any).uri;
+    }
+    return String(value);
+  };
+
+  // watch do campo planoImagem do form
+  const watchedPlanoImagem = watch('planoImagem');
 
   useEffect(() => {
     if (!id) {
@@ -50,71 +84,116 @@ export default function FormEditar() {
     const fetchPlano = async () => {
       try {
         const planoId = Array.isArray(id) ? id[0] : id;
-        const planoData = await getTreinoyId(planoId);
+        const planoData = await getTrainById(planoId);
 
         if (planoData) {
+          // popula o form com os dados do servidor
           reset(planoData);
-          setNotify(planoData.notify || false);
-          if (planoData.imagemUrl) {
-            setSelectedImage(planoData.imagemUrl);
+
+          // ajusta modo da UI com base no campo salvo (assume 'modo' no Treino seja 'grupo'|'plano')
+          if (planoData.modo === 'plano') {
+            setMode('plano');
+          } else {
+            setMode('musculo');
+          }
+
+          // inicializa selectedImage para preview:
+          // - se houver planoImagem salvo (string URL), usa ela
+          // - senão, se for modo 'grupo' e parte corresponder a uma opção com imagem, usa essa imagem
+          const imgFromPlano = safeImageUri(planoData.planoImagem);
+          if (imgFromPlano) {
+            setSelectedImage(imgFromPlano);
+          } else if (planoData.modo === 'grupo' && planoData.parte) {
+            const opt = ExercicieOptionsImages.find(o => String(o.value) === String(planoData.parte) || o.label === planoData.parte);
+            if (opt?.image) {
+              setSelectedImage(safeImageUri(opt.image));
+            } else {
+              setSelectedImage(null);
+            }
+          } else {
+            setSelectedImage(null);
+          }
+
+          // se houver diasDaSemana, garantir que estejam no form (lowercase)
+          if (planoData.diasDaSemana) {
+            setValue('diasDaSemana', planoData.diasDaSemana.map(d => String(d).toLowerCase()));
           }
         } else {
-           setErrorMessage('Plano não encontrado')
-           setShowErrorModal(true)
-         
+          setErrorMessage('Plano não encontrado');
+          setShowErrorModal(true);
         }
       } catch (error) {
         console.error('Erro ao buscar plano:', error);
-        
-           setErrorMessage('Erro ao carregar o plano.')
-           setShowErrorModal(true)
-        
+        setErrorMessage('Erro ao carregar o plano.');
+        setShowErrorModal(true);
       } finally {
         setIsFetching(false);
       }
     };
 
     fetchPlano();
-  }, [id, reset, router]);
+  }, [id, reset, setValue]);
 
-  const handleUpdateTreino = async (data: TreinoFormData) => {
-    if (!id) return;
-
-    setIsLoading(true);
-
+  const handlePickPlanoImage = async (onChange?: (v: string | null) => void) => {
     try {
-      const dataToUpdate = {
-        ...data,
-        imagemUrl: selectedImage,
-      };
-
-      await updateTreinoById(id, dataToUpdate, notify);
-       setSucessoMessage('Treino atualizado com sucesso!');
-       setShowSucessoModal(true);
-    } catch (error) {
-      console.error(error);
-       setErrorMessage('Erro ao atualizar treino.');
-       setShowErrorModal(true);
-    } finally {
-      setIsLoading(false);
+      const imageUri = await pickImage(); // pickImage deve retornar string | null
+      if (imageUri) {
+        onChange?.(imageUri);
+        setSelectedImage(imageUri);
+      }
+    } catch (err) {
+      console.error('Erro ao selecionar imagem:', err);
     }
   };
 
-  const handleDeleteTreino = () => {
-    setDeleteModalVisible(true);
-  };
+  const handleUpdateTreino: SubmitHandler<Treino> = async (data) => {
+    const planoId = Array.isArray(id) ? id[0] : id;
+    if (!planoId) return;
 
-  const confirmDelete = async () => {
-    if (!id) return;
-    setDeleteModalVisible(false);
     setIsLoading(true);
+
+    // converte o mode da UI para o que o service espera
+    const modo: 'grupo' | 'plano' = mode === 'musculo' ? 'grupo' : 'plano';
+
+    // validação extra para grupo (mesma lógica usada no save)
+    if (modo === 'grupo' && !selectedImage && !(data.planoImagem && String(data.planoImagem).trim())) {
+      setIsLoading(false);
+      setErrorMessage('Imagem do grupo muscular não selecionada. Por favor, selecione o músculo novamente.');
+      setShowErrorModal(true);
+      return;
+    }
+
     try {
-      await deleteTreinoById(id);
-      setSucessoMessage('Treino excluído com sucesso!');
+      // normaliza o payload no formato do Treino (sem sobrescrever id)
+      const payload: Partial<Treino> = {
+        ...data,
+        modo,
+        parte: modo === 'grupo' ? data.parte ?? '' : data.parte ?? '',
+        planoTitulo: data.planoTitulo ?? '',
+        exercicios: (data.exercicios ?? []).map((e) => ({
+          nome: e.nome ?? '',
+          series: e.series ?? '',
+          carga: e.carga ?? '',
+        })),
+        diasDaSemana: (data.diasDaSemana ?? []).map((d) => String(d).toLowerCase()),
+        // prioriza valor do form (string) ou undefined
+        planoImagem: data.planoImagem ? String(data.planoImagem) : undefined,
+      };
+
+      // se tiver selectedImage (por exemplo, imagem de grupo escolhida), envie também
+      const payloadToSend: any = { ...payload };
+      if (selectedImage) payloadToSend.imagemUrl = selectedImage;
+
+      // chamada ao serviço (ajuste assinatura se necessário)
+      await updateTrainById(planoId, payloadToSend, selectedImage ?? null);
+
+      setSucessoMessage('Treino atualizado com sucesso!');
       setShowSucessoModal(true);
+      // opcional: navegar de volta
+      // router.back();
     } catch (error) {
-      console.error(error);
-      setErrorMessage('Erro ao excluir treino.');
+      console.error('Erro ao atualizar treino:', error);
+      setErrorMessage('Erro ao atualizar treino.');
       setShowErrorModal(true);
     } finally {
       setIsLoading(false);
@@ -122,122 +201,147 @@ export default function FormEditar() {
   };
 
   if (isFetching) {
-    return <ActivityIndicator size="large" color={colors.vermEscuro} style={{ flex: 1 }} />
+    return <ActivityIndicator size="large" color={colors.vermEscuro} style={{ flex: 1 }} />;
   }
 
   return (
     <ScrollView style={styles.container}>
-      <Header title='Editar Treino' text='Ajuste ou remova seu treino' />
-      <View style={styles.formContainer}>
-        { }
-        <Text style={styles.label}>Músculo:</Text>
-        <Select
-          control={control}
-          name="parte"
-          error={errors.parte?.message}
-          options={ExercicieOptionsImages}
-          onSelectExtraData={(selectedItem) => {
-            setSelectedImage(selectedItem.image ?? null);
-          }}
-        />
+      <Header title="Editar Treino" text="Ajuste ou remova seu treino" />
 
-
-        {fields.map((field, index) => (
-          <View key={field.id} style={{ marginBottom: 16 }}>
-            <View style={styles.row}>
-              <View style={styles.inputHalf}>
-                <Text style={styles.label}>Exercício {index + 1}:</Text>
-                <Input
-                  name={`exercicios.${index}.nome`}
-                  control={control}
-                  placeholder="Ex: Supino Reto"
-                  error={errors.exercicios?.[index]?.nome?.message}
-                  keyboardType="default"
-                />
-              </View>
-
-              <View style={styles.inputHalf}>
-                <Text style={styles.label}>Séries:</Text>
-                <Input
-                  name={`exercicios.${index}.series`}
-                  control={control}
-                  placeholder="Ex: 4x10"
-                  error={errors.exercicios?.[index]?.series?.message}
-                  keyboardType="default"
-                />
-              </View>
-            </View>
-
-            <View style={{ marginTop: 10 }}>
-              <Text style={styles.optionalLabel}>Carga:</Text>
-              <Input
-                name={`exercicios.${index}.carga`}
-                control={control}
-                placeholder="Ex: 10 kg"
-                error={errors.exercicios?.[index]?.carga?.message}
-                keyboardType="default"
-              />
-            </View>
-
-            {index > 0 && (
-              <TouchableOpacity onPress={() => remove(index)} style={styles.removeIcon}>
-                <Feather name="x-circle" size={20} color={colors.vermEscuro} />
-              </TouchableOpacity>
-            )}
-          </View>
-        ))}
-
-
-
-        <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '', carga: '' })}>
-          <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
-          <Feather name="plus-circle" size={20} color="#3D0000" />
+      {/* Seletor de modo igual ao Add */}
+      <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+        <TouchableOpacity
+          style={[styles.modeButton, mode === 'musculo' && styles.modeButtonActive]}
+          onPress={() => setMode('musculo')}
+        >
+          <Text style={styles.modeText}>Por Grupo Muscular</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={[styles.buttonAdicionar, fields.length <= 1 && styles.buttonDisabled]}
-          onPress={() => remove(fields.length - 1)}
-          disabled={fields.length <= 1}
+          style={[styles.modeButton, mode === 'plano' && styles.modeButtonActive]}
+          onPress={() => setMode('plano')}
         >
-          <Text>Remover Último Exercício</Text>
+          <Text style={styles.modeText}>Por Plano de Treino</Text>
         </TouchableOpacity>
+      </View>
 
-        <TouchableOpacity style={styles.buttonAdicionar} onPress={handleDeleteTreino} disabled={isLoading}>
-          <Text >Deletar Treino</Text>
-        </TouchableOpacity>
+      <View style={styles.formContainer}>
+        {mode === 'musculo' && (
+          <>
+            <Text style={styles.label}>Músculo:</Text>
+            <Controller
+              control={control}
+              name="parte"
+              render={({ field: { value, onChange } }) => (
+                <Select
+                  control={control}
+                  name="parte"
+                  placeholder="Selecione o grupo muscular"
+                  error={errors.parte?.message}
+                  options={ExercicieOptionsImages}
+                  onSelectExtraData={(selectedItem) => {
+                    // atualiza imagem do grupo para preview
+                    const img = safeImageUri((selectedItem as any).image) ?? null;
+                    setSelectedImage(img);
+                    onChange(selectedItem.value ?? selectedItem.label ?? value);
+                  }}
+                />
+              )}
+            />
 
-        { }
-        <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(handleUpdateTreino)} disabled={isLoading}>
+            <ExercisesFields
+              fields={fields}
+              control={control}
+              errors={errors}
+              append={append}
+              remove={remove}
+              styles={styles}
+              minItems={1}
+            />
+          </>
+        )}
 
+        {mode === 'plano' && (
+          <>
+            <Text style={styles.label}>Título do Plano:</Text>
+            <Controller
+              control={control}
+              name="planoTitulo"
+              render={({ field }) => (
+                <Input
+                  control={control} keyboardType={'twitter'} {...field}
+                  placeholder="Digite o título do plano"
+                  error={errors.planoTitulo?.message} />
+              )}
+            />
+
+            <Text style={styles.label}>Imagem do Plano:</Text>
+            <Controller
+              control={control}
+              name="planoImagem"
+              render={({ field: { value, onChange } }) => {
+                // prioriza: campo do form -> selectedImage (estado) -> null
+                const imageUri = safeImageUri(value) ?? selectedImage;
+                return (
+                  <TouchableOpacity
+                    style={styles.imageUpload}
+                    onPress={async () => {
+                      await handlePickPlanoImage(onChange);
+                    }}
+                  >
+                    {imageUri ? (
+                      <Image
+                        source={{ uri: imageUri }}
+                        style={styles.imagePreview}
+                        resizeMode="contain"
+                      />
+                    ) : (
+                      <Text>Selecionar imagem</Text>
+                    )}
+                  </TouchableOpacity>
+                );
+              }}
+            />
+
+            <ExercisesFields
+              fields={fields}
+              control={control}
+              errors={errors}
+              append={append}
+              remove={remove}
+              styles={styles}
+              minItems={1}
+            />
+          </>
+        )}
+
+
+        <TouchableOpacity
+          style={styles.buttonSave}
+          onPress={handleSubmit(handleUpdateTreino)}
+          disabled={isLoading}
+        >
           {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>}
         </TouchableOpacity>
 
-      <Modal
-        visible={showErrorModal}
-        title='Erro'
-        message={errorMessage}
+        <Modal
+          visible={showErrorModal}
+          title="Erro"
+          message={errorMessage}
           onClose={() => {
-          setShowErrorModal(false);
-           router.back(); 
+            setShowErrorModal(false);
           }}
-      />
-      <CustomModalSucesso
-        visible={showSucessoModal}
-        title='Sucesso'
-        message={SucessoMessage}
+        />
+        <CustomModalSucesso
+          visible={showSucessoModal}
+          title="Sucesso"
+          message={SucessoMessage}
           onClose={() => {
-          setShowSucessoModal(false);
-           router.back(); 
+            setShowSucessoModal(false);
+            router.replace("/gruposMusc");
           }}
-      />
-      <ModalDelete
-        visible={deleteModalVisible}
-        title="Remover Treino"
-        message="Deseja remover este treino do planejamento semanal?"
-        onCancel={() => setDeleteModalVisible(false)}
-        onConfirm={confirmDelete}
-       />
-      </View>
-    </ScrollView >
 
+        />
+      </View>
+    </ScrollView>
   );
 }

@@ -1,15 +1,16 @@
 
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { Ionicons, MaterialIcons, FontAwesome5, Entypo } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons, FontAwesome5, Entypo, Feather } from '@expo/vector-icons';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useRouter, usePathname } from 'expo-router';
-import {colors} from '../constants/colors';
+import { colors } from '../constants/colors';
 import { routes } from '~/constants/routes';
 
+
 const tabs = [
-  
+
   {
-    label: 'GRP-Musc',
+    label: 'Treinos',
     route: routes.gruposMusc,
     Icon: MaterialCommunityIcons,
     iconName: 'arm-flex-outline',
@@ -27,10 +28,10 @@ const tabs = [
     iconName: 'apple-alt',
   },
   {
-    label: 'Perfil',
-    route: routes.profile,
-    Icon: Entypo,
-    iconName: 'user',
+    label: 'Configurações',
+    route: routes.config,
+    Icon: Feather,
+    iconName: 'settings',
   },
 ];
 
@@ -47,8 +48,9 @@ export default function TabLayout() {
           <TouchableOpacity
             key={route}
             style={styles.button}
-            onPress={() => router.push(route)}
+            onPress={() => router.push(route)} // já é o caminho correto
           >
+
             <Icon
               name={iconName}
               size={24}
@@ -76,26 +78,26 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     width: '100%',
-    
+
   },
   button: {
     paddingVertical: 10,
     paddingHorizontal: 15,
-    alignItems: 'center',          
-    justifyContent: 'center',      
-    flexDirection: 'column', 
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
   },
   text: {
     fontSize: 14,
     color: '#333',
-    alignItems: 'center',          
-    justifyContent: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   activeTab: {
     borderBottomWidth: 2,
     borderBottomColor: '#007AFF',
   },
-  activeText:{
+  activeText: {
 
   }
 });
