@@ -4,7 +4,7 @@ import { colors } from '../../../constants/colors';
 export default StyleSheet.create({
  container: {
     flex: 1,
-    padding: 20,
+    padding: 10,
     backgroundColor: colors.background,
   },
 
@@ -29,15 +29,15 @@ export default StyleSheet.create({
 
 
   trainMuscle: {
-    fontSize: 40,
-    fontWeight: "600",
+    fontSize: 45,
+    fontWeight: "bold",
     color: colors.Vermelho,
     marginBottom: 4,
   },
 
   
   trainTitle: {
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
     color: colors.vermEscuro,
     marginBottom: 12,
@@ -68,7 +68,7 @@ export default StyleSheet.create({
     borderRadius: 12,
   },
   onlineText: {
-    fontSize: 12,
+    fontSize: 20,
     fontWeight: "600",
     color: "green",
   },
@@ -76,7 +76,7 @@ export default StyleSheet.create({
 
   exerciseCard: {
     backgroundColor: "#fff",
-    borderRadius: 16,
+    borderRadius: 20,
     padding: 14,
     marginTop: 12,
     shadowColor: "#000",
@@ -95,23 +95,23 @@ export default StyleSheet.create({
     gap: 6,
   },
   exerciseTitle: {
-    fontSize: 16,
+    fontSize: 23,
     fontWeight: "bold",
     color: colors.vermEscuro,
   },
 
 
   label: {
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: "600",
     color: colors.vermEscuro,
   },
   optionalLabel: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#777",
   },
   valueText: {
-    fontSize: 14,
+    fontSize: 18,
     color: "#333",
   },
 });

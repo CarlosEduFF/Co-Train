@@ -5,6 +5,7 @@ import { Feather } from '@expo/vector-icons';
 import type { Control, FieldErrors } from 'react-hook-form';
 import { Input } from '~/components/input/inputNormal';
 import { colors } from '~/constants/colors';
+import {useTranslation} from "react-i18next";
 
 // Tipagem simples do exercício
 export type Exercise = {
@@ -33,6 +34,7 @@ const ExercisesFields: React.FC<ExercisesFieldsProps> = ({
   styles,
   minItems = 1,
 }) => {
+  const {t} = useTranslation();
   // helper seguro para pegar a mensagem de erro (localiza o "any" apenas aqui)
   const getErrorMessage = (index: number, key: 'nome' | 'series' | 'carga') => {
     // cast localizado para acessar a estrutura dinamicamente
@@ -41,12 +43,14 @@ const ExercisesFields: React.FC<ExercisesFieldsProps> = ({
   };
 
   return (
+    
     <>
+    
       {fields.map((field, index) => (
         <View key={field.id} style={{ marginBottom: 16 }}>
           <View style={styles.row}>
             <View style={styles.inputHalf}>
-              <Text style={styles.label}>Exercício {index + 1}:</Text>
+              <Text style={styles.label}>{t("planning.exercise", { number: index + 1 })}</Text>
               <Input
                 name={`exercicios.${index}.nome`}
                 control={control}
@@ -57,7 +61,7 @@ const ExercisesFields: React.FC<ExercisesFieldsProps> = ({
             </View>
 
             <View style={styles.inputHalf}>
-              <Text style={styles.label}>Séries:</Text>
+              <Text style={styles.label}>{t("planning.series")}</Text>
               <Input
                 name={`exercicios.${index}.series`}
                 control={control}
@@ -69,7 +73,7 @@ const ExercisesFields: React.FC<ExercisesFieldsProps> = ({
           </View>
 
           <View style={{ marginTop: 10 }}>
-            <Text style={styles.optionalLabel}>Carga:</Text>
+            <Text style={styles.optionalLabel}>{t("planning.weight")}</Text>
             <Input
               name={`exercicios.${index}.carga`}
               control={control}
@@ -88,7 +92,7 @@ const ExercisesFields: React.FC<ExercisesFieldsProps> = ({
       ))}
 
       <TouchableOpacity style={styles.buttonAdicionar} onPress={() => append({ nome: '', series: '', carga: '' })}>
-        <Text style={styles.adicionarButton}>Adicionar Exercício</Text>
+        <Text style={styles.adicionarButton}>{t("buttons.addExercise")}</Text>
         <Feather name="plus-circle" size={20} color="#3D0000" />
       </TouchableOpacity>
 
@@ -97,7 +101,7 @@ const ExercisesFields: React.FC<ExercisesFieldsProps> = ({
         onPress={() => remove(fields.length - 1)}
         disabled={fields.length <= minItems}
       >
-        <Text>Remover Último Exercício</Text>
+        <Text>{t("buttons.addExercise")}</Text>
       </TouchableOpacity>
     </>
   );

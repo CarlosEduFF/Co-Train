@@ -1,4 +1,5 @@
-import { Feather } from '@expo/vector-icons';
+{/*
+  import { Feather } from '@expo/vector-icons';
 import styles from "./style";
 import { View, Text, TouchableOpacity, Image, ScrollView, Alert } from 'react-native';
 import * as Animatable from "react-native-animatable";
@@ -93,3 +94,4 @@ export default function Perfil() {
     </ScrollView>
   );
 }
+*/}

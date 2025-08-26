@@ -5,6 +5,10 @@ import { Treino } from '~/types/train';
 import styles from './styles';
 import { colors } from '~/constants/colors';
 import { DayKey, DIAS_SEMANA } from '~/constants/diasSemana';
+import {useTranslation} from "react-i18next";
+import {useLanguage} from "../../../context/LanguageContext"
+
+
 
 type Props = {
   treino: Treino;
@@ -25,6 +29,8 @@ export const TreinoCard: React.FC<Props> = ({
   isSelected,
   onDaysChange,
 }) => {
+const {t} = useTranslation();
+ const { language, toggleLanguage} = useLanguage();
   const [selectedDays, setSelectedDays] = useState<Record<DayKey, boolean>>({
     segunda: false,
     terca: false,
@@ -76,32 +82,34 @@ export const TreinoCard: React.FC<Props> = ({
 
 
   return (
+    
     <TouchableOpacity
       activeOpacity={0.8}
-      onPress={() => onPress(treino.id)}
-      style={[styles.card, isSelected && styles.selectedBorder]}
+      onPress={onPurpose === 'Edit' ? undefined : () => onPress(treino.id)}
+      style={[ onPurpose === 'Edit' ? styles.cardEditContainer : styles.card, isSelected && styles.selectedBorder]}
     >
       {/* Conteúdo do card */}
-      <View style={styles.containerImage}>
+      <View style={onPurpose === 'Edit' ? styles.containerImageEdit: styles.containerImage}>
         {typeof treino.planoImagem === "string" && treino.planoImagem.trim() !== "" ? (
           <Image
             source={getImageSource()}
-            style={styles.MuscImage}
+            style={[onPurpose === 'Edit' ? styles.MuscImagEdit: styles.MuscImage]}
             resizeMode="cover"
           />
         ) : (
           <View style={[styles.MuscImage, { justifyContent: "center", alignItems: "center" }]}>
-            <Text>Sem imagem</Text>
+            <Text>{t("components.noImage")}</Text>
           </View>
         )}
-
-        <Text style={styles.cardTitulo}>{treino.parte}{treino.planoTitulo}</Text>
+        { onPurpose === 'Edit' &&(<Text style={styles.cardTitulo}>{treino.parte}{treino.planoTitulo}</Text>)}
+       
       </View>
+      { onPurpose != 'Edit' &&(<Text style={styles.cardTitulo}>{treino.parte}{treino.planoTitulo}</Text>)}
 
       {/* Lista de dias (apenas no modo Edit) */}
       {onPurpose === 'Edit' && (
         <View style={styles.editContent}>
-          <Text style={styles.sectionTitle}>Dias que tenho esse treino:</Text>
+          <Text style={styles.sectionTitle}>{t("components.daysIHave")}:</Text>
           <View style={styles.daysContainer}>
             {DIAS_SEMANA.map(({ key, label }) => (
               <TouchableOpacity
@@ -112,11 +120,13 @@ export const TreinoCard: React.FC<Props> = ({
                 <View
                   style={[styles.checkbox, selectedDays[key] && styles.checkboxChecked]}
                 />
-                <Text style={styles.checkboxLabel}>{label}</Text>
+                <Text style={styles.checkboxLabel}>{t(label)}</Text>
               </TouchableOpacity>
             ))}
           </View>
         </View>
+      
+
       )}
 
       {/* Botões Edit e Delete lado a lado */}

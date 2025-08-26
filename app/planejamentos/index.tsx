@@ -6,9 +6,10 @@ import TabLayout from '~/components/Tabs';
 import { Feather } from "@expo/vector-icons";
 import { DayKey, DIAS_SEMANA } from '~/constants/diasSemana';
 import { ButtomSemana } from "~/components/ButtomSemana/buttonSemana";
+import {useTranslation} from "react-i18next";
 
 export default function Planejamentos() {
-
+  const {t} = useTranslation();
   const handleDayPress = (day: DayKey) => {
     router.push({
       pathname: '/planejamentos/ViewScreen/ViewScreen',
@@ -26,12 +27,12 @@ export default function Planejamentos() {
        <View style={styles.container}>
          <View style={styles.subContainer}>
         <Header
-          title='Planejamento Semanal'
-          text='Gerencie de segunda a domingo: seus treinos organizados'
+          title={t("header.planningTitle")}
+          text={t("header.planningText")}
         />
 
         <TouchableOpacity style={styles.addbutton} onPress={AddDayPress}>
-          <Text style={styles.TextadicionarButton}>Adicionar Planejamento</Text>
+          <Text style={styles.TextadicionarButton}>{t("planning.planningAdd")}</Text>
           <Feather name='plus-circle' size={24} color='#3D0000' />
         </TouchableOpacity>
       
@@ -58,7 +59,7 @@ export default function Planejamentos() {
                    domingo: "plus"};
                 return (
                  <ButtomSemana
-                 label={item.label}
+                 label={t(item.label)} 
                  dayKey={item.key}
                  isLastAndAlone={isLastAndAlone}
                  onPress={handleDayPress}

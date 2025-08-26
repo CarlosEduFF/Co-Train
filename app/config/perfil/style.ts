@@ -8,6 +8,7 @@ export default StyleSheet.create({
     },
     header: {
         backgroundColor: '#fff',
+  
       },
       headerButton:{
           alignItems:'center',

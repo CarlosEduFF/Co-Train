@@ -14,8 +14,10 @@ import { Header } from '~/components/header/header';
 import { DayKey } from '~/constants/diasSemana';
 import { Treino } from '~/types/train';
 import { subscribeToTrains, updateDaysWeekTrain } from '~/services/Train';
+import { useTranslation } from 'react-i18next';
 
 export default function ListaTreinos() {
+  const { t } = useTranslation();
   const { user, loading: authLoading } = useAuth();
   const [treinos, setTreinos] = useState<Treino[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,7 +35,7 @@ export default function ListaTreinos() {
 
   useEffect(() => {
     if (!user) {
-      setErrorMessage('Usuário não autenticado');
+      setErrorMessage(t('planning.noUserError'));
       setShowErrorModal(true);
       setLoading(false);
       return;
@@ -55,7 +57,7 @@ export default function ListaTreinos() {
     );
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user,t]);
 
   const handleCardPress = (id: string) => {
     setSelectedIds((prevSelected) =>
@@ -74,7 +76,7 @@ export default function ListaTreinos() {
 
   const handleAddPress = async () => {
     if (selectedIds.length === 0) {
-      setErrorMessage('Selecione ao menos um treino.');
+      setErrorMessage(t('planning.selectWorkoutError'));
       setShowErrorModal(true);
       return;
     }
@@ -85,7 +87,7 @@ export default function ListaTreinos() {
     );
 
     if (treinosSemDias.length > 0) {
-      setErrorMessage('Selecione ao menos um dia para todos os treinos selecionados.');
+      setErrorMessage(t('planning.selectDayError'));
       setShowErrorModal(true);
       return;
     }
@@ -96,13 +98,13 @@ export default function ListaTreinos() {
       );
       await Promise.all(updates);
 
-      setSucessoMessage('Treinos atualizados com sucesso!');
+      setSucessoMessage(t('planning.updateSuccess'));
       setShowSucessoModal(true);
       setSelectedIds([]);
       router.push('/planejamentos');
     } catch (error) {
       console.error('Erro ao atualizar treinos:', error);
-      setErrorMessage('Não foi possível atualizar os treinos.');
+      setErrorMessage(t('planning.updateError'));
       setShowErrorModal(true);
     }
   };
@@ -121,7 +123,7 @@ export default function ListaTreinos() {
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <ModalPlanejamento
           visible={showPlanejamentosModal}
-          title="Necessário ter criado um treino na aba de grupo muscular"
+          title={t('planning.noWorkoutsTitle')}
           message={planejamentosMessage}
           onClose={() => setShowPlanejamentosModal(false)}
         />
@@ -130,13 +132,13 @@ export default function ListaTreinos() {
   }
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Header title="Planejamento Semanal" text="Adicione seu planejamento" />
+    <View style={{ flex: 1, padding: 16 , backgroundColor:'#fff'}}>
+      <Header title={t('header.planningTitle')} text={t('header.planningTextAdd')} />
 
       {/* Botão salvar */}
       <TouchableOpacity style={styles.addButton} onPress={handleAddPress}>
         <Feather name="plus-circle" size={24} color="#fff" />
-        <Text style={styles.addText}>Salvar</Text>
+        <Text style={styles.addText}>{t('buttons.saveButton')}</Text>
       </TouchableOpacity>
 
       {/* Lista de treinos */}
@@ -157,13 +159,13 @@ export default function ListaTreinos() {
 
       <ModalAlert
         visible={showErrorModal}
-        title="Erro"
+        title={t('common.error')}
         message={errorMessage}
         onClose={() => setShowErrorModal(false)}
       />
       <ModalSucesso
         visible={showSucessoModal}
-        title="Sucesso"
+        title={t('common.success')}
         message={sucessoMessage}
         onClose={() => setShowSucessoModal(false)}
       />

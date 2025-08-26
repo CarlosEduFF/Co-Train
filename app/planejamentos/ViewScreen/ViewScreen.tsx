@@ -14,8 +14,10 @@ import ModalDelete from '~/components/modal/ModalDelete'
 import { TreinoCard } from '~/components/trainCard/TrainCardMod/trainCard';
 import { Treino } from '~/types/train';
 import { removeDayEspecific, subscribeToTrains } from '~/services/Train';
+import { useTranslation } from 'react-i18next';
 
 export default function Adicionar() {
+  const { t } = useTranslation();
   const { dia } = useLocalSearchParams<{ dia?: string }>();
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [treinoIdToDelete, setTreinoIdToDelete] = useState<string | null>(null);
@@ -68,7 +70,7 @@ export default function Adicionar() {
 
   const handleDelete = async (treinoId?: string, confirm?: boolean) => {
     if (!dia) {
-      setErrorMessage('Dia não informado');
+      setErrorMessage(t("errors.noDay"));
       setShowErrorModal(true);
       return;
     }
@@ -84,10 +86,10 @@ export default function Adicionar() {
     if (treinoIdToDelete) {
       try {
         await removeDayEspecific(treinoIdToDelete, dia);
-        setSucessoMessage('Treino removido com sucesso');
+        setSucessoMessage(t("errors.deleteSuccess"));
         setShowSucessoModal(true);
       } catch (error) {
-        setErrorMessage('Erro ao remover treino');
+        setErrorMessage(t("errors.deleteError"));
         setShowErrorModal(true);
       } finally {
         setDeleteModalVisible(false);
@@ -115,13 +117,13 @@ export default function Adicionar() {
   return (
     <View style={styles.container}>
       <Header
-        title='Planejamento Semanal'
-        text={`Gerencie seus treinos de ${getDayName(dia)}`}
+        title={t("header.planningTitle")}
+        text={t("header.planningTextViewScreen",{ day: getDayName(dia) })}
       />
       {planos.length === 0 ? (
         <View style={{ alignItems: 'center', marginTop: 50 }}>
-          <Text>Nenhum plano adicionado para este dia..</Text>
-          <Text>Clique em "Adicionar" para começar!</Text>
+          <Text>{t("planning.noPlanForDay")}</Text>
+          <Text>{t("planning.clickAdd")}</Text>
         </View>
       ) : (
         <FlatList
@@ -135,25 +137,26 @@ export default function Adicionar() {
               onDelete={() => handleDelete(item.id)}
             />
           )}
+          numColumns={2}
           contentContainerStyle={styles.listContainer}
         />
       )}
       <Modal
         visible={showErrorModal}
-        title='Erro'
+        title={t("common.error")}
         message={errorMessage}
         onClose={() => setShowErrorModal(false)}
       />
       <CustomModalSucesso
         visible={showSucessoModal}
-        title='Sucesso'
+        title={t("common.success")}
         message={SucessoMessage}
         onClose={() => setShowSucessoModal(false)}
       />
       <ModalDelete
         visible={deleteModalVisible}
-        title="Remover Treino"
-        message="Deseja remover este treino do planejamento semanal?"
+        title={t("planning.deleteTitle")}
+        message={t("planning.deleteMessage")}
         onCancel={() => setDeleteModalVisible(false)}
         onConfirm={() => handleDelete(undefined, true)} // confirma exclusão
       />

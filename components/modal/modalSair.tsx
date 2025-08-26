@@ -12,10 +12,11 @@ interface CustomAlertModal{
     onConfirm: () => void;
 }
 
-export default function ModalDelete({visible,title = 'Remover',message,onCancel,
+export default function ModalSair({visible,title = 'Remover',message,onCancel,
   onConfirm,}:CustomAlertModal) {
     const {t} = useTranslation();
  return (
+ 
    <Modal
     visible={visible}
     animationType="fade"
@@ -32,10 +33,12 @@ export default function ModalDelete({visible,title = 'Remover',message,onCancel,
           <Text style={styles.message}>{message}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.cancelButton} onPress={onCancel}>
-              <Text style={styles.buttonText}>{t("modals.cancel")}</Text>
+              <Text style={styles.buttonText}>
+                 {t("modals.cancel")}
+              </Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.confirmButton} onPress={onConfirm}>
-              <Text style={styles.buttonText}>{t("modals.remove")}</Text>
+              <Text style={styles.buttonText}>{t("modals.getOut")}</Text>
             </TouchableOpacity>
           </View>
         </View>

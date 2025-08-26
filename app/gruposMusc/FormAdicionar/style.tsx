@@ -115,24 +115,21 @@ export default StyleSheet.create({
   },
 
   modeButton: {
-    flex: 1,
-    padding: 12,
-    borderWidth: 1,
-    borderColor: colors.vermEscuro,
-    borderRadius: 8,
-    alignItems: 'center',
-    marginHorizontal: 4,
+   paddingVertical:13,
+   paddingHorizontal: 33,
+   borderRadius: 20,
+   backgroundColor: 'transparent',
   },
   modeButtonActive: {
     backgroundColor: colors.vermEscuro,
   },
   modeText: {
-    color: 'white',
+    color: '#8d8d8dff',
     fontWeight: '600',
   },
   imageUpload: {
     height: 150,
-    width: 100,
+    width: '80%',
     borderWidth: 1,
     borderColor: '#CCC',
     borderRadius: 8,
@@ -140,6 +137,7 @@ export default StyleSheet.create({
     alignItems: 'center',
     marginVertical: 10,
     backgroundColor: '#FAFAFA',
+    marginLeft:'10%'
   },
   imagePreview: {
     width: '100%',

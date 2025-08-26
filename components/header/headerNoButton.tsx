@@ -55,14 +55,14 @@ const styles = StyleSheet.create({
     },
 
     titulos: {
-        fontSize: 30,
+        fontSize: 33,
         fontWeight: 'bold',
         color: colors.Vermelho,
 
     },
     textos: {
         color: colors.vermEscuro,
-        fontSize: 20,
+        fontSize: 23,
         fontWeight: 'bold',
     },
 })

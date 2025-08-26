@@ -1,8 +1,11 @@
 import { Stack } from "expo-router";
 import { AuthProvider } from "~/components/AuthContext";
+import { LanguageProvider } from "~/context/LanguageContext";
+import "../config/i18n";
 
 export default function RootLayout() {
   return (
+    <LanguageProvider>
     <AuthProvider>
       <Stack>
 
@@ -34,5 +37,6 @@ export default function RootLayout() {
         <Stack.Screen name="config/EditarPerfil/index" options={{ headerShown: false }} />
       </Stack>
     </AuthProvider>
+    </LanguageProvider>
   );
 }

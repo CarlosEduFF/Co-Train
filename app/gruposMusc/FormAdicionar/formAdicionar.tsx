@@ -17,8 +17,10 @@ import { images } from '~/constants/images';
 import * as Animatable from "react-native-animatable";
 import ExercisesFields from '~/components/ExercisesFields/exerciseField';
 import { saveTrain } from '~/services/Train';
+import {useTranslation} from "react-i18next";
 
 export default function FormAdicionar() {
+  const {t} = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -49,7 +51,7 @@ export default function FormAdicionar() {
     // validação extra para grupo
     if (modo === 'plano' && !selectedImage) {
       setIsLoading(false);
-      setErrorMessage('Imagem do grupo muscular não selecionada. Por favor, selecione o músculo novamente.');
+      setErrorMessage(t("errors.errorValidImage"));
       setShowErrorModal(true);
       return;
     }
@@ -82,13 +84,13 @@ export default function FormAdicionar() {
         },
         (error) => {
           console.error('Erro ao salvar treino:', error);
-          setErrorMessage('Não foi possível salvar o treino.');
+          setErrorMessage(t("errors.erroNoSave"));
           setShowErrorModal(true);
         }
       );
     } catch (error) {
       console.error('Erro inesperado ao salvar treino:', error);
-      setErrorMessage('Ocorreu um erro inesperado.');
+      setErrorMessage(t("errors.erroInespe"));
       setShowErrorModal(true);
     } finally {
       setIsLoading(false);
@@ -107,28 +109,35 @@ export default function FormAdicionar() {
 
   return (
     <ScrollView style={styles.container}>
-      <Header title="Adicionar Novo Treino" text="Preencha os dados abaixo" />
+      <Header title={t("header.grupsMuscTitleAdd")} text={t("header.grupsMuscTextAdd")} />
 
       {/* Seletor de modo */}
-      <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+      <View style={{ flexDirection: 'row',
+          justifyContent: 'center',
+          backgroundColor: '#ccc',
+          borderRadius: 25, 
+          padding:3,
+          marginTop:25,marginLeft:10 }}>
         <TouchableOpacity
           style={[styles.modeButton, mode === 'musculo' && styles.modeButtonActive]}
           onPress={() => setMode('musculo')}
         >
-          <Text style={styles.modeText}>Por Grupo Muscular</Text>
+         <Text style={{ color: mode === 'musculo' ? '#fff' : '#8d8d8dff' }}>{t("grupsMusc.forGrup")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.modeButton, mode === 'plano' && styles.modeButtonActive]}
           onPress={() => setMode('plano')}
         >
-          <Text style={styles.modeText}>Por Plano de Treino</Text>
+          <Text style={{ color: mode === 'plano' ? '#fff' : '#8d8d8dff' }}>
+            {t("grupsMusc.forTrain")}
+          </Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.formContainer}>
         {mode === 'musculo' && (
           <>
-            <Text style={styles.label}>Músculo:</Text>
+            <Text style={styles.label}>{t("grupsMusc.musc")}</Text>
             <Select
               control={control}
               name="parte"
@@ -152,7 +161,7 @@ export default function FormAdicionar() {
 
         {mode === 'plano' && (
           <>
-            <Text style={styles.label}>Título do Plano:</Text>
+            <Text style={styles.label}>{t("grupsMusc.titlePlanning")}</Text>
             <Input
               name="planoTitulo"                       // atenção ao nome do campo no schema
               control={control}
@@ -161,7 +170,7 @@ export default function FormAdicionar() {
               keyboardType={'default'}
             />
 
-            <Text style={styles.label}>Imagem do Plano:</Text>
+            <Text style={styles.label}>{t("grupsMusc.titlePlanning")}</Text>
             <Controller
               control={control}
               name="planoImagem"
@@ -182,7 +191,7 @@ export default function FormAdicionar() {
                       resizeMode="contain"
                     />
                   ) : (
-                    <Text>Selecionar imagem</Text>
+                    <Text>{t("grupsMusc.selectImag")}</Text>
                   )}
                 </TouchableOpacity>
               )}
@@ -203,20 +212,20 @@ export default function FormAdicionar() {
         )}
 
         <TouchableOpacity style={styles.buttonSave} onPress={handleSubmit(handleSaveTreino)} disabled={isLoading}>
-          {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Salvar</Text>}
+          {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("buttons.saveButton")}</Text>}
         </TouchableOpacity>
       </View>
 
       <Modal
         visible={showErrorModal}
-        title="Erro"
+        title={t("modals.modalErrorTitle")}
         message={errorMessage}
         onClose={() => setShowErrorModal(false)}
       />
 
       <CustomModalSucesso
         visible={showSucessoModal}
-        title="Sucesso"
+        title={t("modals.modalSucessTitle")}
         message={SucessoMessage}
         onClose={() => {
           setShowSucessoModal(false);

@@ -20,6 +20,7 @@ import { useAuth } from '~/components/AuthContext';
 import { firestore } from '~/config/firebase';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
+import {useTranslation} from "react-i18next";
 
 export default function EditarPerfil() {
   const [logoUri, setLogoUri] = useState(images.logo);
@@ -31,7 +32,7 @@ export default function EditarPerfil() {
   const [errorMessage,setErrorMessage] = useState('');
   const [showSucessoModal, setShowSucessoModal]= useState(false);
   const [SucessoMessage,setSucessoMessage] = useState('');
-
+  const {t} = useTranslation();
   const { user, loading } = useAuth();
   const router = useRouter();
 
@@ -88,7 +89,7 @@ export default function EditarPerfil() {
 
   const onSubmit = async (form: UserFormData) => {
     if (!user?.uid) {
-      setErrorMessage('Usuário não autenticado');
+      setErrorMessage(t("errors.UserNoAuth"));
       setShowErrorModal(true);
       return;
     }
@@ -109,7 +110,7 @@ export default function EditarPerfil() {
     );
 
     if (success) {
-      setSucessoMessage('Perfil atualizado com sucesso!');
+      setSucessoMessage(t("success.userUpdate"));
       setShowSucessoModal(true);
       
     }
@@ -126,7 +127,7 @@ export default function EditarPerfil() {
   return (
     <View style={styles.container}>
       <ScrollView>
-        <TouchableOpacity style={styles.buttonLeft} onPress={() => router.push(routes.profile)}>
+        <TouchableOpacity style={styles.buttonLeft} onPress={() => router.push(routes.config)}>
           <Feather name='arrow-left' size={40} color='#fff' />
         </TouchableOpacity>
 
@@ -140,12 +141,12 @@ export default function EditarPerfil() {
           />
           <TouchableOpacity onPress={handlePickImage} style={styles.editButton}>
             <Feather name="edit" size={20} color="#fff" />
-            <Text style={styles.editButtonText}>Editar Foto</Text>
+            <Text style={styles.editButtonText}>{t("settings.editPhot")}</Text>
           </TouchableOpacity>
         </View>
 
         <View style={styles.formContainer}>
-          <Text style={styles.label}>Nome completo:</Text>
+          <Text style={styles.label}>{t("settings.nameComp")}</Text>
           <Input name='nome'
             control={control} placeholder='Nome'
             error={errors.nome?.message}
@@ -153,7 +154,7 @@ export default function EditarPerfil() {
           />
 
 
-          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.label}>{t("settings.email")}</Text>
           <Input
             name='email'
             control={control}
@@ -162,7 +163,7 @@ export default function EditarPerfil() {
             keyboardType='email-address'
           />
 
-          <Text style={styles.label}>Data de Nascimento:</Text>
+          <Text style={styles.label}>{t("settings.datNasc")}</Text>
           <Controller
             control={control}
             name="dataNascimento"
@@ -199,7 +200,7 @@ export default function EditarPerfil() {
           {errors.dataNascimento && <Text style={styles.errorText}>{errors.dataNascimento.message}</Text>}
 
 
-          <Text style={styles.label}>Sexo:</Text>
+          <Text style={styles.label}>{t("settings.sex")}</Text>
           <Controller
             control={control}
             name="sexo"
@@ -214,7 +215,7 @@ export default function EditarPerfil() {
                     ]}
                     onPress={() => onChange(sexo)}
                   >
-                    <Text style={[styles.radioText, value ===sexo ? styles.radioTextSelected:styles.radioTextUnselected]}>{sexo}</Text>
+                    <Text style={[styles.radioText, value ===sexo ? styles.radioTextSelected:styles.radioTextUnselected]}>{t(`settings.${sexo}`)}</Text>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -223,7 +224,7 @@ export default function EditarPerfil() {
           {errors.sexo && <Text style={styles.errorText}>{errors.sexo.message}</Text>}
 
 
-          <Text style={styles.label}>Altura (cm):</Text>
+          <Text style={styles.label}>{t("settings.height")}</Text>
           <Input
             name='altura'
             control={control}
@@ -232,7 +233,7 @@ export default function EditarPerfil() {
             keyboardType='numeric'
           />
 
-          <Text style={styles.label}>Peso (kg):</Text>
+          <Text style={styles.label}>{t("settings.weight")}</Text>
           <Input
             name='peso'
             control={control}
@@ -241,7 +242,7 @@ export default function EditarPerfil() {
             keyboardType='numeric'
           />
 
-          <Text style={styles.label}>Objetivo:</Text>
+          <Text style={styles.label}>{t("settings.objective")}</Text>
           <Controller
             control={control}
             name="objetivo"
@@ -264,23 +265,23 @@ export default function EditarPerfil() {
           {errors.objetivo && <Text style={styles.errorText}>{errors.objetivo.message}</Text>}
 
           <TouchableOpacity style={styles.button} onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.buttonText}>Salvar Perfil</Text>
+            <Text style={styles.buttonText}>{t("settings.saveUser")}</Text>
           </TouchableOpacity>
         </View>
 
         <Modal
                 visible={showErrorModal}
-                title='Erro'
+                title={t("common.error")}
                 message={errorMessage}
                  onClose={() => setShowErrorModal(false)}
               />
               <CustomModalSucesso
                 visible={showSucessoModal}
-                title='Sucesso'
+                title={t("common.success")}
                 message={SucessoMessage}
                 onClose={() => {
                  setShowSucessoModal(false);
-                  router.push(routes.profile);
+                  router.push(routes.config);
                   }}
 
                  

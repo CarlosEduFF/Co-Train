@@ -59,7 +59,7 @@ export default StyleSheet.create({
     height: 44,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 4,
+    borderRadius: 10,
     marginTop: 10,
     marginBottom: 60
   },

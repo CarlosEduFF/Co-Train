@@ -1,0 +1,188 @@
+{
+  "common": {
+    "loading": "Carregando",
+    "error": "Erro",
+    "success": "Sucesso"
+  },
+
+  "errors": {
+    "UserNoAuth":"Usuário não autenticado",
+    "userLoad": "Erro ao carregar dados do usuário.",
+    "logoutFail": "Não foi possível sair da conta.",
+    "erroTrain":"Não foi possível carregar os treinos.","deleteSuccess": "Treino removido com sucesso",
+    "deleteError": "Erro ao remover treino",
+    "errorValidImage":"Imagem do grupo muscular não selecionada. Por favor, selecione o músculo novamente.",
+    "erroNoSave":"Não foi possível salvar o treino.",
+    "erroInespe":"Ocorreu um erro inesperado.",
+    "notProvided": "Não informado",
+    "notProvidedF": "Não informada",
+    "notFound": "Plano não encontrado",
+    "loadError": "Erro ao carregar o plano.",
+    "errorUpdate":"Treino atualizado com sucesso!",
+    "erroFood":"Preencha o nome e a quantidade do alimento.",
+    "quantValid":"A quantidade deve ser um número válido.",
+    "problemSave":"Ocorreu um problema ao salvar seu plano. Tente novamente.",
+    "errorSave":"Erro ao salvar.",
+    "erroLoad":"Erro ao carregar a refeição."
+  },
+  "success":{
+    "updateTrain":"Treino atualizado com sucesso!",
+    "saveFood":"Seu plano alimentar foi salvo.",
+    "UserUpdate":"Perfil atualizado com sucesso!"
+    
+  },
+
+  "components": {
+    "noImage": "Sem imagem",
+    "daysIHave": "Dias que eu tenho esse treino"
+  },
+
+  "tabs": {
+    "trainings": "Treinos",
+    "weekly": "Semanal",
+    "diet": "Dieta",
+    "settings": "Configurações"
+  },
+
+  "settings": {
+    "title": "Configurações",
+    "mySettings": "Minhas Configurações",
+    "Perfil": "Perfil",
+    "Config": "Config",
+    "darkMode": "Modo Escuro",
+    "language": "Idioma",
+    "logout": "Sair",
+    "userInfo": "Informações de Usuário",
+    "editProfile": "Editar Perfil",
+    "email": "Email:",
+    "name": "Nome",
+    "dateNasc": "Data de Nascimento",
+    "sex": "Sexo",
+    "height": "Altura",
+    "weight": "Peso",
+    "objective": "Objetivo",
+    "editPhot":"Editar Foto",
+    "nameComp":"Nome completo:",
+   "datNasc":"Data de Nascimento:",
+   "tall":"Altura (cm):",
+   "Masculino":"Masculino",
+   "Feminino":"Ferminino",
+   "Outro":"Outros"
+   
+  },
+
+  "planning": {
+    "title": "Planejamento Semanal",
+    "subtitle": "Visualize seus treinos",
+    "planningAdd": "Adicionar planejamento",
+    "weekTraining": "Treinamento Semanal",
+    "active": "Ativo",
+    "exercise": "Exercício {{number}}",
+    "name": "Nome",
+    "series": "Séries",
+    "weight": "Carga",
+    "defaultDay": "Seu Treino",
+    "noDay": "Dia não informado",
+    "noPlanForDay": "Nenhum plano adicionado para este dia.",
+    "clickAdd": "Clique em \"Adicionar\" para começar!",
+    "deleteTitle": "Remover Treino",
+    "deleteMessage": "Deseja remover este treino do planejamento semanal?",
+    "noUserError": "Usuário não autenticado",
+    "selectWorkoutError": "Selecione ao menos um treino.",
+    "selectDayError": "Selecione ao menos um dia para todos os treinos selecionados.",
+    "updateSuccess": "Treinos atualizados com sucesso!",
+    "updateError": "Não foi possível atualizar os treinos.",
+    "noWorkoutsMessage": "Você ainda não tem treinos planejados.",
+    "noWorkoutsTitle": "Necessário ter criado um treino na aba de grupo muscular"
+   
+  },
+  "grupsMusc":{
+    "buttonAdd":"Adicionar",
+    "tabs": {
+      "all": "Todos",
+      "grups": "Grupos",
+      "planning":"Planos"
+    },
+    "filterSelect":"Nenhum treino encontrado para o filtro selecionado.",
+    "clickAdd":"Clique em 'Adicionar' para começar!",
+    "sucessSave":"",
+    "forGrup":"Por Grupo Muscular",
+    "forTrain":"Por Plano de Treino",
+    "musc":"Músculo:",
+    "titlePlanning":"Título do Plano:",
+    "ImagPlanning":"Imagem do Plano:",
+    "selectImag":"Selecionar imagem:"
+  },
+  "diet":{
+   "messageNameFood":"Por favor, informe o nome da refeição.",
+   "addOneFood":"Adicione pelo menos um alimento à refeição.",
+    "selectDay":"Selecione pelo menos um dia para esta refeição.",
+    "food":"Refeição",
+    "daysFoof":"Dias que tenho essa refeição:",
+    "hourFood":"Hora da Refeição: (opcional)",
+    "quant":"Quantidade: (g)",
+    "updateFood":"Refeição atualizada!",
+    "meal":"Refeições de",
+    "nameMeal":"Nome da Refeição:",
+    "hourMeal":"Hora da Refeição:",
+    "foodUpdate":"Refeição atualizada!"
+    
+  },
+
+  "days": {
+    "monday": "Segunda-feira",
+    "tuesday": "Terça-feira",
+    "wednesday": "Quarta-feira",
+    "thursday": "Quinta-feira",
+    "friday": "Sexta-feira",
+    "saturday": "Sábado",
+    "sunday": "Domingo"
+  },
+
+  "modals": {
+    "removeTrain": {
+      "title": "Remover Treino",
+      "message": "Deseja remover este treino do planejamento semanal?"
+    },
+    "modalErrorTitle": "Erro",
+    "modalSuccessTitle": "Sucesso",
+    "modalRemoverFood":"Remover Alimento",
+    "planningFood":"Deseja remover este alimento de seu planejamento?",
+    "cancel":"Cancelar",
+    "getOut":"Sair",
+    "remove":"Remover"
+  },
+
+  "buttons":{
+    "saveButton": "Salvar",
+    "saveAlter":"SALVAR ALTERAÇÕES",
+    "addExercise":"Adicionar Exercício",
+    "deleteExercise":"Remover Último Exercício",
+    "addDiet":"Adicionar Refeição",
+    "addAlimen":"Adicionar Alimento",
+    "edit":"Editar",
+    "delet":"Deletar",
+    "saveUser":"Salvar Perfil"
+  },
+
+  "header": {
+    "planningTitle": "Planejamento Semanal",
+    "planningText": "Gerencie de segunda a domingo: seus treinos organizados",
+    "planningTextViewScreen": "Gerencie seus treinos de {{day}}",
+    "planningTextViewTrain": "Visualize seus treinos",
+    "planningTextAdd": "Adicione seu planejamento",
+
+    "grupsMuscTitle": "Divisão por Grupos Musculares",
+    "grupsMuscText": "Gerencie por grupos musculares seus treinos organizados",
+    "grupsMuscTitleEdit": "Editar Treino",
+    "grupsMuscTextEdit": "Ajuste ou remova seu treino",
+    "grupsMuscTitleAdd":"Adicionar Novo Treino",
+    "grupsMuscTextAdd":"Preencha os dados abaixo",
+
+    "dietTitle": "Plano Alimentar",
+    "dietText":"Escolha um dia da semana para ver ou editar sua alimentação",
+    "dietTextAdd": "Acompanhe sua alimentação diária de forma organizada",
+    "dietTextEdit": "Acompanhe sua alimentação diária",
+    "dietTextMeals": "Acompanhe sua alimentação diária"
+  }
+}

@@ -22,6 +22,35 @@ export default StyleSheet.create({
     marginBottom: 20,
     fontFamily: FONT_FAMILY,
   },
+  inputAliments: {
+    backgroundColor: colors.background,
+    borderWidth: 1.5,
+    borderColor: PRIMARY_COLOR,
+    borderRadius: 16,
+    padding:5,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: TEXT_COLOR,
+    marginBottom: 18,
+    fontFamily: FONT_FAMILY,
+    width:165,
+    height:50
+  },
+  containerButtonLixeira:{
+  alignItems:'center',
+  
+  },
+  ButtonLixeira:{
+    alignItems:'center',
+    alignContent:'center',
+    backgroundColor: colors.background,
+    borderWidth: 2,
+    borderColor: PRIMARY_COLOR,
+    borderRadius: 25,
+    padding:10,
+    width:50,
+    height:50
+  },
 
   formContainer: {
     width: '100%',
@@ -143,11 +172,11 @@ export default StyleSheet.create({
 
   foodItemRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    
     alignItems: 'center',
-    backgroundColor: '#F5F5F5',
-    padding: 8,
-    marginVertical: 4,
+    backgroundColor: colors.background,
+    
+    
     borderRadius: 5,
   },
 

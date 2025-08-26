@@ -5,7 +5,7 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.background,
+    backgroundColor: colors.white,
     marginTop: 0,
   },
   buttonDisabled: {

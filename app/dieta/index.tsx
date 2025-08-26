@@ -7,10 +7,11 @@ import { Header } from '../../components/header/headerNoButton';
 import { DayKey, DIAS_SEMANA } from '~/constants/diasSemana';
 import TabLayout from '~/components/Tabs';
 import { ButtomSemana } from '~/components/ButtomSemana/buttonSemana';
-
+import {useTranslation} from "react-i18next";
 
 
 export default function Dieta() {
+  const {t} = useTranslation();
   const handleDayPress = (day: DayKey) => {
     router.push({
       pathname: '/dieta/meals', // Corrigido para minúsculo
@@ -32,9 +33,9 @@ export default function Dieta() {
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
-      <Header title='Plano Alimentar' text='Escolha um dia da semana para ver ou editar sua alimentação' />
+      <Header title={t("header.dietTitle")} text={t("header.dietText")} />
       <TouchableOpacity style={styles.button} onPress={handleAddMeal}>
-        <Text style={styles.adicionarButton}>Adicionar Refeição</Text>
+        <Text style={styles.adicionarButton}>{t("buttons.addDiet")}</Text>
         <Feather name='plus-circle' size={24} color='#3D0000' />
       </TouchableOpacity>
 
@@ -60,7 +61,7 @@ export default function Dieta() {
                 domingo: "plus"};
           return (
            <ButtomSemana
-           label={item.label}
+           label={t(item.label)}
            dayKey={item.key}
            isLastAndAlone={isLastAndAlone}
            onPress={handleDayPress}

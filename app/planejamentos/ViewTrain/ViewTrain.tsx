@@ -16,9 +16,11 @@ import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
 import { getTrainById, updateTrainById } from '~/services/Train';
 import { Treino } from '~/types/train';
+import {useTranslation} from "react-i18next";
 
 export default function FormEditar() {
   const { id } = useLocalSearchParams();
+  const { t } = useTranslation();
 
   const { user, loading } = useAuth();
   const router = useRouter();
@@ -61,13 +63,13 @@ export default function FormEditar() {
         if (planoData) {
           reset(planoData);
         } else {
-          setErrorMessage('Plano não encontrado')
+          setErrorMessage(t("planning.notFound"));
           setShowErrorModal(true)
 
         }
       } catch (error) {
         console.error('Erro ao buscar plano:', error);
-        setErrorMessage('Erro ao carregar o plano.')
+        setErrorMessage(t("planning.loadError"));
         setShowErrorModal(true)
 
       } finally {
@@ -86,20 +88,20 @@ export default function FormEditar() {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.container}>
-        <Header title="Planejamento Semanal" text="Visualize seus treinos" />
+        <Header title={t("header.planningTitle")} text={t("header.planningTextViewTrain")} />
 
 
         <View style={styles.trainCard}>
           <Text style={styles.trainMuscle}>
-            {watch("parte") || watch("planoTitulo") || "Músculo não informado"}
+            {watch("parte") || watch("planoTitulo") ||  t("planning.noMuscle")}
           </Text>
-          <Text style={styles.trainTitle}>Treinamento Semanal</Text>
+          <Text style={styles.trainTitle}>{t("planning.weekTraining")}</Text>
 
 
           <View style={styles.infoRow}>
             <View style={styles.onlineTag}>
-              <Feather name="zap" size={14} color="green" />
-              <Text style={styles.onlineText}>Ativo</Text>
+              <Feather name="zap" size={18} color="green" />
+              <Text style={styles.onlineText}>{t("planning.active")}</Text>
             </View>
           </View>
 
@@ -109,31 +111,31 @@ export default function FormEditar() {
               <View style={styles.exerciseHeader}>
                 <Feather name="check-circle" size={18} color={colors.vermEscuro} />
                 <Text style={styles.exerciseTitle}>
-                  Exercício {index + 1}
+                   {t("planning.exercise", { number: index + 1 })}
                 </Text>
               </View>
 
               <View style={styles.infoRow}>
                 <Feather name="edit-3" size={16} color="#555" />
-                <Text style={styles.label}>Nome:</Text>
+                <Text style={styles.label}>{t("planning.name")}:</Text>
                 <Text style={styles.valueText}>
-                  {watch(`exercicios.${index}.nome`) || "Não informado"}
+                  {watch(`exercicios.${index}.nome`) || t("planning.notProvided")}
                 </Text>
               </View>
 
               <View style={styles.infoRow}>
                 <Feather name="list" size={16} color="#555" />
-                <Text style={styles.label}>Séries:</Text>
+                <Text style={styles.label}>{t("planning.series")}:</Text>
                 <Text style={styles.valueText}>
-                  {watch(`exercicios.${index}.series`) || "Não informado"}
+                  {watch(`exercicios.${index}.series`) || t("planning.notProvided")}
                 </Text>
               </View>
 
               <View style={styles.infoRow}>
                 <Feather name="bar-chart-2" size={16} color="#555" />
-                <Text style={styles.optionalLabel}>Carga:</Text>
+                <Text style={styles.optionalLabel}>{t("planning.weight")}:</Text>
                 <Text style={styles.valueText}>
-                  {watch(`exercicios.${index}.carga`) || "Não informada"}
+                  {watch(`exercicios.${index}.carga`) || t("planning.notProvidedF")}
                 </Text>
               </View>
             </View>
@@ -141,7 +143,7 @@ export default function FormEditar() {
 
           <Modal
             visible={showErrorModal}
-            title="Erro"
+            title={t("common.error")}
             message={errorMessage}
             onClose={() => {
               setShowErrorModal(false);
@@ -151,7 +153,7 @@ export default function FormEditar() {
 
           <CustomModalSucesso
             visible={showSucessoModal}
-            title="Sucesso"
+            title={t("common.success")}
             message={SucessoMessage}
             onClose={() => {
               setShowSucessoModal(false);

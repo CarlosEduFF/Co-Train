@@ -10,10 +10,11 @@ import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
 import ModalDelete from '~/components/modal/ModalDelete'
 import { Header } from '~/components/header/header';
-
+import {useTranslation} from "react-i18next";
 
 
 export default function Meals() {
+    const {t} = useTranslation();
     const [deleteModalVisible, setDeleteModalVisible] = useState(false);
     const [mealToDeleteId, setMealToDeleteId] = useState<string | null>(null);
     const [showErrorModal, setShowErrorModal] = useState(false);
@@ -52,11 +53,11 @@ export default function Meals() {
     const handleUpdateMeal = async (meal: MealPlan) => {
         try {
             await updateMealPlanById(meal);
-            setSucessoMessage("Refeição atualizada!");
+            setSucessoMessage(t("diet.updateFood"));
             setShowSucessoModal(true);
         } catch (error) {
             console.error(error);
-            setErrorMessage("Erro ao salvar.");
+            setErrorMessage(t("errors.erroSave"));
             setShowErrorModal(true);
         }
     };
@@ -100,22 +101,22 @@ export default function Meals() {
 
     return (
         <ScrollView style={styles.container} >
-            <Header title='Plano Alimentar' text="Acompanhe sua alimentação diária" />
-            <Text style={styles.title} >Refeições de {String(dia).toUpperCase()}</Text>
+            <Header title={t(".header.dietTitle")} text={t("header.dietTextMeals")}/>
+            <Text style={styles.title} >{t("diet.meal")} {String(dia).toUpperCase()}</Text>
 
             {meals.map((meal, mealIndex) => (
                 <View key={meal.id} style={styles.mealCard}>
-                    <Text style={styles.label}>Nome da Refeição:</Text>
+                    <Text style={styles.label}>{t("diet.nameMeal")}</Text>
                     <Text>
                         {meal.mealName}
                     </Text>
 
-                    <Text style={styles.label}>Hora da Refeição:</Text>
+                    <Text style={styles.label}>{t("diet.hourMeal")}</Text>
                     <Text>
                         {meal.mealTime}
                     </Text>
 
-                    <Text style={styles.label}>Alimentos:</Text>
+                    <Text style={styles.label}>{t("diet.food")}</Text>
                     {meal.foods.map((food, foodIndex) => (
                         <View key={foodIndex} style={styles.foodItemRow}>
                             <Text>{food.name} - {food.quantity}g</Text>
@@ -126,19 +127,19 @@ export default function Meals() {
                         style={styles.saveButton}
                         onPress={() => validDia && handleEditMeal(meal.id, validDia)}
                     >
-                        <Text style={styles.saveButtonText}>Editar</Text>
+                        <Text style={styles.saveButtonText}>{t("button.edit")}</Text>
                     </TouchableOpacity>
 
 
                     <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteMeal(meal.id)}>
-                        <Text style={styles.deleteButtonText}>Deletar</Text>
+                        <Text style={styles.deleteButtonText}>{t(".buttons.delet")}</Text>
                     </TouchableOpacity>
                 </View >
             ))
             }
             <Modal
                 visible={showErrorModal}
-                title='Erro'
+                title={t("common.error")}
                 message={errorMessage}
                 onClose={() => {
                     setShowErrorModal(false);
@@ -147,7 +148,7 @@ export default function Meals() {
             />
             <CustomModalSucesso
                 visible={showSucessoModal}
-                title='Sucesso'
+                title={t("common.success")}
                 message={SucessoMessage}
                 onClose={() => {
                     setShowSucessoModal(false);
@@ -156,8 +157,8 @@ export default function Meals() {
             />
             <ModalDelete
                 visible={deleteModalVisible}
-                title="Remover Alimento"
-                message="Deseja remover este alimento de seu planejamento?"
+                title={t("modals.modalRemoverFood")}
+                message={t(".modals.planningFood")}
                 onCancel={() => setDeleteModalVisible(false)}
                 onConfirm={confirmDelete}
             />

@@ -8,7 +8,7 @@ import {
   Image,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
-import styles from "../FormAdicionar/style";
+import styles from "../FormEditar/style";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm, useFieldArray, SubmitHandler, Controller } from 'react-hook-form';
 import { colors } from '../../../constants/colors';
@@ -25,8 +25,10 @@ import { getTrainById, updateTrainById } from '~/services/Train';
 import { Treino } from '~/types/train';
 import ExercisesFields from '~/components/ExercisesFields/exerciseField';
 import { pickImage } from '~/utils/handleMediaManeger';
+import {useTranslation} from "react-i18next";
 
 export default function FormEditar() {
+  const {t} = useTranslation();
   const [deleteModalVisible, setDeleteModalVisible] = useState(false);
   const [treinoIdToDelete, setTreinoIdToDelete] = useState<string | null>(null);
   const [showErrorModal, setShowErrorModal] = useState(false);
@@ -119,12 +121,12 @@ export default function FormEditar() {
             setValue('diasDaSemana', planoData.diasDaSemana.map(d => String(d).toLowerCase()));
           }
         } else {
-          setErrorMessage('Plano não encontrado');
+          setErrorMessage(t("errors.notFound"));
           setShowErrorModal(true);
         }
       } catch (error) {
         console.error('Erro ao buscar plano:', error);
-        setErrorMessage('Erro ao carregar o plano.');
+        setErrorMessage(t("errors.loadError"));
         setShowErrorModal(true);
       } finally {
         setIsFetching(false);
@@ -158,7 +160,7 @@ export default function FormEditar() {
     // validação extra para grupo (mesma lógica usada no save)
     if (modo === 'grupo' && !selectedImage && !(data.planoImagem && String(data.planoImagem).trim())) {
       setIsLoading(false);
-      setErrorMessage('Imagem do grupo muscular não selecionada. Por favor, selecione o músculo novamente.');
+      setErrorMessage(t("errors.errorValidImage"));
       setShowErrorModal(true);
       return;
     }
@@ -187,13 +189,13 @@ export default function FormEditar() {
       // chamada ao serviço (ajuste assinatura se necessário)
       await updateTrainById(planoId, payloadToSend, selectedImage ?? null);
 
-      setSucessoMessage('Treino atualizado com sucesso!');
+      setSucessoMessage(t("success.updateTrain"));
       setShowSucessoModal(true);
       // opcional: navegar de volta
       // router.back();
     } catch (error) {
       console.error('Erro ao atualizar treino:', error);
-      setErrorMessage('Erro ao atualizar treino.');
+      setErrorMessage(t("error.errorUpdate"));
       setShowErrorModal(true);
     } finally {
       setIsLoading(false);
@@ -206,28 +208,33 @@ export default function FormEditar() {
 
   return (
     <ScrollView style={styles.container}>
-      <Header title="Editar Treino" text="Ajuste ou remova seu treino" />
+      <Header title={t("header.grupsMuscTitleEdit")} text={t("header.grupsMuscTextEdit")} />
 
       {/* Seletor de modo igual ao Add */}
-      <View style={{ flexDirection: 'row', marginBottom: 16 }}>
+      <View style={{ flexDirection: 'row',
+          justifyContent: 'center',
+          backgroundColor: '#ccc',
+          borderRadius: 25, 
+          padding:3,
+          marginTop:25,marginLeft:10 }}>
         <TouchableOpacity
-          style={[styles.modeButton, mode === 'musculo' && styles.modeButtonActive]}
+          style={[styles.modeButton, mode === 'musculo' && styles.modeButtonActive ]}
           onPress={() => setMode('musculo')}
         >
-          <Text style={styles.modeText}>Por Grupo Muscular</Text>
+          <Text style={{ color: mode === 'musculo' ? '#fff' : '#8d8d8dff' }}>{t("grupsMusc.forGrup")}</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.modeButton, mode === 'plano' && styles.modeButtonActive]}
           onPress={() => setMode('plano')}
         >
-          <Text style={styles.modeText}>Por Plano de Treino</Text>
+          <Text style={{ color: mode === 'plano' ? '#fff' : '#8d8d8dff' }}>{t("grupsMusc.forTrain")}</Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.formContainer}>
         {mode === 'musculo' && (
           <>
-            <Text style={styles.label}>Músculo:</Text>
+            <Text style={styles.label}>{t("grupsMusc.musc")}</Text>
             <Controller
               control={control}
               name="parte"
@@ -262,7 +269,7 @@ export default function FormEditar() {
 
         {mode === 'plano' && (
           <>
-            <Text style={styles.label}>Título do Plano:</Text>
+            <Text style={styles.label}>{t("grupsMusc.titlePlanning")}</Text>
             <Controller
               control={control}
               name="planoTitulo"
@@ -274,7 +281,7 @@ export default function FormEditar() {
               )}
             />
 
-            <Text style={styles.label}>Imagem do Plano:</Text>
+            <Text style={styles.label}>{t("grupsMusc.ImagPlanning")}</Text>
             <Controller
               control={control}
               name="planoImagem"
@@ -295,7 +302,7 @@ export default function FormEditar() {
                         resizeMode="contain"
                       />
                     ) : (
-                      <Text>Selecionar imagem</Text>
+                      <Text>{t("grupsMusc.selectImag")}</Text>
                     )}
                   </TouchableOpacity>
                 );
@@ -320,12 +327,12 @@ export default function FormEditar() {
           onPress={handleSubmit(handleUpdateTreino)}
           disabled={isLoading}
         >
-          {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>SALVAR ALTERAÇÕES</Text>}
+          {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("buttons.saveAlter")}</Text>}
         </TouchableOpacity>
 
         <Modal
           visible={showErrorModal}
-          title="Erro"
+          title={t("commom.Erro")}
           message={errorMessage}
           onClose={() => {
             setShowErrorModal(false);
@@ -333,7 +340,7 @@ export default function FormEditar() {
         />
         <CustomModalSucesso
           visible={showSucessoModal}
-          title="Sucesso"
+          title={t("commom.sucess")}
           message={SucessoMessage}
           onClose={() => {
             setShowSucessoModal(false);

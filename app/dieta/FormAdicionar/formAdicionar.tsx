@@ -13,10 +13,11 @@ import { savePlanoAlimentar } from '~/services/dietService';
 import { FoodItem } from '~/constants/foodItem';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import Modal from '~/components/modal/modalAlert'
-
+import {useTranslation} from "react-i18next";
 
 
 export default function MealPlanForm() {
+  const {t} = useTranslation();
   const [mealName, setMealName] = useState('');
   const [mealTime, setMealTime] = useState('');
   const [notify, setNotify] = useState(false);
@@ -46,13 +47,13 @@ export default function MealPlanForm() {
   //funcao add alimento a lista da refeicao
   const handleAddFood = () => {
     if (!currentFood.trim() || !currentQuantity.trim()) {
-      setErrorMessage('Preencha o nome e a quantidade do alimento.')
+      setErrorMessage(t("error.erroFood"))
       setShowErrorModal(true)
       return;
     }
     const quantityNum = parseInt(currentQuantity, 10);
     if (isNaN(quantityNum) || quantityNum <= 0) {
-      setErrorMessage('A quantidade deve ser um número válido.')
+      setErrorMessage(t("errors.quantValid"))
       setShowErrorModal(true)
       return;
     }
@@ -74,18 +75,18 @@ export default function MealPlanForm() {
 
   const handleSavePlan = async () => {
     if (!mealName.trim()) {
-      setErrorMessage('Por favor, informe o nome da refeição.')
+      setErrorMessage(t("diet.messageNameFood"))
       setShowErrorModal(true)
       return;
     }
     if (foods.length === 0) {
-      setErrorMessage('Adicione pelo menos um alimento à refeição.')
+      setErrorMessage(t("diet.addOneFood"))
       setShowErrorModal(true)
       return;
     }
     const activeDays = Object.keys(selectedDays).filter(day => selectedDays[day as DayKey]);
     if (activeDays.length === 0) {
-      setErrorMessage('Selecione pelo menos um dia para esta refeição.')
+      setErrorMessage(t("diet.selectDay"))
       setShowErrorModal(true)
       return;
     }
@@ -102,7 +103,7 @@ export default function MealPlanForm() {
       });
 
 
-      setSucessoMessage('Seu plano alimentar foi salvo.')
+      setSucessoMessage(t("success.saveFood"))
       setShowSucessoModal(true)
 
       // Resetar campos após salvar
@@ -123,7 +124,7 @@ export default function MealPlanForm() {
       router.back();
 
     } catch (error) {
-      setErrorMessage('Ocorreu um problema ao salvar seu plano. Tente novamente.')
+      setErrorMessage(t("erros.problemSave"))
       setShowErrorModal(true)
     } finally {
       setIsLoading(false);
@@ -132,9 +133,9 @@ export default function MealPlanForm() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <Header title='Plano Alimentar' text="Acompanhe sua alimentação diária de forma organizada" />
+      <Header title={t("header.dietTitle")} text={t(".header.dietTextAdd")} />
 
-      <Text style={styles.label}>Refeição</Text>
+      <Text style={styles.label}>{t("diet.food")}</Text>
       <TextInput
         style={styles.input}
         placeholder="Ex: Café da Manhã"
@@ -165,7 +166,7 @@ export default function MealPlanForm() {
           />
         </View>
         <View style={{ flex: 1 }}>
-          <Text style={styles.label}>Quantidade: (g)</Text>
+          <Text style={styles.label}>{t("diet.quant")}</Text>
           <TextInput
             style={styles.input}
             placeholder="--"
@@ -178,11 +179,11 @@ export default function MealPlanForm() {
       </View>
 
       <TouchableOpacity style={styles.addButton} onPress={handleAddFood}>
-        <Text style={styles.addButtonText}>Adicionar Alimento</Text>
+        <Text style={styles.addButtonText}>{t("buttons.addAlimen")}</Text>
         <View style={styles.plusIcon}><Text style={styles.plusIconText}>+</Text></View>
       </TouchableOpacity>
 
-      <Text style={styles.label}>Hora da Refeição: (opcional)</Text>
+      <Text style={styles.label}>{t("hourFood")}</Text>
       <TextInput
         style={styles.input}
         placeholder="-- Ex: 08:00"
@@ -191,7 +192,7 @@ export default function MealPlanForm() {
         placeholderTextColor="#999"
       />
 
-      <Text style={styles.sectionTitle}>Dias que tenho essa refeição:</Text>
+      <Text style={styles.sectionTitle}>{t("diet.daysFood")}</Text>
       <View style={styles.daysContainer}>
         {DIAS_SEMANA.map(({ key, label }) => (
           <TouchableOpacity key={key} style={styles.dayItem} onPress={() => toggleDay(key)}>
@@ -205,19 +206,19 @@ export default function MealPlanForm() {
         {isLoading ? (
           <ActivityIndicator color="#A14545" />
         ) : (
-          <Text style={styles.saveButtonText}>SALVAR</Text>
+          <Text style={styles.saveButtonText}>{t("buttons.saveButton")}</Text>
         )}
       </TouchableOpacity>
 
       <Modal
         visible={showErrorModal}
-        title='Erro'
+        title={t("common.error")}
         message={errorMessage}
         onClose={() => setShowErrorModal(false)}
       />
       <CustomModalSucesso
         visible={showSucessoModal}
-        title='Sucesso'
+        title={t("common.success")}
         message={SucessoMessage}
         onClose={() => setShowSucessoModal(false)}
       />

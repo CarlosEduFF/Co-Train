@@ -15,11 +15,12 @@ import ModalDelete from '~/components/modal/ModalDelete';
 import CustomModalSucesso from '~/components/modal/modalSucesso';
 import { Treino } from '~/types/train';
 import { deleteTrainById, subscribeToTrains } from '~/services/Train';
-
+import {useTranslation} from "react-i18next";
 
 type FilterMode = 'todos' | 'grupo' | 'plano';
 
 export default function GruposMusc() {
+  const {t} = useTranslation();
   const [treinos, setTreinos] = useState<Treino[]>([]);
   const [loadingTreinos, setLoadingTreinos] = useState(true);
   const { user, loading: loadingAuth } = useAuth();
@@ -58,7 +59,7 @@ export default function GruposMusc() {
         },
         (error: any) => {
           console.error('Erro ao carregar treinos:', error);
-          Alert.alert('Erro', 'Não foi possível carregar os treinos.');
+          Alert.alert(t("errors.erroTrain"));
           setTreinos([]);
           setLoadingTreinos(false);
         }
@@ -94,11 +95,11 @@ export default function GruposMusc() {
     setDeleteModalVisible(false);
     try {
       await deleteTrainById(treinoIdSelecionado);
-      setSucessoMessage('Treino excluído com sucesso!');
+      setSucessoMessage(t("errors.deleteSuccess"));
       setShowSucessoModal(true);
     } catch (error) {
       console.error('Erro ao excluir treino:', error);
-      setErrorMessage('Erro ao excluir treino.');
+      setErrorMessage(t("errors.deleteError"));
       setShowErrorModal(true);
     } finally {
       setTreinoIdSelecionado(null);
@@ -122,15 +123,15 @@ export default function GruposMusc() {
     <View style={styles.container}>
       <View style={styles.containerHeader}>
         <Header
-          title="Divisão por Grupos Musculares"
-          text="Gerencie por grupos musculares seus treinos organizados"
+          title={t("header.grupsMuscTitle")}
+          text={t("header.grupsMuscText")}
         />
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => router.push("/gruposMusc/FormAdicionar/formAdicionar")}
         >
-          <Text style={styles.adicionarButton}>Adicionar</Text>
+          <Text style={styles.adicionarButton}>{t("grupsMusc.buttonAdd")}</Text>
           <Feather name="plus-circle" size={30} color="#3D0000" />
         </TouchableOpacity>
       </View>
@@ -138,27 +139,31 @@ export default function GruposMusc() {
       {/* --- Segmented control --- */}
       <View
         style={{
-          flexDirection: "row",
-          justifyContent: "center",
-          marginVertical: 12,
+          flexDirection: 'row',
+          justifyContent: 'center',
+          backgroundColor: '#ccc',
+          borderRadius: 20,
+          marginStart:60,
+          marginEnd:60,
+          padding:3
         }}
       >
         <TouchableOpacity
           onPress={() => setFilterMode("todos")}
           style={[
             {
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              borderRadius: 8,
-              marginHorizontal: 6,
+            paddingVertical:13,
+            paddingHorizontal: 30,
+            borderRadius: 15,
+            backgroundColor: 'transparent',
             },
             filterMode === "todos"
               ? { backgroundColor: colors.vermEscuro }
-              : { borderWidth: 1, borderColor: "#ddd" },
+              : { },
           ]}
         >
-          <Text style={filterMode === "todos" ? { color: "#fff" } : { color: "#333" }}>
-            Todos
+          <Text style={filterMode === "todos" ? { color: "#fff" } : { color: "#8d8d8dff" }}>
+            {t("grupsMusc.tabs.all")}
           </Text>
         </TouchableOpacity>
 
@@ -166,18 +171,18 @@ export default function GruposMusc() {
           onPress={() => setFilterMode("grupo")}
           style={[
             {
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              borderRadius: 8,
-              marginHorizontal: 6,
+              paddingVertical:13,
+              paddingHorizontal: 30,
+              borderRadius: 15,
+              backgroundColor: 'transparent',
             },
             filterMode === "grupo"
               ? { backgroundColor: colors.vermEscuro }
-              : { borderWidth: 1, borderColor: "#ddd" },
+              : { },
           ]}
         >
-          <Text style={filterMode === "grupo" ? { color: "#fff" } : { color: "#333" }}>
-            Grupos
+          <Text style={filterMode === "grupo" ? { color: "#fff" } : { color: "#8d8d8dff" }}>
+            {t("grupsMusc.tabs.grups")}
           </Text>
         </TouchableOpacity>
 
@@ -185,18 +190,18 @@ export default function GruposMusc() {
           onPress={() => setFilterMode("plano")}
           style={[
             {
-              paddingHorizontal: 12,
-              paddingVertical: 8,
-              borderRadius: 8,
-              marginHorizontal: 6,
+              paddingVertical:13,
+              paddingHorizontal: 30,
+              borderRadius: 15,
+              backgroundColor: 'transparent',
             },
             filterMode === "plano"
               ? { backgroundColor: colors.vermEscuro }
-              : { borderWidth: 1, borderColor: "#ddd" },
+              : { },
           ]}
         >
-          <Text style={filterMode === "plano" ? { color: "#fff" } : { color: "#333" }}>
-            Planos
+          <Text style={filterMode === "plano" ? { color: "#fff" } : { color: "#8d8d8dff" }}>
+            {t("grupsMusc.tabs.planning")}
           </Text>
         </TouchableOpacity>
       </View>
@@ -224,11 +229,12 @@ export default function GruposMusc() {
             />
 
           )}
+          numColumns={2}
           contentContainerStyle={styles.listContainer}
           ListEmptyComponent={
             <View style={{ alignItems: "center", marginTop: 50 }}>
-              <Text>Nenhum treino encontrado para o filtro selecionado.</Text>
-              <Text>Clique em "Adicionar" para começar!</Text>
+              <Text>{t("grupsMusc.filterSelect")}</Text>
+              <Text>{t("grupsMusc.clickAdd")}</Text>
             </View>
           }
         />
@@ -238,7 +244,7 @@ export default function GruposMusc() {
 
       <CustomModalSucesso
         visible={showSucessoModal}
-        title="Sucesso"
+        title={t("modals.modalSuccessTitle")}
         message={SucessoMessage}
         onClose={() => {
           setShowSucessoModal(false);
@@ -247,8 +253,8 @@ export default function GruposMusc() {
 
       <ModalDelete
         visible={deleteModalVisible}
-        title="Remover Treino"
-        message="Deseja remover este treino do planejamento semanal?"
+        title={t("modals.removeTrain.title")}
+        message={t("modals.removeTrain.message")}
         onCancel={() => setDeleteModalVisible(false)}
         onConfirm={() => handleDeleteTreino(undefined, true)} // 2ª etapa
       />

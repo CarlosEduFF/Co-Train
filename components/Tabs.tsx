@@ -5,38 +5,40 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { useRouter, usePathname } from 'expo-router';
 import { colors } from '../constants/colors';
 import { routes } from '~/constants/routes';
+import {useTranslation} from "react-i18next";
+
+
+export default function TabLayout() {
+  const {t} = useTranslation();
 
 
 const tabs = [
 
   {
-    label: 'Treinos',
+    label: t("tabs.trainings"),
     route: routes.gruposMusc,
     Icon: MaterialCommunityIcons,
     iconName: 'arm-flex-outline',
   },
   {
-    label: 'Semanal',
+    label: t("tabs.weekly"),
     route: routes.plane,
     Icon: MaterialIcons,
     iconName: 'event-note',
   },
   {
-    label: 'Dieta',
+    label: t("tabs.diet"),
     route: routes.dieta,
     Icon: FontAwesome5,
     iconName: 'apple-alt',
   },
   {
-    label: 'Configurações',
+    label: t("tabs.settings"),
     route: routes.config,
     Icon: Feather,
     iconName: 'settings',
   },
 ];
-
-export default function TabLayout() {
-
   const router = useRouter();
   const pathname = usePathname();
 

@@ -1,0 +1,188 @@
+{
+  "common": {
+    "loading": "Loading",
+    "error": "Error",
+    "success": "Success"
+  },
+
+  "errors": {
+    "UserNoAuth": "User not authenticated",
+    "userLoad": "Error loading user data.",
+    "logoutFail": "Unable to log out.",
+    "erroTrain": "Unable to load workouts.",
+    "deleteSuccess": "Workout successfully removed",
+    "deleteError": "Error removing workout",
+    "errorValidImage": "Muscle group image not selected. Please select the muscle again.",
+    "erroNoSave": "Unable to save workout.",
+    "erroInespe": "An unexpected error occurred.",
+    "notProvided": "Not provided",
+    "notProvidedF": "Not provided",
+    "notFound": "Plan not found",
+    "loadError": "Error loading plan.",
+    "errorUpdate": "Workout successfully updated!",
+    "erroFood": "Please fill in the food name and quantity.",
+    "quantValid": "Quantity must be a valid number.",
+    "problemSave": "There was a problem saving your plan. Please try again.",
+    "errorSave": "Error saving.",
+    "erroLoad": "Error loading meal."
+  },
+
+  "success": {
+    "updateTrain": "Workout successfully updated!",
+    "saveFood": "Your meal plan has been saved.",
+    "UserUpdate": "Profile successfully updated!"
+  },
+
+  "components": {
+    "noImage": "No image",
+    "daysIHave": "Days I have this workout"
+  },
+
+  "tabs": {
+    "trainings": "Workouts",
+    "weekly": "Weekly",
+    "diet": "Diet",
+    "settings": "Settings"
+  },
+
+  "settings": {
+    "title": "Settings",
+    "mySettings": "My Settings",
+    "Perfil": "Profile",
+    "Config": "Config",
+    "darkMode": "Dark Mode",
+    "language": "Language",
+    "logout": "Logout",
+    "userInfo": "User Information",
+    "editProfile": "Edit Profile",
+    "email": "Email:",
+    "name": "Name",
+    "dateNasc": "Date of Birth",
+    "sex": "Sex",
+    "height": "Height",
+    "weight": "Weight",
+    "objective": "Goal",
+    "editPhot": "Edit Photo",
+    "nameComp": "Full Name:",
+    "datNasc": "Date of Birth:",
+    "tall": "Height (cm):",
+    "Masculino":"Male",
+    "Feminino":"Female",
+    "Outro":"Other"
+  },
+
+  "planning": {
+    "title": "Weekly Planning",
+    "subtitle": "View your workouts",
+    "planningAdd": "Add planning",
+    "weekTraining": "Weekly Training",
+    "active": "Active",
+    "exercise": "Exercise {{number}}",
+    "name": "Name",
+    "series": "Sets",
+    "weight": "Weight",
+    "defaultDay": "Your Workout",
+    "noDay": "Day not provided",
+    "noPlanForDay": "No plan added for this day.",
+    "clickAdd": "Click \"Add\" to get started!",
+    "deleteTitle": "Remove Workout",
+    "deleteMessage": "Do you want to remove this workout from weekly planning?",
+    "noUserError": "User not authenticated",
+    "selectWorkoutError": "Select at least one workout.",
+    "selectDayError": "Select at least one day for all selected workouts.",
+    "updateSuccess": "Workouts successfully updated!",
+    "updateError": "Unable to update workouts.",
+    "noWorkoutsMessage": "You don't have any planned workouts yet.",
+    "noWorkoutsTitle": "You need to create a workout in the muscle group tab first"
+  },
+
+  "grupsMusc": {
+    "buttonAdd": "Add",
+    "tabs": {
+      "all": "All",
+      "grups": "Groups",
+      "planning": "Plans"
+    },
+    "filterSelect": "No workout found for the selected filter.",
+    "clickAdd": "Click 'Add' to get started!",
+    "sucessSave": "",
+    "forGrup": "By Muscle Group",
+    "forTrain": "By Workout Plan",
+    "musc": "Muscle:",
+    "titlePlanning": "Plan Title:",
+    "ImagPlanning": "Plan Image:",
+    "selectImag": "Select image:"
+  },
+
+  "diet": {
+    "messageNameFood": "Please provide the meal name.",
+    "addOneFood": "Add at least one food to the meal.",
+    "selectDay": "Select at least one day for this meal.",
+    "food": "Meal",
+    "daysFoof": "Days I have this meal:",
+    "hourFood": "Meal Time: (optional)",
+    "quant": "Quantity: (g)",
+    "updateFood": "Meal updated!",
+    "meal": "Meals of",
+    "nameMeal": "Meal Name:",
+    "hourMeal": "Meal Time:",
+    "foodUpdate": "Meal updated!"
+  },
+
+  "days": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+
+  "modals": {
+    "removeTrain": {
+      "title": "Remove Workout",
+      "message": "Do you want to remove this workout from weekly planning?"
+    },
+    "modalErrorTitle": "Error",
+    "modalSuccessTitle": "Success",
+    "modalRemoverFood": "Remove Food",
+    "planningFood": "Do you want to remove this food from your plan?",
+    "cancel":"Cancel",
+    "getOut":"Get out",
+    "remove":"Remove"
+  },
+
+  "buttons": {
+    "saveButton": "Save",
+    "saveAlter": "SAVE CHANGES",
+    "addExercise": "Add Exercise",
+    "deleteExercise": "Remove Last Exercise",
+    "addDiet": "Add Meal",
+    "addAlimen": "Add Food",
+    "edit": "Edit",
+    "delet": "Delete",
+    "saveUser": "Save Profile"
+  },
+
+  "header": {
+    "planningTitle": "Weekly Planning",
+    "planningText": "Manage from Monday to Sunday: your organized workouts",
+    "planningTextViewScreen": "Manage your workouts on {{day}}",
+    "planningTextViewTrain": "View your workouts",
+    "planningTextAdd": "Add your planning",
+
+    "grupsMuscTitle": "Muscle Group Division",
+    "grupsMuscText": "Manage your workouts by muscle groups",
+    "grupsMuscTitleEdit": "Edit Workout",
+    "grupsMuscTextEdit": "Adjust or remove your workout",
+    "grupsMuscTitleAdd": "Add New Workout",
+    "grupsMuscTextAdd": "Fill in the details below",
+
+    "dietTitle": "Meal Plan",
+    "dietText": "Choose a day of the week to view or edit your meals",
+    "dietTextAdd": "Track your daily meals in an organized way",
+    "dietTextEdit": "Track your daily meals",
+    "dietTextMeals": "Track your daily meals"
+  }
+}

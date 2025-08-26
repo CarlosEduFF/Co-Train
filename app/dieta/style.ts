@@ -8,9 +8,8 @@ export default StyleSheet.create({
     },
     container:{
         flex: 1,
-        
         backgroundColor:colors.background,
-        marginTop:30,
+       
         
     },
     subContainer: {

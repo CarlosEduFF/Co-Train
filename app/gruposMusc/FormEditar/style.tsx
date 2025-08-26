@@ -13,7 +13,7 @@ export default StyleSheet.create({
     width: '100%',
     gap: 12,
     marginTop: 20,
-    paddingVertical: 15,
+    padding:10
   },
 
   label: {
@@ -70,7 +70,7 @@ export default StyleSheet.create({
   buttonAdicionar: {
     backgroundColor: colors.white,
     borderRadius: 30,
-    width: '45%',
+    width: '100%',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
@@ -80,6 +80,12 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     paddingVertical: 8,
     gap: 6,
+  },
+    buttonDisabled: {
+    backgroundColor: '#ccc', // Cor para botao desabilitado
+    opacity: 0.6,
+     borderWidth: 2,
+    borderColor: '#ccc',
   },
 
   buttonSave: {
@@ -91,6 +97,7 @@ export default StyleSheet.create({
     borderColor: colors.Vermelho,
     justifyContent: 'center',
     alignItems: 'center',
+    marginBottom: 80
   },
 
   buttonText: {
@@ -106,5 +113,35 @@ export default StyleSheet.create({
     backgroundColor: '#fff',
     borderRadius: 12,
   },
-  
+
+  modeButton: {
+   paddingVertical:13,
+   paddingHorizontal: 33,
+   borderRadius: 20,
+   backgroundColor: 'transparent',
+  },
+  modeButtonActive: {
+    backgroundColor: colors.vermEscuro,
+  },
+  modeText: {
+    color: '#8d8d8dff',
+    fontWeight: '600',
+  },
+  imageUpload: {
+    height: 150,
+    width: '80%',
+    borderWidth: 1,
+    borderColor: '#CCC',
+    borderRadius: 8,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginVertical: 10,
+    backgroundColor: '#FAFAFA',
+    marginLeft:'10%'
+  },
+  imagePreview: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
+  },
 });
