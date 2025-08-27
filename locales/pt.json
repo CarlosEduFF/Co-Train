@@ -118,7 +118,7 @@
    "addOneFood":"Adicione pelo menos um alimento à refeição.",
     "selectDay":"Selecione pelo menos um dia para esta refeição.",
     "food":"Refeição",
-    "daysFoof":"Dias que tenho essa refeição:",
+    "daysFood":"Dias que tenho essa refeição:",
     "hourFood":"Hora da Refeição: (opcional)",
     "quant":"Quantidade: (g)",
     "updateFood":"Refeição atualizada!",
@@ -184,5 +184,20 @@
     "dietTextAdd": "Acompanhe sua alimentação diária de forma organizada",
     "dietTextEdit": "Acompanhe sua alimentação diária",
     "dietTextMeals": "Acompanhe sua alimentação diária"
+  },
+
+  "exercises": {
+    "Chest": "Peito",
+    "Back": "Costas",
+    "Shoulder": "Ombro",
+    "Biceps": "Bíceps",
+    "Triceps": "Tríceps",
+    "Abdomen": "Abdômen",
+    "Hamstring": "Posterior de Coxa",
+    "Quadriceps": "Quadríceps",
+    "Glute": "Glúteo",
+    "Calf": "Panturrilha",
+    "Forearm": "Antebraço"
   }
+
 }

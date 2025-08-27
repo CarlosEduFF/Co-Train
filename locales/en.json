@@ -184,5 +184,17 @@
     "dietTextAdd": "Track your daily meals in an organized way",
     "dietTextEdit": "Track your daily meals",
     "dietTextMeals": "Track your daily meals"
-  }
+  },
+   "exercises": {
+    "Chest": "Chest",
+    "Back": "Back",
+    "Shoulder": "Shoulder",
+    "Biceps": "Biceps",
+    "Triceps": "Triceps",
+    "Abdomen": "Abdomen",
+    "Hamstring": "Hamstring",
+    "Quadriceps": "Quadriceps",
+    "Glute": "Glute",
+    "Calf": "Calf",
+    "Forearm": "Forearm"}
 }

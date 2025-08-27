@@ -1,52 +1,57 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet,Dimensions } from "react-native";
 import { colors } from "~/constants/colors";
 
 const PRIMARY_COLOR = '#A14545';
 const TEXT_COLOR = '#333';
 const FONT_FAMILY = Platform.OS === 'ios' ? 'Avenir' : 'Roboto';
 
+const { width } = Dimensions.get("window");
+const scale = (size: number) => Math.min((width / 375) * size, size * 1.3);
+
 export default StyleSheet.create({
   card: {
-     width: 160,
-     backgroundColor: colors.background, 
-     borderWidth:2,
-     borderColor:colors.vermEscuro,
-     borderRadius: 20,
-     paddingTop: 60, 
-     paddingBottom: 16,
-     alignItems: 'center',
-     marginHorizontal:'4%',
-     elevation: 4,
-     shadowColor: '#000',
-     shadowOffset: { width: 0, height: 4 },
-     shadowOpacity: 0.25,
-     shadowRadius: 6,
-     marginTop:80
+    width: width * 0.42, 
+    maxWidth: scale(180), 
+    backgroundColor: colors.background,
+    borderWidth: 2,
+    borderColor: colors.Vermelho,
+    borderRadius: scale(20),
+    paddingTop: scale(60),
+    paddingBottom: scale(16),
+    alignItems: 'center',
+    marginHorizontal: '2.5%',
+    elevation: 4,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    marginTop: scale(80),
      },
         containerImage: {
-          position: 'absolute',
-          top: -55,
-          alignItems: 'center',
-          justifyContent: 'center',
-          width: 100,
-          height: 100,
-          borderRadius: 50,
-          borderWidth:2,
-          backgroundColor: '#fff',
-          overflow: 'hidden',
-          elevation: 6,
+         position: 'absolute',
+         top: -55,
+         alignItems: 'center',
+         justifyContent: 'center',
+         width: scale(100),
+         height: scale(100),
+         borderRadius: 50,
+         borderWidth: 2,
+         backgroundColor: '#fff',
+         overflow: 'hidden',
+         borderColor: colors.Vermelho,
+         elevation: 6,
         },
         MuscImage: {
            width: '100%',
            height: '100%',
            borderRadius: 50,
+           
         },
         cardTitulo: {
-          color: colors.Vermelho,
-          fontWeight: 'bold',
-          fontSize: 16,
-          textAlign: 'center',
-          maxWidth: 100,
+           fontWeight: 'bold',
+           fontSize: scale(16),
+           textAlign: 'center',
+           maxWidth: scale(100),
         },
 
                 MuscImagEdit:{
@@ -54,7 +59,7 @@ export default StyleSheet.create({
                   height: 80,
                   borderRadius: 40,
                   borderWidth: 2,
-                  borderColor: colors.vermEscuro,
+                  borderColor: colors.Vermelho,
                   marginBottom: 8,
                 },
                 cardEditContainer:{

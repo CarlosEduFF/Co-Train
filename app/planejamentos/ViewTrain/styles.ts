@@ -29,7 +29,7 @@ export default StyleSheet.create({
 
 
   trainMuscle: {
-    fontSize: 45,
+    fontSize: 35,
     fontWeight: "bold",
     color: colors.Vermelho,
     marginBottom: 4,
@@ -37,7 +37,7 @@ export default StyleSheet.create({
 
   
   trainTitle: {
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: "bold",
     color: colors.vermEscuro,
     marginBottom: 12,

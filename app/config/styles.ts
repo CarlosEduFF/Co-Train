@@ -1,5 +1,8 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet , Dimensions, PixelRatio } from "react-native";
 import {colors} from '~/constants/colors'
+
+const { width } = Dimensions.get("window");
+const scale = (size: number) => (width / 375) * size; 
 
 export default StyleSheet.create({
     scrollContainer:{
@@ -8,33 +11,33 @@ export default StyleSheet.create({
     },
          header: {
              backgroundColor: '#fff',
-             padding: '5%',
+             padding: scale(20),
            },
            bunttonLeftContainer:{
            flexDirection:'row',
            alignItems:'center',
-           marginTop:20,
+           marginTop: scale(20),
            },
            buttonLeft:{
-                  height:40,
-                  width:40,
-                  backgroundColor:colors.vermEscuro,
-                  borderRadius:20,
-                  justifyContent:'center',
-                  alignItems:'center',
-                  marginRight:20
+                height: scale(40),
+                width: scale(40),
+                backgroundColor: colors.vermEscuro,
+                borderRadius: scale(20),
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginRight: scale(20),
                  },
            headerButton:{
-               alignItems:'center',
-               paddingBottom: 10,
-               marginBottom: 10,
-                borderColor: colors.vermEscuro,
+               alignItems: 'center',
+               paddingBottom: scale(10),
+               marginBottom: scale(10),
+               borderColor: colors.vermEscuro,
          
            },
            TituloSecao: {
-               fontSize: 26,
-               fontWeight: 'bold',
-               color: colors.Vermelho,
+                fontSize: scale(26),
+                fontWeight: 'bold',
+                color: colors.Vermelho,
            },
            headerBackground: {
              width: '100%',
@@ -42,44 +45,44 @@ export default StyleSheet.create({
              
            },
            perfilImage: {
-             width: 150,
-             height: 150,
-             borderRadius: 75,
-             borderWidth: 5,
-             borderColor: '#000',
-             marginBottom: 10,
+               width: scale(150),
+               height: scale(150),
+               borderRadius: scale(75),
+               borderWidth: scale(5),
+               borderColor: '#000',
+               marginBottom: scale(10),
            },
 
            name: {
-             fontSize: 24,
+             fontSize: scale(24),
              fontWeight: 'bold',
              color: colors.vermEscuro,
            },
             email: {
-              fontSize: 16,
+              fontSize:  scale(16),
               color: '#666',
             },
 
                 
 
                      tabcontainer: {
-                      flexDirection: 'row',
-                      justifyContent: 'center',
-                      backgroundColor: '#ccc',
-                      borderRadius: 25,
-                      marginStart:90,
-                      marginEnd:90,
-                      padding:3
+                       flexDirection: 'row',
+                       justifyContent: 'center',
+                       backgroundColor: '#ccc',
+                       borderRadius:25,
+                       marginStart: 65,
+                       marginEnd:   65,
+                       padding:     3,
                      },
                      tabButton:{
-                      paddingVertical:13,
-                      paddingHorizontal: 30,
-                      borderRadius: 15,
+                      paddingVertical: scale(13),
+                      paddingHorizontal: scale(30),
+                      borderRadius: scale(15),
                       backgroundColor: 'transparent',
                      },
                      tabButtonActive:{
                       backgroundColor: colors.vermEscuro,
-                      borderRadius:22
+                      borderRadius: scale(22)
                      },
                      tabText:{
                        color: '#8d8d8dff',
@@ -96,65 +99,66 @@ export default StyleSheet.create({
                          
                       },
                       button:{
-                           padding:10,
-                           justifyContent:'center',
-                           alignItems:'center',
-                           borderRadius:10,
-                           backgroundColor:colors.vermEscuro,
-                           marginTop:10
+                           padding: scale(10),
+                           justifyContent: 'center',
+                           alignItems: 'center',
+                           borderRadius: scale(10),
+                           backgroundColor: colors.vermEscuro,
+                           marginTop: scale(10),
                          },
                          buttonText:{
                            color:colors.white,
-                           fontSize:16,
+                           fontSize: scale(16),
                            fontWeight:'bold'
                          },
 
                       optionsContainer: {
-                         marginTop: 30
+                         marginTop: scale(30),
                        },
                        optionCard: {
                          flexDirection: 'row',
                          alignItems: 'center',
                          justifyContent: 'space-between',
-                         padding: 15,
+                         padding: scale(15),
                          backgroundColor: '#fff',
-                         borderRadius: 12,
-                         marginBottom: 12,
+                         borderRadius: scale(12),
+                         marginBottom: scale(12),
                          shadowColor: '#000',
                          shadowOffset: { width: 0, height: 2 },
                          shadowOpacity: 0.1,
                          shadowRadius: 3.84,
                          elevation: 2,
-                         marginTop: 18
+                         marginTop: scale(18),
                        },
                        optionText: {
-                         fontSize: 16,
-                         fontWeight: '500',
-                         marginLeft: 10,
-                         flex: 1
+                          fontSize: scale(16),
+                          fontWeight: '500',
+                          marginLeft: scale(10),
+                          flex: 1,
                        },
 
 
                                       container: {
-                                        paddingHorizontal: 20,
-                                        marginTop:18
+                                         paddingHorizontal: scale(20),
+                                         marginTop: scale(2),
+                                         paddingVertical: scale(45)
                                       },
                                      
                                       infocaixa: {
                                         backgroundColor: '#fff',
-                                        padding: 15,
-                                        borderRadius: 10,
-                                        marginBottom: 20,
+                                        padding: scale(15),
+                                        borderRadius: scale(10),
+                                        marginBottom: scale(20),
                                         shadowColor: '#000',
                                         shadowOffset: { width: 0, height: 2 },
                                         shadowOpacity: 0.1,
                                         shadowRadius: 3.84,
                                         elevation: 2,
-                                        marginTop:8
+                                        marginTop: scale(8),
                                       },
                                       infoText: {
-                                        fontSize: 16,
-                                        marginBottom: 5,
+                                        fontSize: scale(16),
+                                        marginBottom: scale(5),
                                       },
 
                        

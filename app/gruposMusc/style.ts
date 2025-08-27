@@ -16,7 +16,7 @@ export default StyleSheet.create({
         padding: '2%',
     },
     button:{
-          backgroundColor: colors.white,
+    backgroundColor: colors.white,
     borderRadius: 30,
     width: '45%',
     flexDirection: 'row',

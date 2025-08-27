@@ -143,8 +143,8 @@ export default function GruposMusc() {
           justifyContent: 'center',
           backgroundColor: '#ccc',
           borderRadius: 20,
-          marginStart:60,
-          marginEnd:60,
+          marginStart:40,
+          marginEnd:40,
           padding:3
         }}
       >
@@ -153,8 +153,8 @@ export default function GruposMusc() {
           style={[
             {
             paddingVertical:13,
-            paddingHorizontal: 30,
-            borderRadius: 15,
+            paddingHorizontal: 28,
+            borderRadius: 20,
             backgroundColor: 'transparent',
             },
             filterMode === "todos"
@@ -172,8 +172,8 @@ export default function GruposMusc() {
           style={[
             {
               paddingVertical:13,
-              paddingHorizontal: 30,
-              borderRadius: 15,
+              paddingHorizontal: 28,
+              borderRadius: 20,
               backgroundColor: 'transparent',
             },
             filterMode === "grupo"
@@ -191,8 +191,8 @@ export default function GruposMusc() {
           style={[
             {
               paddingVertical:13,
-              paddingHorizontal: 30,
-              borderRadius: 15,
+              paddingHorizontal: 28,
+            borderRadius: 20,
               backgroundColor: 'transparent',
             },
             filterMode === "plano"

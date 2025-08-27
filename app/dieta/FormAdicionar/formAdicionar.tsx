@@ -133,7 +133,7 @@ export default function MealPlanForm() {
 
   return (
     <ScrollView style={styles.container} contentContainerStyle={styles.contentContainer}>
-      <Header title={t("header.dietTitle")} text={t(".header.dietTextAdd")} />
+      <Header title={t("header.dietTitle")} text={t("header.dietTextAdd")} />
 
       <Text style={styles.label}>{t("diet.food")}</Text>
       <TextInput
@@ -192,12 +192,12 @@ export default function MealPlanForm() {
         placeholderTextColor="#999"
       />
 
-      <Text style={styles.sectionTitle}>{t("diet.daysFood")}</Text>
+      <Text style={styles.sectionTitle}>{t("diet.daysFoof")}</Text>
       <View style={styles.daysContainer}>
         {DIAS_SEMANA.map(({ key, label }) => (
           <TouchableOpacity key={key} style={styles.dayItem} onPress={() => toggleDay(key)}>
             <View style={[styles.checkbox, selectedDays[key] && styles.checkboxChecked]} />
-            <Text style={styles.checkboxLabel}>{label}</Text>
+            <Text style={styles.checkboxLabel}>{t(label)}</Text>
           </TouchableOpacity>
         ))}
       </View>

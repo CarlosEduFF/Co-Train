@@ -211,12 +211,15 @@ export default function FormEditar() {
       <Header title={t("header.grupsMuscTitleEdit")} text={t("header.grupsMuscTextEdit")} />
 
       {/* Seletor de modo igual ao Add */}
-      <View style={{ flexDirection: 'row',
+      <View style={{ 
+          flexDirection: 'row',
           justifyContent: 'center',
           backgroundColor: '#ccc',
-          borderRadius: 25, 
-          padding:3,
-          marginTop:25,marginLeft:10 }}>
+          borderRadius: 20,
+          marginStart:3,
+          marginEnd:3,
+          padding:3
+           }}>
         <TouchableOpacity
           style={[styles.modeButton, mode === 'musculo' && styles.modeButtonActive ]}
           onPress={() => setMode('musculo')}
@@ -332,7 +335,7 @@ export default function FormEditar() {
 
         <Modal
           visible={showErrorModal}
-          title={t("commom.Erro")}
+          title={t("common.error")}
           message={errorMessage}
           onClose={() => {
             setShowErrorModal(false);
@@ -340,7 +343,7 @@ export default function FormEditar() {
         />
         <CustomModalSucesso
           visible={showSucessoModal}
-          title={t("commom.sucess")}
+          title={t("common.success")}
           message={SucessoMessage}
           onClose={() => {
             setShowSucessoModal(false);

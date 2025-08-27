@@ -116,7 +116,7 @@ export default StyleSheet.create({
 
   modeButton: {
    paddingVertical:13,
-   paddingHorizontal: 33,
+   paddingHorizontal: 20,
    borderRadius: 20,
    backgroundColor: 'transparent',
   },

@@ -8,7 +8,7 @@ export default StyleSheet.create({
     },
   container:{
        flex: 1,
-       padding:20,
+       padding:"2.5%",
        backgroundColor:colors.background,
       
     },

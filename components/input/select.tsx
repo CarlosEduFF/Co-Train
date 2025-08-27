@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
           backgroundColor:colors.white,
           paddingHorizontal:10,
           borderRadius:4,
-          borderColor: '#3D0000',
+          borderColor: colors.Vermelho,
       }, 
         errorText:{
           color:"red"
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
           justifyContent: 'space-between',
           paddingHorizontal: 10,
           borderRadius: 15,
-          borderColor: colors.vermEscuro,
+          borderColor: colors.Vermelho,
           borderWidth: 2,
       },
         modalContainer:{

@@ -101,7 +101,7 @@ export default function Meals() {
 
     return (
         <ScrollView style={styles.container} >
-            <Header title={t(".header.dietTitle")} text={t("header.dietTextMeals")}/>
+            <Header title={t("header.dietTitle")} text={t("header.dietTextMeals")}/>
             <Text style={styles.title} >{t("diet.meal")} {String(dia).toUpperCase()}</Text>
 
             {meals.map((meal, mealIndex) => (
@@ -127,12 +127,12 @@ export default function Meals() {
                         style={styles.saveButton}
                         onPress={() => validDia && handleEditMeal(meal.id, validDia)}
                     >
-                        <Text style={styles.saveButtonText}>{t("button.edit")}</Text>
+                        <Text style={styles.saveButtonText}>{t("buttons.edit")}</Text>
                     </TouchableOpacity>
 
 
                     <TouchableOpacity style={styles.deleteButton} onPress={() => handleDeleteMeal(meal.id)}>
-                        <Text style={styles.deleteButtonText}>{t(".buttons.delet")}</Text>
+                        <Text style={styles.deleteButtonText}>{t("buttons.delet")}</Text>
                     </TouchableOpacity>
                 </View >
             ))
